@@ -18,6 +18,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 15px;
+    padding-top: 30px;
 }
 
 header #left {
@@ -28,8 +29,8 @@ header #left {
     background-color: #161616aa;
     backdrop-filter: blur(5px);
     width: max-content;
-    width: 400px;
-    padding: 8px 25px;
+    width: max-content;
+    padding: 0px 25px;
     padding-right: 0;
     border-radius: 25px;
 }
@@ -41,7 +42,8 @@ header #left .listName {
     flex: 1;
     border: none;
     border-right: solid 2px rgb(163, 162, 162);
-    padding-right: 5px;
+    padding: 0 20px;
+    padding-left: 0;
 }
 
 header #left .share,
@@ -56,6 +58,7 @@ header #left .view {
     border: none;
     border-right: solid 2px rgb(163, 162, 162);
     flex: 1;
+    padding: 8px 20px;
     color: rgb(163, 162, 162);
     background-color: transparent;
     cursor: pointer;
@@ -66,17 +69,37 @@ header #left .burger {
     justify-content: center;
     align-items: center;
     border: none;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
     width: max-content;
     flex: 1;
-    max-width: 80px;
+    padding: 8px 20px;
     background-color: transparent;
     cursor: pointer;
+}
+
+header #left .share:hover,
+header #left .view:hover,
+header #left .burger:hover {
+    background-color: #161616;
+}
+
+header #left button:hover span {
+    color: white; /* rgb(11, 133, 255) */
 }
 
 header #left button img {
     height: 25px;
     width: 25px;
     filter: invert(70%);
+}
+
+header #left button:hover img {
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+}
+
+header #left .burger:hover img {
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
 }
 
 header #right {
@@ -100,10 +123,18 @@ header #right .search {
     cursor: pointer;
 }
 
+header #right .search:hover {
+    background-color: #161616;
+}
+
 header #right button img {
     height: 25px;
     width: 25px;
     filter: invert(70%);
+}
+
+header #right button:hover img {
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
 }
 
 #sidebar {
@@ -113,7 +144,7 @@ header #right button img {
     display: flex;
     flex-direction: column;
     gap: 30px;
-    padding: 25px;
+    padding: 25px 0;
     color: rgb(163, 162, 162);
 }
 
@@ -124,6 +155,7 @@ header #right button img {
     color: white;
     font-size: 20px;
     font-weight: 600;
+    padding: 0 25px;
 }
 
 #sidebar .profile .theme {
@@ -147,24 +179,172 @@ header #right button img {
 #sidebar .sort {
     display: flex;
     flex-direction: column;
-    gap: 22px;
     cursor: pointer;
+}
+
+#sidebar .sort > * {
+    padding: 15px 25px;
+}
+
+#sidebar .sort > *:hover {
+    background-color: #65656599;
 }
 
 #sidebar .myList {
     display: flex;
     flex-direction: column;
-    gap: 22px;
     cursor: pointer;
 }
 
+#sidebar .myList span {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 25px;
+}
+
+#sidebar .myList #item{
+    padding: 15px 25px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#sidebar .myList #item:hover,
+#sidebar .myList span:hover {
+    background-color: #65656599;
+}
+
 #sidebar .myList h3{
-    margin-bottom: 0;
     color: white;
     font-weight: 900;
+    margin: 13.5px 0;
+}
+
+#sidebar .myList .add{
+    margin: auto 0;
+    margin-left: auto;
+    height: 32px;
+    width: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    border-radius: 100%;
+}
+
+#sidebar .myList .add img{
+    height: 22px;
+    width: 22px;
+    filter: invert(70%);
+    cursor: pointer;
+}
+
+#sidebar .myList .add:hover img{
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+}
+
+.myList dialog::backdrop {
+    background-color: #101010cc;
+    filter: brightness(0%);
 }
 
 #content {
     grid-row: 2 / 3;
     grid-column: 2 / 3;
+    display: flex;
+    gap: 25px;
+    padding: 15px;
+    padding-top: 10px;
+}
+
+#content > * {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 600px;
+    width: 600px;
+    background-color: #161616cc;
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-sizing: border-box;
+}
+
+#content > .detail {
+    background-color: #161616ef;
+}
+
+#content * {
+    color: rgb(235, 233, 233);
+}
+
+#content > * > div{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+#content h3 {
+    color: white;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.footerInputBox {
+    height: max-content;
+    width: 600px;
+    background-color: #313131bb;
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 10px 25px;
+    box-sizing: border-box;
+}
+
+.footerInputBox:hover {
+    box-shadow: 0 -5px 5px black;
+}
+
+#footerInput {
+    flex: 1;
+    height: 40px;
+    border-radius: 8px;
+    border: solid 1px #808080;
+    outline: none;
+    background-color: #161616;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#footerInput:focus {
+    border-color: rgb(11, 133, 255);
+}
+
+#footerInput::placeholder {
+    font-size: 15px;
+}
+
+.footerInputBox .addTask {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 30px;
+    position: relative;
+    right: 40px;
+    background-color: transparent;
+    border: none;
+}
+
+.footerInputBox .addTask img {
+    height: 25px;
+    width: 25px;
+    filter: invert(60%);
+    cursor: pointer;
+}
+
+.footerInputBox #footerInput:not(:placeholder-shown) ~ .addTask img {
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
 }
