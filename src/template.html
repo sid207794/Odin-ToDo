@@ -12,8 +12,8 @@
         <header>
             <nav id="left">
                 <div class="listName">Personal</div>
-                <button class="share"><img src="./images/account-plus-outline.svg">Share</button>
-                <button class="view"><img src="./images/eye-outline.svg">View</button>
+                <button class="share"><img src="./images/account-plus-outline.svg"><span>Share</span></button>
+                <button class="view"><img src="./images/eye-outline.svg"><span>View</span></button>
                 <button class="burger"><img src="./images/menu.svg" alt="burger menu"></button>
             </nav>
             <nav id="right">
@@ -26,17 +26,21 @@
                 <div class="name">Siddharth</div>
             </div>
             <div class="sort">
-                <div class="upcoming">Upcoming</div>
+                <div class="upcomingTasks">Upcoming Tasks</div>
                 <div class="allTask">All Tasks</div>
             </div>
             <div class="myList">
-                <h3>My Lists</h3>
-                <div class="personal">Personal</div>
+                <span>
+                    <h3>My Lists</h3>
+                    <dialog>
+                        <button class="close" autofocus>Close</button>
+                        <input type="text" id="dialogList" name="dialogBox" placeholder="Add a list title">
+                        <button class="submit">Continue</button>
+                      </dialog>
+                    <button class="add"><img src="./images/plus.svg" alt="add"></button>
+                </span>
             </div>
         </div>
-        <div id="content">
-            <div class="personal"></div>
-            <div class="personalDetail"></div>
-        </div>
+        <div id="content"></div>
     </body>
 </html>
