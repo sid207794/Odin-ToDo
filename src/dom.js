@@ -1,4 +1,6 @@
 import arrowUp from "./images/arrow-up.svg";
+import bell from "./images/bell-outline.svg";
+import star from "./images/star-outline.svg";
 
 const myListDialog = (function () {
     const dialog = document.querySelector(".myList dialog");
@@ -27,19 +29,21 @@ const myListDialog = (function () {
     
     submitBtn.addEventListener("click", () => {
         const userInput = document.querySelector(".myList dialog input").value;
-        const uniqueclass = crypto.randomUUID();
-        listName.textContent = userInput;
-        const myListItem = document.createElement("div");
-        myListItem.classList.add(`${uniqueclass}`);
-        myListItem.setAttribute("id", "item");
-        myListItem.textContent = userInput;
-        myList.appendChild(myListItem);
-  
-        content.replaceChildren();
-  
-        contentCreate(uniqueclass);
-        myListItems(uniqueclass, userInput);
-        dialog.close();
+        if (userInput !== "") {
+            const uniqueclass = crypto.randomUUID();
+            listName.textContent = userInput;
+            const myListItem = document.createElement("div");
+            myListItem.classList.add(`${uniqueclass}`);
+            myListItem.setAttribute("id", "item");
+            myListItem.textContent = userInput;
+            myList.appendChild(myListItem);
+      
+            content.replaceChildren();
+      
+            contentCreate(uniqueclass);
+            myListItems(uniqueclass, userInput);
+            dialog.close();
+        }
     });
 })();
   
@@ -59,25 +63,102 @@ function contentCreate(UID) {
 
     const taskList = (function () {
         const contentItem = document.createElement("div");
+        const today = document.createElement("div");
+        const tomorrow = document.createElement("div");
+        const upcoming = document.createElement("div");
+        const h3Today = document.createElement("h3");
+        const h3Tomorrow = document.createElement("h3");
+        const h3Upcoming = document.createElement("h3");
         const contentItemFooter = document.createElement("footer");
         const contentItemFooterSubmit = document.createElement("button");
-        const img = document.createElement("img");
-        img.src = arrowUp;
+        const buttonsFooter = document.createElement("div");
+        const reminderButton = document.createElement("button");
+        const priorityButton = document.createElement("button");
+        const imgArrow = document.createElement("img");
+        const imgBell = document.createElement("img");
+        const imgStar = document.createElement("img");
+        imgArrow.src = arrowUp;
+        imgBell.src = bell;
+        imgStar.src = star;
 
         contentItem.classList.add(`${UID}`);
+        contentItem.classList.add(`list`);
+        today.classList.add("today");
+        h3Today.textContent = "Today";
+        tomorrow.classList.add("tomorrow");
+        h3Tomorrow.textContent = "Tomorrow";
+        upcoming.classList.add("upcoming");
+        h3Upcoming.textContent = "Upcoming";
         contentItemFooter.classList.add("footerInputBox");
         contentItemFooter.innerHTML = `<input type="text" id="footerInput" placeholder="+ Add task">`;
         contentItemFooterSubmit.classList.add("addTask");
+        today.style.padding = "0 25px";
+        tomorrow.style.padding = "0 25px";
+        upcoming.style.padding = "0 25px";
+        buttonsFooter.classList.add("footerButtons");
+        reminderButton.classList.add("reminder");
+        priorityButton.classList.add("priority");
 
         content.appendChild(contentItem)
+        contentItem.appendChild(today);
+        contentItem.appendChild(tomorrow);
+        contentItem.appendChild(upcoming);
+        today.appendChild(h3Today);
+        tomorrow.appendChild(h3Tomorrow);
+        upcoming.appendChild(h3Upcoming);
         contentItem.appendChild(contentItemFooter);
+
+        const input = document.querySelector(".footerInputBox #footerInput");
+        
         contentItemFooter.appendChild(contentItemFooterSubmit);
-        contentItemFooterSubmit.appendChild(img);
+        contentItemFooter.insertBefore(buttonsFooter, input);
+        contentItemFooterSubmit.appendChild(imgArrow);
+        buttonsFooter.appendChild(reminderButton);
+        buttonsFooter.appendChild(priorityButton);
+        reminderButton.appendChild(imgBell);
+        priorityButton.appendChild(imgStar);
 
-        contentCreate.addTask(UID);
+        addTask(UID);
     })();
+    
+    function addTask(UID) {
+        const contentItem = document.querySelector(`#content .${CSS.escape(UID)}`)
+        const submit = document.querySelector(`.${CSS.escape(UID)} .addTask`);
+        const footer = document.querySelector(`.${CSS.escape(UID)} .footerInputBox`);
+        const input = document.querySelector(`.${CSS.escape(UID)} #footerInput`);
+    
+        console.log(`${contentItem}, ${submit}, ${footer}, ${input}`);
+    
+        submit.addEventListener("click", () => {
+            if (input.value !== "") {
+                const newTask = document.createElement("div");
+                const label = document.createElement("label");
+                const checkbox = document.createElement("input");
+                const taskUID = crypto.randomUUID();
 
-    function taskDetail(UID) {
+                label.setAttribute("for", `task-${taskUID}`);
+                checkbox.setAttribute("type", "checkbox");
+                checkbox.setAttribute("id", `task-${taskUID}`);
+                newTask.classList.add(`task-${taskUID}`);
+                newTask.style.padding = "0 25px";
+                const labelText = document.createTextNode(input.value);
+    
+                contentItem.insertBefore(newTask, footer);
+                newTask.appendChild(label);
+                label.appendChild(checkbox);
+                label.insertBefore(labelText, null);
+
+                input.value = "";
+                // Add array
+            }
+        });
+    }
+
+    function reminder() {
+        //
+    }
+
+    (function () {
         const contentItemDetail = document.createElement("div");
         const header = document.createElement("div");
         const title = document.createElement("div");
@@ -102,25 +183,5 @@ function contentCreate(UID) {
         contentItemDetail.appendChild(buttons);
         contentItemDetail.appendChild(notes);
         contentItemDetail.appendChild(attachments);
-    }
+    })();
 }
-    
-contentCreate.addTask = function (UID) {
-    const contentItem = document.querySelector(`.${CSS.escape(UID)}`)
-    const submit = document.querySelector(`.${CSS.escape(UID)} .addTask`);
-    const footer = document.querySelector(`.${CSS.escape(UID)} .footerInputBox`);
-    const input = document.querySelector(`.${CSS.escape(UID)} #footerInput`);
-
-    console.log(`${contentItem}, ${submit}, ${footer}, ${input}`);
-
-    submit.addEventListener("click", () => {
-        if (input.value !== "") {
-            const newTask = document.createElement("div");
-            const taskUID = crypto.randomUUID();
-            newTask.classList.add(`task-${taskUID}`);
-            newTask.textContent = input.value;
-
-            contentItem.insertBefore(newTask, footer);
-        }
-    });
-};
