@@ -187,13 +187,12 @@ header #right button:hover img {
 }
 
 #sidebar .sort > *:hover {
-    background-color: #65656599;
+    background-color: #65656530;
 }
 
 #sidebar .myList {
     display: flex;
     flex-direction: column;
-    cursor: pointer;
 }
 
 #sidebar .myList span {
@@ -206,11 +205,12 @@ header #right button:hover img {
     padding: 15px 25px;
     margin-left: 0;
     margin-right: 0;
+    cursor: pointer;
 }
 
 #sidebar .myList #item:hover,
 #sidebar .myList span:hover {
-    background-color: #65656599;
+    background-color: #65656530;
 }
 
 #sidebar .myList h3{
@@ -239,13 +239,79 @@ header #right button:hover img {
     cursor: pointer;
 }
 
-#sidebar .myList .add:hover img{
+#sidebar .myList .add:hover img {
     filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
 }
 
 .myList dialog::backdrop {
     background-color: #101010cc;
     filter: brightness(0%);
+}
+
+.myList dialog .myListDialog {
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+}
+
+.myList dialog .myListDialog #dialogList {
+    height: 90px;
+    font-size: 30px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.myList dialog .myListDialog #dialogList::placeholder {
+    color: rgb(163, 162, 162);
+    font-weight: bold;
+}
+
+.myList dialog .myListDialog .close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 30px;
+    margin-left: auto;
+    font-size: 20px;
+    background-color: transparent;
+    border: none;
+}
+
+.myList dialog .myListDialog .close img {
+    height: 25px;
+    width: 25px;
+    filter: invert(60%);
+    cursor: pointer;
+}
+
+.myList dialog .myListDialog .close img:hover {
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+}
+
+.myList dialog .myListDialog .submit {
+    height: 40px;
+    width: max-content;
+    margin: 0 auto;
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 35px;
+    padding-right: 35px;
+    border: none;
+    border-radius: 25px;
+    background-color: rgb(11, 133, 255);
+    color: white;
+    filter: brightness(50%);
+}
+
+.myList dialog .myListDialog #dialogList:not(:placeholder-shown) + .submit {
+    filter: brightness(100%);
+    cursor: pointer;
 }
 
 #content {
@@ -260,7 +326,6 @@ header #right button:hover img {
 #content > * {
     display: flex;
     flex-direction: column;
-    gap: 12px;
     height: 600px;
     width: 600px;
     background-color: #161616cc;
@@ -277,15 +342,26 @@ header #right button:hover img {
     color: rgb(235, 233, 233);
 }
 
-#content > * > div{
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+#content .list {
+    padding-top: 25px;
 }
 
-#content h3 {
-    color: white;
-    margin-bottom: 0;
+#content .list label{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#content .today:hover h3,
+#content .tomorrow:hover h3,
+#content .upcoming:hover h3 {
+    color: rgb(11, 133, 255);
+}
+
+.today:hover,
+.tomorrow:hover,
+.upcoming:hover {
+    background-color: #65656530;
     cursor: pointer;
 }
 
@@ -295,11 +371,12 @@ header #right button:hover img {
     background-color: #313131bb;
     margin-top: auto;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    padding: 10px 25px;
+    padding: 10px 0;
+    padding-top: 0;
     box-sizing: border-box;
 }
 
@@ -308,7 +385,6 @@ header #right button:hover img {
 }
 
 #footerInput {
-    flex: 1;
     height: 40px;
     border-radius: 8px;
     border: solid 1px #808080;
@@ -316,6 +392,7 @@ header #right button:hover img {
     background-color: #161616;
     padding-left: 15px;
     padding-right: 15px;
+    margin: 0 25px;
 }
 
 #footerInput:focus {
@@ -332,8 +409,9 @@ header #right button:hover img {
     align-items: center;
     height: 30px;
     width: 30px;
-    position: relative;
-    right: 40px;
+    position: absolute;
+    right: 30px;
+    bottom: 16px;
     background-color: transparent;
     border: none;
 }
@@ -346,5 +424,40 @@ header #right button:hover img {
 }
 
 .footerInputBox #footerInput:not(:placeholder-shown) ~ .addTask img {
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+}
+
+.footerInputBox .footerButtons {
+    display: flex;
+}
+
+.footerInputBox .reminder,
+.footerInputBox .priority {
+    margin: 0 auto;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 30px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.footerInputBox .reminder {
+    border: none;
+    border-right: solid 1px #808080;
+}
+
+.footerInputBox .reminder img,
+.footerInputBox .priority img {
+    height: 25px;
+    width: 25px;
+    filter: invert(60%);
+}
+
+.footerInputBox .reminder:hover img,
+.footerInputBox .priority:hover img {
     filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
 }
