@@ -1,6 +1,10 @@
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import "flatpickr/dist/themes/dark.css";
 import arrowUp from "./images/arrow-up.svg";
 import bell from "./images/bell-outline.svg";
 import star from "./images/star-outline.svg";
+import cross from "./images/window-close.svg";
 
 const myListDialog = (function () {
     const dialog = document.querySelector(".myList dialog");
@@ -119,6 +123,7 @@ function contentCreate(UID) {
         priorityButton.appendChild(imgStar);
 
         addTask(UID);
+        timeDialog();
     })();
     
     function addTask(UID) {
@@ -126,8 +131,6 @@ function contentCreate(UID) {
         const submit = document.querySelector(`.${CSS.escape(UID)} .addTask`);
         const footer = document.querySelector(`.${CSS.escape(UID)} .footerInputBox`);
         const input = document.querySelector(`.${CSS.escape(UID)} #footerInput`);
-    
-        console.log(`${contentItem}, ${submit}, ${footer}, ${input}`);
     
         submit.addEventListener("click", () => {
             if (input.value !== "") {
@@ -154,8 +157,97 @@ function contentCreate(UID) {
         });
     }
 
-    function reminder() {
-        //
+    function timeDialog() {
+        const bellBtn = document.querySelector(".reminder");
+        const star = document.querySelector(".priority");
+        const footerButtons = document.querySelector(".footerButtons");
+
+        const dialogReminder = document.createElement("dialog");
+        const div = document.createElement("div");
+        const dialogReminderClose = document.createElement("button");
+        const timeInput = document.createElement("input");
+        const submitTime = document.createElement("button");
+        const imgCross = document.createElement("img");
+        imgCross.src = cross;
+
+        dialogReminder.classList.add("bellDialog");
+        div.classList.add("bellDialogCover");
+        dialogReminderClose.classList.add("close");
+        dialogReminder.style.backgroundColor = "#161616";
+        dialogReminder.style.border = "solid 1px #50505080";
+        dialogReminder.style.borderRadius = "10px";
+        dialogReminder.style.height = "60vh";
+        dialogReminder.style.width = "21vw";
+        dialogReminder.style.filter = "brightness(100%)";
+        dialogReminder.style.minWidth = "320px";
+        timeInput.setAttribute("id", "dateTimePicker");
+        timeInput.setAttribute("type", "text");
+        timeInput.setAttribute("placeholder", "Select Date");
+        timeInput.style.display = "none";
+        submitTime.classList.add("submitTime");
+        submitTime.textContent = "Set";
+        
+        footerButtons.appendChild(dialogReminder);
+        dialogReminder.appendChild(div);
+        div.appendChild(dialogReminderClose);
+        dialogReminderClose.appendChild(imgCross);
+        div.appendChild(timeInput);
+        div.appendChild(submitTime);
+
+        let datePickerInstance = null;
+        const todayDate = new Date();
+
+        bellBtn.addEventListener("click", () => {
+            dialogReminder.showModal();
+
+            if (!datePickerInstance) {
+                datePickerInstance = flatpickr(timeInput, {
+                    enableTime: true,
+                    inline: true,
+                    dateFormat: "d-m-Y H:i",
+                    appendTo: dialogReminder,
+                    defaultDate: new Date(),
+                    minDate: todayDate,
+                });
+            }
+        });
+
+        dialogReminderClose.addEventListener("click", () => {
+            bellBtn.replaceChildren();
+            const imgBell = document.createElement("img");
+            imgBell.src = bell;
+            bellBtn.appendChild(imgBell);
+            timeInput.value = "";
+            if (datePickerInstance) {
+                datePickerInstance.destroy();
+                datePickerInstance = null;
+            }
+            dialogReminder.close();
+        });
+
+        submitTime.addEventListener("click", () => {
+            const dateInput = timeInput.value;
+            const [date, time] = dateInput.split(" ");
+            const [dateDay, dateMonth, dateYear] = date.split("-"); // Remove comment if used later
+            const yyyy = todayDate.getFullYear();
+            const mm = String(todayDate.getMonth()+1).padStart(2, "0");
+            const dd = String(todayDate.getDate()).padStart(2, "0");
+            const today = `${dd}-${mm}-${yyyy}`;
+
+            if (date === today) {
+                bellBtn.replaceChildren();
+                bellBtn.textContent = time;
+            } else if (date === `${parseInt(dd)+1}-${mm}-${yyyy}`) {
+                bellBtn.replaceChildren();
+                const weekDay = new Date(parseInt(yyyy), parseInt(mm)-1, parseInt(dd)+1);
+                const weekDayName = weekDay.toLocaleDateString("en-US", { weekday: "short"});
+                bellBtn.textContent = `${weekDayName} ${time}`;
+            } else {
+                bellBtn.replaceChildren();
+                bellBtn.textContent = `${date}`;
+            }
+            dialogReminder.close()
+        });
     }
 
     (function () {
