@@ -243,7 +243,8 @@ header #right button:hover img {
     filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
 }
 
-.myList dialog::backdrop {
+.myList dialog::backdrop,
+.bellDialog::backdrop {
     background-color: #101010cc;
     filter: brightness(0%);
 }
@@ -252,6 +253,11 @@ header #right button:hover img {
     display: flex;
     flex-direction: column;
     gap: 19px;
+}
+
+.bellDialogCover {
+    display: flex;
+    flex-direction: column;
 }
 
 .myList dialog .myListDialog #dialogList {
@@ -271,7 +277,8 @@ header #right button:hover img {
     font-weight: bold;
 }
 
-.myList dialog .myListDialog .close {
+.myList dialog .myListDialog .close,
+.bellDialog .bellDialogCover .close {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -283,14 +290,21 @@ header #right button:hover img {
     border: none;
 }
 
-.myList dialog .myListDialog .close img {
+.bellDialog .bellDialogCover .close {
+    margin: auto;
+    margin-bottom: 12px;
+}
+
+.myList dialog .myListDialog .close img,
+.bellDialog .bellDialogCover .close img {
     height: 25px;
     width: 25px;
     filter: invert(60%);
     cursor: pointer;
 }
 
-.myList dialog .myListDialog .close img:hover {
+.myList dialog .myListDialog .close img:hover,
+.bellDialog .bellDialogCover .close img:hover {
     filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
 }
 
@@ -312,6 +326,10 @@ header #right button:hover img {
 .myList dialog .myListDialog #dialogList:not(:placeholder-shown) + .submit {
     filter: brightness(100%);
     cursor: pointer;
+}
+
+.myList dialog .myListDialog #dialogList:not(:placeholder-shown) + .submit:hover {
+    filter: brightness(90%);
 }
 
 #content {
@@ -448,6 +466,9 @@ header #right button:hover img {
 .footerInputBox .reminder {
     border: none;
     border-right: solid 1px #808080;
+    color: rgb(11, 133, 255) !important;
+    font-weight: bold;
+    font-size: 15px;
 }
 
 .footerInputBox .reminder img,
@@ -460,4 +481,40 @@ header #right button:hover img {
 .footerInputBox .reminder:hover img,
 .footerInputBox .priority:hover img {
     filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+}
+
+.bellDialog .flatpickr-calendar {
+    margin: auto;
+    background-color: #161616;
+}
+
+.bellDialog .flatpickr-monthDropdown-months,
+.bellDialog .flatpickr-month,
+.bellDialog .flatpickr-weekdays,
+.bellDialog .flatpickr-weekdaycontainer > * {
+    background: rgb(11, 133, 255) !important;
+}
+
+.bellDialog .flatpickr-day.flatpickr-disabled {
+    color: #aaaa !important;
+    background: none !important;
+    cursor: not-allowed;
+}
+
+.bellDialog .flatpickr-month {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.submitTime {
+    position: absolute;
+    top: 415px;
+    left: 140px;
+    background-color: rgb(11, 133, 255);
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 8px 25px;
+    border-radius: 20px;
+    cursor: pointer;
 }
