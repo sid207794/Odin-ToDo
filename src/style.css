@@ -33,6 +33,8 @@ header #left {
     padding: 0px 25px;
     padding-right: 0;
     border-radius: 25px;
+    z-index: 9999;
+    position: relative;
 }
 
 header #left .listName {
@@ -81,7 +83,7 @@ header #left .burger {
 header #left .share:hover,
 header #left .view:hover,
 header #left .burger:hover {
-    background-color: #161616;
+    background-color: #161616 !important;
 }
 
 header #left button:hover span {
@@ -99,7 +101,43 @@ header #left button:hover img {
 }
 
 header #left .burger:hover img {
-    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%) !important;
+}
+
+.burgerDialogCover {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    box-sizing: border-box;
+}
+
+.listDelete,
+.taskDeleteSelect {
+    flex: 1;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    padding: 2.5px 15px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.listDelete {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.taskDeleteSelect {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.listDelete:hover,
+.taskDeleteSelect:hover {
+    background-color: #65656530;
 }
 
 header #right {
@@ -201,14 +239,14 @@ header #right button:hover img {
     padding: 0 25px;
 }
 
-#sidebar .myList #item{
+#sidebar .myList .item{
     padding: 15px 25px;
     margin-left: 0;
     margin-right: 0;
     cursor: pointer;
 }
 
-#sidebar .myList #item:hover,
+#sidebar .myList .item:hover,
 #sidebar .myList span:hover {
     background-color: #65656530;
 }
