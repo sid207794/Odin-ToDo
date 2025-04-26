@@ -30,35 +30,77 @@ const myListDialog = (function () {
     closeBtn.addEventListener("click", () => {
         dialog.close();
     });
+
+    dialog.addEventListener("click", (e) => {
+        if (e.target === dialog) {
+            dialog.close();
+        }
+    });
     
     submitBtn.addEventListener("click", () => {
         const userInput = document.querySelector(".myList dialog input").value;
+        const burgerDialogCover = document.querySelector(".burgerDialogCover");
+
         if (userInput !== "") {
             const uniqueclass = crypto.randomUUID();
             listName.textContent = userInput;
             const myListItem = document.createElement("div");
             myListItem.classList.add(`${uniqueclass}`);
-            myListItem.setAttribute("id", "item");
+            myListItem.classList.add("item");
             myListItem.textContent = userInput;
             myList.appendChild(myListItem);
       
             content.replaceChildren();
-      
+
+            burgerDialogCover.replaceChildren();
+            const listDelete = document.createElement("button");
+            const taskDeleteSelect = document.createElement("button");
+            listDelete.classList.add("listDelete");
+            listDelete.classList.add(`${uniqueclass}`);
+            taskDeleteSelect.classList.add("taskDeleteSelect");
+            taskDeleteSelect.classList.add(`${uniqueclass}`);
+            listDelete.textContent = "Delete List";
+            taskDeleteSelect.textContent = "Delete Task";
+            burgerDialogCover.appendChild(listDelete);
+            burgerDialogCover.appendChild(taskDeleteSelect);
+
             contentCreate(uniqueclass);
+            deleteAction(uniqueclass);
             myListItems(uniqueclass, userInput);
             dialog.close();
         }
     });
 })();
-  
+
+let datePickerInstance;
+
 function myListItems(UID, input) {
     const content = document.querySelector("#content");
     const listName = document.querySelector(".listName");
-    const item = document.querySelector(`.${CSS.escape(UID)}`);
+    const item = document.querySelector(`.myList .${CSS.escape(UID)}`);
     item.addEventListener("click", () => {
+        const burgerDialogCover = document.querySelector(".burgerDialogCover");
+        if (datePickerInstance) {
+            datePickerInstance.destroy();
+            datePickerInstance = null;
+        }
         content.replaceChildren();
+
+        burgerDialogCover.replaceChildren();
+        const listDelete = document.createElement("button");
+        const taskDeleteSelect = document.createElement("button");
+        listDelete.classList.add("listDelete");
+        listDelete.classList.add(`${UID}`);
+        taskDeleteSelect.classList.add("taskDeleteSelect");
+        taskDeleteSelect.classList.add(`${UID}`);
+        listDelete.textContent = "Delete List";
+        taskDeleteSelect.textContent = "Delete Task";
+        burgerDialogCover.appendChild(listDelete);
+        burgerDialogCover.appendChild(taskDeleteSelect);
+
         listName.textContent = input;
         contentCreate(UID);
+        deleteAction(UID);
     });
 }
 
@@ -128,9 +170,9 @@ function contentCreate(UID) {
     
     function addTask(UID) {
         const contentItem = document.querySelector(`#content .${CSS.escape(UID)}`)
-        const submit = document.querySelector(`.${CSS.escape(UID)} .addTask`);
-        const footer = document.querySelector(`.${CSS.escape(UID)} .footerInputBox`);
-        const input = document.querySelector(`.${CSS.escape(UID)} #footerInput`);
+        const submit = document.querySelector(`#content .${CSS.escape(UID)} .addTask`);
+        const footer = document.querySelector(`#content .${CSS.escape(UID)} .footerInputBox`);
+        const input = document.querySelector(`#content .${CSS.escape(UID)} #footerInput`);
     
         submit.addEventListener("click", () => {
             if (input.value !== "") {
@@ -194,7 +236,7 @@ function contentCreate(UID) {
         div.appendChild(timeInput);
         div.appendChild(submitTime);
 
-        let datePickerInstance = null;
+        datePickerInstance = null;
         const todayDate = new Date();
 
         bellBtn.addEventListener("click", () => {
@@ -248,6 +290,12 @@ function contentCreate(UID) {
             }
             dialogReminder.close()
         });
+
+        dialogReminder.addEventListener("click", (e) => {
+            if (e.target === dialogReminder) {
+                dialogReminder.close();
+            }
+        });
     }
 
     (function () {
@@ -276,4 +324,83 @@ function contentCreate(UID) {
         contentItemDetail.appendChild(notes);
         contentItemDetail.appendChild(attachments);
     })();
+}
+
+const burgerDialog = (function () {
+    const burger = document.querySelector("#left .burger");
+    const burgerImg = document.querySelector("#left .burger img");
+    const dialog = document.querySelector("#left .burgerDialog");
+    
+    dialog.style.backgroundColor = "#2a2d33";
+    dialog.style.border = "none";
+    dialog.style.borderRadius = "10px";
+    dialog.style.height = "12vh";
+    dialog.style.width = "10vw";
+    dialog.style.minWidth = "160px";
+    dialog.style.filter = "brightness(100%)";
+    dialog.style.position = "absolute";
+    dialog.style.top = "44px";
+    dialog.style.display = "none";
+
+    burger.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (dialog.style.display === "none") {
+            dialog.style.display = "flex";
+            dialog.style.flexDirection = "column";
+            dialog.style.left = `${burger.offsetLeft-46}px`;
+            burger.style.backgroundColor = "#161616";
+            burgerImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
+        } else {
+            dialog.style.display = "none";
+            burger.style.backgroundColor = "transparent";
+            burgerImg.style.filter = "invert(70%)";
+        }
+    });
+
+    document.addEventListener("click", () => {
+        dialog.style.display = "none";
+        burger.style.backgroundColor = "transparent";
+        burgerImg.style.filter = "invert(70%)";
+    });
+
+    dialog.addEventListener("click", (e) => {
+        e.stopPropagation();
+    });
+})();
+
+function deleteAction(UID) {
+    const deleteListBtn = document.querySelector(`.listDelete.${CSS.escape(UID)}`);
+    const listToDelete = document.querySelector(`.myList .${CSS.escape(UID)}`);
+    const burger = document.querySelector("#left .burger");
+    const burgerImg = document.querySelector("#left .burger img");
+    const dialog = document.querySelector("#left .burgerDialog");
+
+    deleteListBtn.addEventListener("click", () => {
+        const content = document.querySelector("#content");
+        const myList = document.querySelector(".myList");
+
+        if (datePickerInstance) {
+            datePickerInstance.destroy();
+            datePickerInstance = null;
+        }
+        console.log(content.children);
+        content.replaceChildren();
+        console.log("content removed", content.children);
+        myList.removeChild(listToDelete);
+        console.log("list name removed");
+
+        const item = document.querySelector(".myList .item");
+        const listName = document.querySelector(".listName");
+
+        if (item) {
+            const itemUID = item.classList[0];
+            item.click();
+        } else {
+            listName.textContent = "";
+        }
+        
+        dialog.style.display = "none";
+        burger.style.backgroundColor = "transparent";
+        burgerImg.style.filter = "invert(70%)";
+    });
 }
