@@ -21,6 +21,7 @@ const myListDialog = (function () {
     const listName = document.querySelector(".listName");
     const myList = document.querySelector(".myList");
     const content = document.querySelector("#content");
+    const burger = document.querySelector("#left .burger");
   
     openBtn.addEventListener("click", () => {
         document.querySelector(".myList dialog input").value = "";
@@ -39,7 +40,6 @@ const myListDialog = (function () {
     
     submitBtn.addEventListener("click", () => {
         const userInput = document.querySelector(".myList dialog input").value;
-        const burgerDialogCover = document.querySelector(".burgerDialogCover");
 
         if (userInput !== "") {
             const uniqueclass = crypto.randomUUID();
@@ -52,17 +52,9 @@ const myListDialog = (function () {
       
             content.replaceChildren();
 
-            burgerDialogCover.replaceChildren();
-            const listDelete = document.createElement("button");
-            const taskDeleteSelect = document.createElement("button");
-            listDelete.classList.add("listDelete");
-            listDelete.classList.add(`${uniqueclass}`);
-            taskDeleteSelect.classList.add("taskDeleteSelect");
-            taskDeleteSelect.classList.add(`${uniqueclass}`);
-            listDelete.textContent = "Delete List";
-            taskDeleteSelect.textContent = "Delete Task";
-            burgerDialogCover.appendChild(listDelete);
-            burgerDialogCover.appendChild(taskDeleteSelect);
+            burger.disabled = false;
+            burger.classList.remove("disabled");
+            createBurgerDialogCover(uniqueclass);
 
             contentCreate(uniqueclass);
             deleteAction(uniqueclass);
@@ -79,24 +71,13 @@ function myListItems(UID, input) {
     const listName = document.querySelector(".listName");
     const item = document.querySelector(`.myList .${CSS.escape(UID)}`);
     item.addEventListener("click", () => {
-        const burgerDialogCover = document.querySelector(".burgerDialogCover");
         if (datePickerInstance) {
             datePickerInstance.destroy();
             datePickerInstance = null;
         }
         content.replaceChildren();
 
-        burgerDialogCover.replaceChildren();
-        const listDelete = document.createElement("button");
-        const taskDeleteSelect = document.createElement("button");
-        listDelete.classList.add("listDelete");
-        listDelete.classList.add(`${UID}`);
-        taskDeleteSelect.classList.add("taskDeleteSelect");
-        taskDeleteSelect.classList.add(`${UID}`);
-        listDelete.textContent = "Delete List";
-        taskDeleteSelect.textContent = "Delete Task";
-        burgerDialogCover.appendChild(listDelete);
-        burgerDialogCover.appendChild(taskDeleteSelect);
+        createBurgerDialogCover(UID);
 
         listName.textContent = input;
         contentCreate(UID);
@@ -370,37 +351,116 @@ const burgerDialog = (function () {
 
 function deleteAction(UID) {
     const deleteListBtn = document.querySelector(`.listDelete.${CSS.escape(UID)}`);
-    const listToDelete = document.querySelector(`.myList .${CSS.escape(UID)}`);
     const burger = document.querySelector("#left .burger");
     const burgerImg = document.querySelector("#left .burger img");
     const dialog = document.querySelector("#left .burgerDialog");
 
     deleteListBtn.addEventListener("click", () => {
-        const content = document.querySelector("#content");
-        const myList = document.querySelector(".myList");
-
-        if (datePickerInstance) {
-            datePickerInstance.destroy();
-            datePickerInstance = null;
-        }
-        console.log(content.children);
-        content.replaceChildren();
-        console.log("content removed", content.children);
-        myList.removeChild(listToDelete);
-        console.log("list name removed");
-
-        const item = document.querySelector(".myList .item");
-        const listName = document.querySelector(".listName");
-
-        if (item) {
-            const itemUID = item.classList[0];
-            item.click();
-        } else {
-            listName.textContent = "";
-        }
+        const deleteDialog = document.querySelector(`.listDeleteConfirm.${CSS.escape(UID)}`);
+        const deleteDialogDiv = document.querySelector(`.listDeleteConfirmDiv.${CSS.escape(UID)}`);
+        const deleteYes = document.querySelector(`.listDeleteConfirmDiv.${CSS.escape(UID)} .yes.${CSS.escape(UID)}`);
+        const deleteNo = document.querySelector(`.listDeleteConfirmDiv.${CSS.escape(UID)} .no.${CSS.escape(UID)}`);
         
-        dialog.style.display = "none";
-        burger.style.backgroundColor = "transparent";
-        burgerImg.style.filter = "invert(70%)";
+        deleteDialog.style.backgroundColor = "#161616";
+        deleteDialog.style.border = "solid 1px #505050";
+        deleteDialog.style.borderRadius = "10px";
+        deleteDialog.style.height = "25vh";
+        deleteDialog.style.width = "20vw";
+        deleteDialog.style.filter = "brightness(100%)";
+        deleteDialog.style.textAlign = "center";
+
+        deleteDialog.showModal();
+
+        deleteYes.addEventListener("click", () => {
+            const listToDelete = document.querySelector(`.myList .${CSS.escape(UID)}`);
+            const content = document.querySelector("#content");
+            const myList = document.querySelector(".myList");
+    
+            if (datePickerInstance) {
+                datePickerInstance.destroy();
+                datePickerInstance = null;
+            }
+            
+            content.replaceChildren();
+            
+            if (listToDelete) {
+                myList.removeChild(listToDelete);
+            }
+    
+            const item = document.querySelector(".myList .item");
+            const listName = document.querySelector(".listName");
+            const listDelete = document.querySelector(".listDelete");
+            const taskDeleteSelect = document.querySelector(".taskDeleteSelect");
+
+            deleteDialog.close();
+    
+            if (item) {
+                item.click();
+            } else {
+                listName.textContent = "";
+                listDelete.setAttribute("class","listDelete");
+                taskDeleteSelect.setAttribute("class","taskDeleteSelect");
+                burger.disabled = true;
+                burger.classList.add("disabled");
+                deleteDialog.setAttribute("class", "listDeleteConfirm");
+                deleteDialogDiv.setAttribute("class", "listDeleteConfirmDiv");
+                deleteYes.setAttribute("class","yes");
+                deleteNo.setAttribute("class","no");
+            }
+            
+            dialog.style.display = "none";
+            burger.style.backgroundColor = "transparent";
+            burgerImg.style.filter = "invert(70%)";
+        });
+
+        deleteNo.addEventListener("click", () => {
+            deleteDialog.close();
+            dialog.style.display = "none";
+            burger.style.backgroundColor = "transparent";
+            burgerImg.style.filter = "invert(70%)";
+        });
     });
+}
+
+function createBurgerDialogCover(UIDClass) {
+    const burgerDialogCover = document.querySelector(".burgerDialogCover");
+
+    burgerDialogCover.replaceChildren();
+    const listDelete = document.createElement("button");
+    const taskDeleteSelect = document.createElement("button");
+    const listDeleteConfirm = document.createElement("dialog");
+    const h3 = document.createElement("h3");
+    const p1 = document.createElement("p");
+    const p2 = document.createElement("p");
+    const listDeleteConfirmDiv = document.createElement("div");
+    const yes = document.createElement("button");
+    const no = document.createElement("button");
+    listDelete.classList.add("listDelete");
+    listDelete.classList.add(`${UIDClass}`);
+    taskDeleteSelect.classList.add("taskDeleteSelect");
+    taskDeleteSelect.classList.add(`${UIDClass}`);
+    listDeleteConfirm.classList.add("listDeleteConfirm");
+    listDeleteConfirm.classList.add(`${UIDClass}`);
+    listDeleteConfirmDiv.classList.add("listDeleteConfirmDiv");
+    listDeleteConfirmDiv.classList.add(`${UIDClass}`);
+    h3.textContent = "Delete this list?";
+    p1.textContent = "This action cannot be undone.";
+    p2.textContent = "Are you sure you want to delete?";
+    yes.classList.add("yes");
+    yes.classList.add(`${UIDClass}`);
+    no.classList.add("no");
+    no.classList.add(`${UIDClass}`);
+    listDelete.textContent = "Delete List";
+    taskDeleteSelect.textContent = "Delete Task";
+    yes.textContent = "Yes";
+    no.textContent = "No";
+    burgerDialogCover.appendChild(listDelete);
+    burgerDialogCover.appendChild(taskDeleteSelect);
+    burgerDialogCover.appendChild(listDeleteConfirm);
+    listDeleteConfirm.appendChild(h3);
+    listDeleteConfirm.appendChild(p1);
+    listDeleteConfirm.appendChild(p2);
+    listDeleteConfirm.appendChild(listDeleteConfirmDiv);
+    listDeleteConfirmDiv.appendChild(yes);
+    listDeleteConfirmDiv.appendChild(no);
 }
