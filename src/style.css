@@ -2,7 +2,7 @@ body {
     height: 100vh;
     display: grid;
     grid-template: 1fr 9fr / 1fr 6fr;
-    background: url("./images/7680x4320-simple-blue-gradients-abstract-4k_1614437780.webp");
+    background: url("./images/2560x1440-simple-blue-gradients-abstract-4k_1614437780.webp");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -84,6 +84,12 @@ header #left .share:hover,
 header #left .view:hover,
 header #left .burger:hover {
     background-color: #161616 !important;
+    transition: background-color 0.3s ease-in-out;
+}
+
+header #left .burger.disabled:hover {
+    background-color: transparent !important;
+    cursor: not-allowed;
 }
 
 header #left button:hover span {
@@ -102,6 +108,10 @@ header #left button:hover img {
 
 header #left .burger:hover img {
     filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%) !important;
+}
+
+header #left .burger.disabled:hover img {
+    filter: invert(20%) sepia(100%) saturate(5000%) hue-rotate(0deg) brightness(100%) contrast(100%) !important;
 }
 
 .burgerDialogCover {
@@ -163,6 +173,7 @@ header #right .search {
 
 header #right .search:hover {
     background-color: #161616;
+    transition: background-color 0.3s ease-in-out;
 }
 
 header #right button img {
@@ -226,6 +237,12 @@ header #right button:hover img {
 
 #sidebar .sort > *:hover {
     background-color: #65656530;
+    transition: background-color 0.2s ease-in-out;
+}
+
+#sidebar .sort > *:not(:hover) {
+    background-color: transparent;
+    transition: background-color 0.2s ease-in-out;
 }
 
 #sidebar .myList {
@@ -249,6 +266,13 @@ header #right button:hover img {
 #sidebar .myList .item:hover,
 #sidebar .myList span:hover {
     background-color: #65656530;
+    transition: background-color 0.2s ease-in-out;
+}
+
+#sidebar .myList .item:not(:hover),
+#sidebar .myList span:not(:hover) {
+    background-color: transparent;
+    transition: background-color 0.2s ease-in-out;
 }
 
 #sidebar .myList h3{
@@ -282,7 +306,8 @@ header #right button:hover img {
 }
 
 .myList dialog::backdrop,
-.bellDialog::backdrop {
+.bellDialog::backdrop,
+.listDeleteConfirm::backdrop {
     background-color: #101010cc;
     filter: brightness(0%);
 }
@@ -367,7 +392,8 @@ header #right button:hover img {
 }
 
 .myList dialog .myListDialog #dialogList:not(:placeholder-shown) + .submit:hover {
-    filter: brightness(90%);
+    filter: brightness(80%);
+    transition: filter 0.1s ease-in-out;
 }
 
 #content {
@@ -412,6 +438,14 @@ header #right button:hover img {
 #content .tomorrow:hover h3,
 #content .upcoming:hover h3 {
     color: rgb(11, 133, 255);
+    transition: color 0.2s ease-in-out;
+}
+
+#content .today:not(:hover) h3,
+#content .tomorrow:not(:hover) h3,
+#content .upcoming:not(:hover) h3 {
+    color: rgb(235, 233, 233);
+    transition: color 0.2s ease-in-out;
 }
 
 .today:hover,
@@ -419,6 +453,15 @@ header #right button:hover img {
 .upcoming:hover {
     background-color: #65656530;
     cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.today:not(:hover),
+.tomorrow:not(:hover),
+.upcoming:not(:hover) {
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .footerInputBox {
@@ -438,6 +481,7 @@ header #right button:hover img {
 
 .footerInputBox:hover {
     box-shadow: 0 -5px 5px black;
+    transition: box-shadow 0.2s ease-in-out;
 }
 
 #footerInput {
@@ -555,4 +599,61 @@ header #right button:hover img {
     padding: 8px 25px;
     border-radius: 20px;
     cursor: pointer;
+}
+
+.listDeleteConfirmDiv {
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    gap: 60px;
+}
+
+.listDeleteConfirmDiv .yes,
+.listDeleteConfirmDiv .no {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 80px;
+    border: none;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: rgb(11, 133, 255);
+    color: white;
+    cursor: pointer;
+}
+
+.listDeleteConfirmDiv .yes {
+    background-color: red;
+}
+
+.listDeleteConfirmDiv .yes:hover {
+    background-color: transparent;
+    border: solid 2px red;
+    color: red;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.listDeleteConfirmDiv .no:hover {
+    background-color: transparent;
+    border: solid 2px rgb(11, 133, 255);
+    color: rgb(11, 133, 255);
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.listDeleteConfirm h3 {
+    margin-top: 12px;
+    color: white;
+    font-size: 20px;
+}
+
+.listDeleteConfirm p {
+    color: rgb(212, 212, 212);
+    margin-bottom: 0;
+}
+
+.listDeleteConfirm p + p {
+    margin-top: 0;
 }
