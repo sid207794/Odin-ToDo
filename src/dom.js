@@ -1,3 +1,4 @@
+import "./logic.js";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import "flatpickr/dist/themes/dark.css";
@@ -11,9 +12,10 @@ const myListDialog = (function () {
     dialog.style.backgroundColor = "#161616";
     dialog.style.border = "solid 1px #505050";
     dialog.style.borderRadius = "10px";
-    dialog.style.height = "28vh";
+    dialog.style.height = "32vh";
     dialog.style.width = "40vw";
     dialog.style.filter = "brightness(100%)";
+    dialog.style.padding = "0";
   
     const openBtn = document.querySelector(".myList .add");
     const closeBtn = document.querySelector(".myList dialog .close");
@@ -25,16 +27,16 @@ const myListDialog = (function () {
   
     openBtn.addEventListener("click", () => {
         document.querySelector(".myList dialog input").value = "";
-        dialog.showModal();
+        dialogPropertiesChildren.dialogOpen(dialog);
     });
   
     closeBtn.addEventListener("click", () => {
-        dialog.close();
+        dialogPropertiesChildren.dialogClose(dialog);
     });
 
     dialog.addEventListener("click", (e) => {
         if (e.target === dialog) {
-            dialog.close();
+            dialogPropertiesChildren.dialogClose(dialog);
         }
     });
     
@@ -59,7 +61,8 @@ const myListDialog = (function () {
             contentCreate(uniqueclass);
             deleteAction(uniqueclass);
             myListItems(uniqueclass, userInput);
-            dialog.close();
+            
+            dialogPropertiesChildren.dialogClose(dialog);
         }
     });
 })();
@@ -221,7 +224,7 @@ function contentCreate(UID) {
         const todayDate = new Date();
 
         bellBtn.addEventListener("click", () => {
-            dialogReminder.showModal();
+            dialogPropertiesChildren.dialogOpen(dialogReminder);
 
             if (!datePickerInstance) {
                 datePickerInstance = flatpickr(timeInput, {
@@ -245,7 +248,8 @@ function contentCreate(UID) {
                 datePickerInstance.destroy();
                 datePickerInstance = null;
             }
-            dialogReminder.close();
+
+            dialogPropertiesChildren.dialogClose(dialogReminder);
         });
 
         submitTime.addEventListener("click", () => {
@@ -269,12 +273,23 @@ function contentCreate(UID) {
                 bellBtn.replaceChildren();
                 bellBtn.textContent = `${date}`;
             }
-            dialogReminder.close()
+            
+            if (datePickerInstance) {
+                datePickerInstance.destroy();
+                datePickerInstance = null;
+            }
+
+            dialogPropertiesChildren.dialogClose(dialogReminder);
         });
 
         dialogReminder.addEventListener("click", (e) => {
             if (e.target === dialogReminder) {
-                dialogReminder.close();
+                if (datePickerInstance) {
+                    datePickerInstance.destroy();
+                    datePickerInstance = null;
+                }
+
+                dialogPropertiesChildren.dialogClose(dialogReminder);
             }
         });
     }
@@ -327,19 +342,40 @@ const burgerDialog = (function () {
         event.stopPropagation();
         if (dialog.style.display === "none") {
             dialog.style.display = "flex";
+            dialog.style.opacity = "0";//
+            dialog.style.transform = "scale(0.95)";//
+            requestAnimationFrame(() => {
+                dialog.style.opacity = "1";//
+                dialog.style.transform = "scale(1)";//
+                dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";//
+            });
             dialog.style.flexDirection = "column";
             dialog.style.left = `${burger.offsetLeft-46}px`;
             burger.style.backgroundColor = "#161616";
             burgerImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
         } else {
-            dialog.style.display = "none";
+            dialog.style.opacity = "1";//
+            dialog.style.transform = "scale(1)";//
+            dialog.style.opacity = "0";//
+            dialog.style.transform = "scale(0.95)";//
+            dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";//
+            setTimeout(() => {
+                dialog.style.display = "none";
+            }, 100);
             burger.style.backgroundColor = "transparent";
             burgerImg.style.filter = "invert(70%)";
         }
     });
 
     document.addEventListener("click", () => {
-        dialog.style.display = "none";
+        dialog.style.opacity = "1";//
+        dialog.style.transform = "scale(1)";//
+        dialog.style.opacity = "0";//
+        dialog.style.transform = "scale(0.95)";//
+        dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";//
+        setTimeout(() => {
+            dialog.style.display = "none";
+        }, 100);
         burger.style.backgroundColor = "transparent";
         burgerImg.style.filter = "invert(70%)";
     });
@@ -369,7 +405,7 @@ function deleteAction(UID) {
         deleteDialog.style.filter = "brightness(100%)";
         deleteDialog.style.textAlign = "center";
 
-        deleteDialog.showModal();
+        dialogPropertiesChildren.dialogOpen(deleteDialog);
 
         deleteYes.addEventListener("click", () => {
             const listToDelete = document.querySelector(`.myList .${CSS.escape(UID)}`);
@@ -392,7 +428,7 @@ function deleteAction(UID) {
             const listDelete = document.querySelector(".listDelete");
             const taskDeleteSelect = document.querySelector(".taskDeleteSelect");
 
-            deleteDialog.close();
+            dialogPropertiesChildren.dialogClose(deleteDialog);
     
             if (item) {
                 item.click();
@@ -408,14 +444,28 @@ function deleteAction(UID) {
                 deleteNo.setAttribute("class","no");
             }
             
-            dialog.style.display = "none";
+            dialog.style.opacity = "1";//
+            dialog.style.transform = "scale(1)";//
+            dialog.style.opacity = "0";//
+            dialog.style.transform = "scale(0.95)";//
+            dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";//
+            setTimeout(() => {
+                dialog.style.display = "none";
+            }, 100);
             burger.style.backgroundColor = "transparent";
             burgerImg.style.filter = "invert(70%)";
         });
 
         deleteNo.addEventListener("click", () => {
-            deleteDialog.close();
-            dialog.style.display = "none";
+            dialogPropertiesChildren.dialogClose(deleteDialog);
+            dialog.style.opacity = "1";//
+            dialog.style.transform = "scale(1)";//
+            dialog.style.opacity = "0";//
+            dialog.style.transform = "scale(0.95)";//
+            dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";//
+            setTimeout(() => {
+                dialog.style.display = "none";
+            }, 100);
             burger.style.backgroundColor = "transparent";
             burgerImg.style.filter = "invert(70%)";
         });
@@ -464,3 +514,29 @@ function createBurgerDialogCover(UIDClass) {
     listDeleteConfirmDiv.appendChild(yes);
     listDeleteConfirmDiv.appendChild(no);
 }
+
+const dialogProperties = () => {
+    function dialogOpen(dialog) {
+        dialog.style.opacity = "0";
+        dialog.style.transform = "scale(0.95)";
+        dialog.showModal();
+        dialog.style.opacity = "1";
+        dialog.style.transform = "scale(1)";
+        dialog.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
+    }
+
+    function dialogClose(dialog) {
+        dialog.style.opacity = "1";
+        dialog.style.transform = "scale(1)";
+        dialog.style.opacity = "0";
+        dialog.style.transform = "scale(0.95)";
+        dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";
+        setTimeout(() => {
+            dialog.close();
+        }, 100);
+    }
+
+    return { dialogOpen, dialogClose };
+}
+
+const dialogPropertiesChildren = dialogProperties();
