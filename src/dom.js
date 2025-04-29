@@ -1,4 +1,4 @@
-import "./logic.js";
+import { MyListClass, Today, Tomorrow, Upcoming } from "./logic.js";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import "flatpickr/dist/themes/dark.css";
@@ -7,15 +7,11 @@ import bell from "./images/bell-outline.svg";
 import star from "./images/star-outline.svg";
 import cross from "./images/window-close.svg";
 
+const listArray = [];
+console.log(listArray);
+
 const myListDialog = (function () {
     const dialog = document.querySelector(".myList dialog");
-    dialog.style.backgroundColor = "#161616";
-    dialog.style.border = "solid 1px #505050";
-    dialog.style.borderRadius = "10px";
-    dialog.style.height = "32vh";
-    dialog.style.width = "40vw";
-    dialog.style.filter = "brightness(100%)";
-    dialog.style.padding = "0";
   
     const openBtn = document.querySelector(".myList .add");
     const closeBtn = document.querySelector(".myList dialog .close");
@@ -61,6 +57,10 @@ const myListDialog = (function () {
             contentCreate(uniqueclass);
             deleteAction(uniqueclass);
             myListItems(uniqueclass, userInput);
+
+            const newList = new MyListClass(uniqueclass);
+            listArray.push(newList);
+            console.log(listArray);
             
             dialogPropertiesChildren.dialogClose(dialog);
         }
@@ -74,17 +74,24 @@ function myListItems(UID, input) {
     const listName = document.querySelector(".listName");
     const item = document.querySelector(`.myList .${CSS.escape(UID)}`);
     item.addEventListener("click", () => {
-        if (datePickerInstance) {
-            datePickerInstance.destroy();
-            datePickerInstance = null;
+        const contentList = document.querySelector(`#content .${CSS.escape(UID)}.list`);
+        if(!content.contains(contentList)) {
+            if (datePickerInstance) {
+                datePickerInstance.destroy();
+                datePickerInstance = null;
+            }
+            content.replaceChildren();
+    
+            createBurgerDialogCover(UID);
+    
+            listName.textContent = input;
+            contentCreate(UID);
+            deleteAction(UID);
+
+            // Find the class object in the array using UID.
+            // Use that to access today, tomorrow and upcoming.
+            // Append the values to their respective elements on the page.
         }
-        content.replaceChildren();
-
-        createBurgerDialogCover(UID);
-
-        listName.textContent = input;
-        contentCreate(UID);
-        deleteAction(UID);
     });
 }
 
@@ -122,9 +129,6 @@ function contentCreate(UID) {
         contentItemFooter.classList.add("footerInputBox");
         contentItemFooter.innerHTML = `<input type="text" id="footerInput" placeholder="+ Add task">`;
         contentItemFooterSubmit.classList.add("addTask");
-        today.style.padding = "0 25px";
-        tomorrow.style.padding = "0 25px";
-        upcoming.style.padding = "0 25px";
         buttonsFooter.classList.add("footerButtons");
         reminderButton.classList.add("reminder");
         priorityButton.classList.add("priority");
@@ -148,37 +152,76 @@ function contentCreate(UID) {
         reminderButton.appendChild(imgBell);
         priorityButton.appendChild(imgStar);
 
-        addTask(UID);
         timeDialog();
+        addTask(UID);
     })();
     
     function addTask(UID) {
-        const contentItem = document.querySelector(`#content .${CSS.escape(UID)}`)
         const submit = document.querySelector(`#content .${CSS.escape(UID)} .addTask`);
         const footer = document.querySelector(`#content .${CSS.escape(UID)} .footerInputBox`);
         const input = document.querySelector(`#content .${CSS.escape(UID)} #footerInput`);
+        const timeInput = document.querySelector(`#content .${CSS.escape(UID)} #dateTimePicker`);
+        const today = document.querySelector(`#content .${CSS.escape(UID)} .today`);
+        const tomorrow = document.querySelector(`#content .${CSS.escape(UID)} .tomorrow`);
+        const upcoming = document.querySelector(`#content .${CSS.escape(UID)} .upcoming`);
+        const todayDate = new Date();
+        const newToday = new Today();
+        const newTomorrow = new Tomorrow();
+        const newUpcoming = new Upcoming();
     
         submit.addEventListener("click", () => {
+            const dateInput = timeInput.value;
+            const [date, time] = dateInput.split(" ");
+            const yyyy = todayDate.getFullYear();
+            const mm = String(todayDate.getMonth()+1).padStart(2, "0");
+            const dd = String(todayDate.getDate()).padStart(2, "0");
+            const currentDate = `${dd}-${mm}-${yyyy}`;
+
             if (input.value !== "") {
                 const newTask = document.createElement("div");
                 const label = document.createElement("label");
                 const checkbox = document.createElement("input");
                 const taskUID = crypto.randomUUID();
+                const targetClass = listArray.find(item => item.ListId === UID);
 
-                label.setAttribute("for", `task-${taskUID}`);
+                label.setAttribute("for", `${taskUID}`);
                 checkbox.setAttribute("type", "checkbox");
-                checkbox.setAttribute("id", `task-${taskUID}`);
-                newTask.classList.add(`task-${taskUID}`);
-                newTask.style.padding = "0 25px";
-                const labelText = document.createTextNode(input.value);
-    
-                contentItem.insertBefore(newTask, footer);
-                newTask.appendChild(label);
-                label.appendChild(checkbox);
-                label.insertBefore(labelText, null);
+                checkbox.setAttribute("id", `${taskUID}`);
+                newTask.classList.add(`${taskUID}`);
+                newTask.classList.add("task");
+                
+                if (timeInput.value === "" || date === currentDate) {
+                    const labelText = document.createTextNode(`${input.value} ${time || ""}`);
+                    today.appendChild(newTask);
+                    newTask.appendChild(label);
+                    label.appendChild(checkbox);
+                    label.insertBefore(labelText, null);
+                    newToday.addTask(taskUID, checkbox.value, input.value, null, null, time || null);
+                    targetClass.today = newToday;
+                    console.log(listArray);
+                } else if (date === getNextDateFormatted(yyyy, mm, dd)) {
+                    const weekDay = new Date(parseInt(yyyy), parseInt(mm)-1, parseInt(dd)+1);
+                    const weekDayName = weekDay.toLocaleDateString("en-US", { weekday: "short"});
+                    const labelText = document.createTextNode(`${input.value} ${weekDayName} ${time}`);
+                    tomorrow.appendChild(newTask);
+                    newTask.appendChild(label);
+                    label.appendChild(checkbox);
+                    label.insertBefore(labelText, null);
+                    newTomorrow.addTask(taskUID, checkbox.value, input.value, null, weekDayName, time);
+                    targetClass.tomorrow = newTomorrow;
+                    console.log(listArray);
+                } else {
+                    const labelText = document.createTextNode(`${input.value} ${date}`);
+                    upcoming.appendChild(newTask);
+                    newTask.appendChild(label);
+                    label.appendChild(checkbox);
+                    label.insertBefore(labelText, null);
+                    newUpcoming.addTask(taskUID, checkbox.value, input.value, date, null, null);
+                    targetClass.upcoming = newUpcoming;
+                    console.log(listArray);
+                }
 
                 input.value = "";
-                // Add array
             }
         });
     }
@@ -199,17 +242,9 @@ function contentCreate(UID) {
         dialogReminder.classList.add("bellDialog");
         div.classList.add("bellDialogCover");
         dialogReminderClose.classList.add("close");
-        dialogReminder.style.backgroundColor = "#161616";
-        dialogReminder.style.border = "solid 1px #50505080";
-        dialogReminder.style.borderRadius = "10px";
-        dialogReminder.style.height = "60vh";
-        dialogReminder.style.width = "21vw";
-        dialogReminder.style.filter = "brightness(100%)";
-        dialogReminder.style.minWidth = "320px";
         timeInput.setAttribute("id", "dateTimePicker");
         timeInput.setAttribute("type", "text");
         timeInput.setAttribute("placeholder", "Select Date");
-        timeInput.style.display = "none";
         submitTime.classList.add("submitTime");
         submitTime.textContent = "Set";
         
@@ -264,7 +299,7 @@ function contentCreate(UID) {
             if (date === today) {
                 bellBtn.replaceChildren();
                 bellBtn.textContent = time;
-            } else if (date === `${parseInt(dd)+1}-${mm}-${yyyy}`) {
+            } else if (date === getNextDateFormatted(yyyy, mm, dd)) {
                 bellBtn.replaceChildren();
                 const weekDay = new Date(parseInt(yyyy), parseInt(mm)-1, parseInt(dd)+1);
                 const weekDayName = weekDay.toLocaleDateString("en-US", { weekday: "short"});
@@ -292,6 +327,16 @@ function contentCreate(UID) {
                 dialogPropertiesChildren.dialogClose(dialogReminder);
             }
         });
+    }
+    
+    function getNextDateFormatted(year, month, date) {
+        const dateObj = new Date(parseInt(year), parseInt(month)-1, parseInt(date));
+        dateObj.setDate(dateObj.getDate()+1);
+        const newDd = String(dateObj.getDate()).padStart(2, "0");
+        const newMm = String(dateObj.getMonth()+1).padStart(2, "0");
+        const newYyyy = String(dateObj.getFullYear());
+
+        return `${newDd}-${newMm}-${newYyyy}`;
     }
 
     (function () {
@@ -327,38 +372,29 @@ const burgerDialog = (function () {
     const burgerImg = document.querySelector("#left .burger img");
     const dialog = document.querySelector("#left .burgerDialog");
     
-    dialog.style.backgroundColor = "#2a2d33";
-    dialog.style.border = "none";
-    dialog.style.borderRadius = "10px";
-    dialog.style.height = "12vh";
-    dialog.style.width = "10vw";
-    dialog.style.minWidth = "160px";
-    dialog.style.filter = "brightness(100%)";
-    dialog.style.position = "absolute";
-    dialog.style.top = "44px";
     dialog.style.display = "none";
 
     burger.addEventListener("click", (event) => {
         event.stopPropagation();
         if (dialog.style.display === "none") {
             dialog.style.display = "flex";
-            dialog.style.opacity = "0";//
-            dialog.style.transform = "scale(0.95)";//
+            dialog.style.opacity = "0";
+            dialog.style.transform = "scale(0.95)";
             requestAnimationFrame(() => {
-                dialog.style.opacity = "1";//
-                dialog.style.transform = "scale(1)";//
-                dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";//
+                dialog.style.opacity = "1";
+                dialog.style.transform = "scale(1)";
+                dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";
             });
             dialog.style.flexDirection = "column";
             dialog.style.left = `${burger.offsetLeft-46}px`;
             burger.style.backgroundColor = "#161616";
             burgerImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
         } else {
-            dialog.style.opacity = "1";//
-            dialog.style.transform = "scale(1)";//
-            dialog.style.opacity = "0";//
-            dialog.style.transform = "scale(0.95)";//
-            dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";//
+            dialog.style.opacity = "1";
+            dialog.style.transform = "scale(1)";
+            dialog.style.opacity = "0";
+            dialog.style.transform = "scale(0.95)";
+            dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";
             setTimeout(() => {
                 dialog.style.display = "none";
             }, 100);
@@ -368,11 +404,11 @@ const burgerDialog = (function () {
     });
 
     document.addEventListener("click", () => {
-        dialog.style.opacity = "1";//
-        dialog.style.transform = "scale(1)";//
-        dialog.style.opacity = "0";//
-        dialog.style.transform = "scale(0.95)";//
-        dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";//
+        dialog.style.opacity = "1";
+        dialog.style.transform = "scale(1)";
+        dialog.style.opacity = "0";
+        dialog.style.transform = "scale(0.95)";
+        dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";
         setTimeout(() => {
             dialog.style.display = "none";
         }, 100);
@@ -397,14 +433,6 @@ function deleteAction(UID) {
         const deleteYes = document.querySelector(`.listDeleteConfirmDiv.${CSS.escape(UID)} .yes.${CSS.escape(UID)}`);
         const deleteNo = document.querySelector(`.listDeleteConfirmDiv.${CSS.escape(UID)} .no.${CSS.escape(UID)}`);
         
-        deleteDialog.style.backgroundColor = "#161616";
-        deleteDialog.style.border = "solid 1px #505050";
-        deleteDialog.style.borderRadius = "10px";
-        deleteDialog.style.height = "25vh";
-        deleteDialog.style.width = "20vw";
-        deleteDialog.style.filter = "brightness(100%)";
-        deleteDialog.style.textAlign = "center";
-
         dialogPropertiesChildren.dialogOpen(deleteDialog);
 
         deleteYes.addEventListener("click", () => {
@@ -444,11 +472,11 @@ function deleteAction(UID) {
                 deleteNo.setAttribute("class","no");
             }
             
-            dialog.style.opacity = "1";//
-            dialog.style.transform = "scale(1)";//
-            dialog.style.opacity = "0";//
-            dialog.style.transform = "scale(0.95)";//
-            dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";//
+            dialog.style.opacity = "1";
+            dialog.style.transform = "scale(1)";
+            dialog.style.opacity = "0";
+            dialog.style.transform = "scale(0.95)";
+            dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";
             setTimeout(() => {
                 dialog.style.display = "none";
             }, 100);
@@ -458,11 +486,11 @@ function deleteAction(UID) {
 
         deleteNo.addEventListener("click", () => {
             dialogPropertiesChildren.dialogClose(deleteDialog);
-            dialog.style.opacity = "1";//
-            dialog.style.transform = "scale(1)";//
-            dialog.style.opacity = "0";//
-            dialog.style.transform = "scale(0.95)";//
-            dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";//
+            dialog.style.opacity = "1";
+            dialog.style.transform = "scale(1)";
+            dialog.style.opacity = "0";
+            dialog.style.transform = "scale(0.95)";
+            dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";
             setTimeout(() => {
                 dialog.style.display = "none";
             }, 100);
