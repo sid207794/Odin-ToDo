@@ -114,11 +114,33 @@ header #left .burger.disabled:hover img {
     filter: invert(20%) sepia(100%) saturate(5000%) hue-rotate(0deg) brightness(100%) contrast(100%) !important;
 }
 
+#left .burgerDialog {
+    background-color: #2a2d33;
+    border: none;
+    border-radius: 10px;
+    height: 12vh;
+    width: 10vw;
+    min-width: 160px;
+    filter: brightness(100%);
+    position: absolute;
+    top: 44px;
+}
+
 .burgerDialogCover {
     display: flex;
     flex-direction: column;
     flex: 1;
     box-sizing: border-box;
+}
+
+.burgerDialogCover .listDeleteConfirm {
+    background-color: #161616;
+    border: solid 1px #505050;
+    border-radius: 10px;
+    height: 25vh;
+    width: 20vw;
+    filter: brightness(100%);
+    text-align: center;
 }
 
 .listDelete,
@@ -312,6 +334,26 @@ header #right button:hover img {
     filter: brightness(0%);
 }
 
+.myList dialog {
+    background-color: #161616;
+    border: solid 1px #505050;
+    border-radius: 10px;
+    height: 32vh;
+    width: 40vw;
+    filter: brightness(100%);
+    padding: 0;
+}
+
+.bellDialog {
+    background-color: #161616;
+    border: solid 1px #50505080;
+    border-radius: 10px;
+    height: 60vh;
+    width: 21vw;
+    filter: brightness(100%);
+    min-width: 320px;
+}
+
 .myList dialog .myListDialog {
     display: flex;
     flex-direction: column;
@@ -434,6 +476,18 @@ header #right button:hover img {
     padding-top: 25px;
 }
 
+#content .list .today,
+#content .list .tomorrow,
+#content .list .upcoming {
+    padding: 0 25px;
+}
+
+#content .list .today .task,
+#content .list .tomorrow .task,
+#content .list .upcoming .task {
+    padding: 0 25px;
+}
+
 #content .list label{
     display: flex;
     align-items: center;
@@ -488,6 +542,10 @@ header #right button:hover img {
 .footerInputBox:hover {
     box-shadow: 0 -5px 5px black;
     transition: box-shadow 0.2s ease-in-out;
+}
+
+.bellDialogCover #dateTimePicker {
+    display: none;
 }
 
 #footerInput {
