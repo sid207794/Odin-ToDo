@@ -217,6 +217,7 @@ header #right button:hover img {
     gap: 30px;
     padding: 25px 0;
     color: rgb(163, 162, 162);
+    z-index: 15;
 }
 
 #sidebar .profile {
@@ -268,14 +269,35 @@ header #right button:hover img {
 }
 
 #sidebar .myList {
-    display: flex;
-    flex-direction: column;
+    display: block;
+    overflow-y: auto;
+    position: relative;
+    max-height: 300px;
+}
+
+#sidebar .myList::-webkit-scrollbar {
+    width: 5px;
+}
+
+#sidebar .myList::-webkit-scrollbar-track {
+    background-color: #101010;
+    border-radius: 2px;
+    margin-top: 50px;
+}
+
+#sidebar .myList::-webkit-scrollbar-thumb {
+    background-color: rgb(11, 133, 255);
+    border-radius: 2px;
 }
 
 #sidebar .myList span {
     display: flex;
     justify-content: space-between;
     padding: 0 25px;
+    position: sticky;
+    top: 0;
+    z-index: 17;
+    background-color: #101010;
 }
 
 #sidebar .myList .item{
@@ -293,8 +315,13 @@ header #right button:hover img {
 
 #sidebar .myList .item:not(:hover),
 #sidebar .myList span:not(:hover) {
-    background-color: transparent;
+    background-color: #101010;
     transition: background-color 0.2s ease-in-out;
+}
+
+#sidebar .myList .item.highlighted {
+    background-color: #65656530;
+    color: rgb(11, 133, 255);
 }
 
 #sidebar .myList h3{
@@ -472,62 +499,200 @@ header #right button:hover img {
     color: rgb(235, 233, 233);
 }
 
-#content .list {
-    padding-top: 25px;
+#content .list input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-color: transparent;
+    border: solid 2px #65656590;
+    border-radius: 100%;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease-in-out, border-color 0.5s ease;
 }
 
-#content .list .today,
-#content .list .tomorrow,
-#content .list .upcoming {
-    padding: 0 25px;
+#content .list input[type="checkbox"]:checked {
+    border-color: rgb(11, 133, 255);
+}
+
+#content .list input[type="checkbox"]:checked::before {
+    transform: scale(1.03);
+}
+
+#content .list input[type="checkbox"]:checked::after {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+}
+
+#content .list input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 100%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+    background-color: rgb(11, 133, 255);
+    z-index: 11;
+}
+
+#content .list input[type="checkbox"]::after {
+    content: "";
+    position: absolute;
+    top: 2.5px;
+    left: 6px;
+    height: 8px;
+    width: 4px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    opacity: 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    background-color: rgb(11, 133, 255);
+    z-index: 12;
+}
+
+#content .list {
+    transform: scale(0.95);
+}
+
+#content .detail {
+    opacity: 0;
+    transform: translateX(-200%);
+}
+
+#content .list.fadeOut {
+    transform: scale(0.95);
+    transition: transform 0.3s ease-in-out;
+}
+
+#content .detail.fadeOut {
+    opacity: 0;
+    transform: translateX(-200%);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#content .list.fadeIn.fadeOutLast {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#content .detail.fadeIn.fadeOutLast {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#content .list.fadeIn {
+    transform: scale(1);
+    transition: transform 0.4s ease-in-out;
+    z-index: 10;
+}
+
+#content .detail.fadeIn {
+    opacity: 1;
+    transform: translateX(0%);
+    transition: opacity 0.6s ease-in-out, transform 0.5s ease-in-out;
+    z-index: 5;
+}
+
+#content .list {
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    position: relative;
+}
+
+#content .list::-webkit-scrollbar {
+    display: none;
+}
+
+#content .today,
+#content .tomorrow,
+#content .upcoming {
+    position: relative;
+}
+
+#content .today h3,
+#content .tomorrow h3,
+#content .upcoming h3 {
+    margin: 0 auto;
+    padding: 15px 25px;
+    position: sticky;
+    top: 0;
+    background-color: transparent;
+    z-index: 13;
+    cursor: pointer;
+    user-select: none;
 }
 
 #content .list .today .task,
 #content .list .tomorrow .task,
 #content .list .upcoming .task {
-    padding: 0 25px;
+    padding: 10px 25px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#content .list .today .task:hover,
+#content .list .tomorrow .task:hover,
+#content .list .upcoming .task:hover {
+    background-color: #65656530;
+}
+
+#content .list .today .task:not(:hover),
+#content .list .tomorrow .task:not(:hover),
+#content .list .upcoming .task:not(:hover) {
+    background-color: transparent;
+}
+
+#content .list .today .task.fadeIn,
+#content .list .tomorrow .task.fadeIn,
+#content .list .upcoming .task.fadeIn {
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+#content .list .today .task.fadeOut,
+#content .list .tomorrow .task.fadeOut,
+#content .list .upcoming .task.fadeOut {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
 }
 
 #content .list label{
     display: flex;
     align-items: center;
     gap: 10px;
+    color: rgb(212, 212, 212);
+    cursor: pointer;
 }
 
-#content .today:hover h3,
-#content .tomorrow:hover h3,
-#content .upcoming:hover h3 {
+#content .today h3:hover,
+#content .tomorrow h3:hover,
+#content .upcoming h3:hover {
     color: rgb(11, 133, 255);
-    transition: color 0.2s ease-in-out;
+    box-shadow: 0 5px 10px black, 0 -5px 10px black;
+    transition: color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-#content .today:not(:hover) h3,
-#content .tomorrow:not(:hover) h3,
-#content .upcoming:not(:hover) h3 {
+#content .today h3:not(:hover),
+#content .tomorrow h3:not(:hover),
+#content .upcoming h3:not(:hover) {
     color: rgb(235, 233, 233);
-    transition: color 0.2s ease-in-out;
-}
-
-.today:hover,
-.tomorrow:hover,
-.upcoming:hover {
-    background-color: #65656530;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
-
-.today:not(:hover),
-.tomorrow:not(:hover),
-.upcoming:not(:hover) {
-    background-color: transparent;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    box-shadow: none;
+    transition: color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .footerInputBox {
     height: max-content;
     width: 600px;
-    background-color: #313131bb;
+    background-color: #2a2d33;
     margin-top: auto;
     display: flex;
     flex-direction: column;
@@ -537,11 +702,10 @@ header #right button:hover img {
     padding: 10px 0;
     padding-top: 0;
     box-sizing: border-box;
-}
-
-.footerInputBox:hover {
-    box-shadow: 0 -5px 5px black;
-    transition: box-shadow 0.2s ease-in-out;
+    position: sticky;
+    bottom: 0;
+    z-index: 13;
+    box-shadow: 0 -5px 10px black;
 }
 
 .bellDialogCover #dateTimePicker {

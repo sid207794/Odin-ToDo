@@ -1,4 +1,4 @@
-import { MyListClass, Today, Tomorrow, Upcoming } from "./logic.js";
+import { MyListClass, Today, Tomorrow, Upcoming, listArray } from "./logic.js";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import "flatpickr/dist/themes/dark.css";
@@ -6,9 +6,6 @@ import arrowUp from "./images/arrow-up.svg";
 import bell from "./images/bell-outline.svg";
 import star from "./images/star-outline.svg";
 import cross from "./images/window-close.svg";
-
-const listArray = [];
-console.log(listArray);
 
 const myListDialog = (function () {
     const dialog = document.querySelector(".myList dialog");
@@ -38,6 +35,7 @@ const myListDialog = (function () {
     
     submitBtn.addEventListener("click", () => {
         const userInput = document.querySelector(".myList dialog input").value;
+        const items = document.querySelectorAll(".myList .item.highlighted");
 
         if (userInput !== "") {
             const uniqueclass = crypto.randomUUID();
@@ -45,8 +43,16 @@ const myListDialog = (function () {
             const myListItem = document.createElement("div");
             myListItem.classList.add(`${uniqueclass}`);
             myListItem.classList.add("item");
+            items.forEach(element => {
+                element.classList.remove("highlighted");
+            });
+            myListItem.classList.add("highlighted");
             myListItem.textContent = userInput;
             myList.appendChild(myListItem);
+            myListItem.scrollIntoView({
+                behavior: "smooth",
+                block: "end"
+            });
       
             content.replaceChildren();
 
@@ -54,13 +60,13 @@ const myListDialog = (function () {
             burger.classList.remove("disabled");
             createBurgerDialogCover(uniqueclass);
 
-            contentCreate(uniqueclass);
-            deleteAction(uniqueclass);
-            myListItems(uniqueclass, userInput);
-
             const newList = new MyListClass(uniqueclass);
             listArray.push(newList);
             console.log(listArray);
+
+            contentCreate(uniqueclass);
+            deleteAction(uniqueclass);
+            myListItems(uniqueclass, userInput);
             
             dialogPropertiesChildren.dialogClose(dialog);
         }
@@ -75,6 +81,7 @@ function myListItems(UID, input) {
     const item = document.querySelector(`.myList .${CSS.escape(UID)}`);
     item.addEventListener("click", () => {
         const contentList = document.querySelector(`#content .${CSS.escape(UID)}.list`);
+        const items = document.querySelectorAll(".myList .item.highlighted");
         if(!content.contains(contentList)) {
             if (datePickerInstance) {
                 datePickerInstance.destroy();
@@ -88,9 +95,10 @@ function myListItems(UID, input) {
             contentCreate(UID);
             deleteAction(UID);
 
-            // Find the class object in the array using UID.
-            // Use that to access today, tomorrow and upcoming.
-            // Append the values to their respective elements on the page.
+            items.forEach(element => {
+                element.classList.remove("highlighted");
+            });
+            item.classList.add("highlighted");
         }
     });
 }
@@ -127,13 +135,16 @@ function contentCreate(UID) {
         upcoming.classList.add("upcoming");
         h3Upcoming.textContent = "Upcoming";
         contentItemFooter.classList.add("footerInputBox");
-        contentItemFooter.innerHTML = `<input type="text" id="footerInput" placeholder="+ Add task">`;
+        contentItemFooter.innerHTML = `<input type="text" id="footerInput" placeholder="+ Add task" autocomplete="off">`;
         contentItemFooterSubmit.classList.add("addTask");
         buttonsFooter.classList.add("footerButtons");
         reminderButton.classList.add("reminder");
         priorityButton.classList.add("priority");
 
-        content.appendChild(contentItem)
+        content.appendChild(contentItem);
+        requestAnimationFrame(() => {
+            contentItem.classList.add("fadeIn");
+        });
         contentItem.appendChild(today);
         contentItem.appendChild(tomorrow);
         contentItem.appendChild(upcoming);
@@ -154,6 +165,7 @@ function contentCreate(UID) {
 
         timeDialog();
         addTask(UID);
+        taskHideReveal();
     })();
     
     function addTask(UID) {
@@ -165,9 +177,10 @@ function contentCreate(UID) {
         const tomorrow = document.querySelector(`#content .${CSS.escape(UID)} .tomorrow`);
         const upcoming = document.querySelector(`#content .${CSS.escape(UID)} .upcoming`);
         const todayDate = new Date();
-        const newToday = new Today();
-        const newTomorrow = new Tomorrow();
-        const newUpcoming = new Upcoming();
+        
+        const targetClass = listArray.find(item => item.ListId === UID);
+
+        populateExisitingList();
     
         submit.addEventListener("click", () => {
             const dateInput = timeInput.value;
@@ -182,7 +195,7 @@ function contentCreate(UID) {
                 const label = document.createElement("label");
                 const checkbox = document.createElement("input");
                 const taskUID = crypto.randomUUID();
-                const targetClass = listArray.find(item => item.ListId === UID);
+                const list = document.querySelector(`#content .list`);
 
                 label.setAttribute("for", `${taskUID}`);
                 checkbox.setAttribute("type", "checkbox");
@@ -193,37 +206,263 @@ function contentCreate(UID) {
                 if (timeInput.value === "" || date === currentDate) {
                     const labelText = document.createTextNode(`${input.value} ${time || ""}`);
                     today.appendChild(newTask);
+                    requestAnimationFrame(() => {
+                        if (today.children.length === 2 || today.querySelector(".fadeIn")) {
+                            newTask.classList.add("fadeIn");
+                            newTask.style.display = "block";
+                        } else if (!today.querySelector(".fadeIn")) {
+                            newTask.style.display = "none";
+                        }
+                    });
                     newTask.appendChild(label);
                     label.appendChild(checkbox);
                     label.insertBefore(labelText, null);
-                    newToday.addTask(taskUID, checkbox.value, input.value, null, null, time || null);
-                    targetClass.today = newToday;
+                    checkbox.addEventListener("change", () => {
+                        Object.entries(targetClass.today).forEach(([key, task]) => {
+                            if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
+                                task.check = checkbox.checked;
+                                label.style.textDecoration = "line-through";
+                                label.style.color = "rgb(163, 162, 162)";
+                                console.log(listArray);
+                            } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
+                                task.check = checkbox.checked;
+                                label.style.textDecoration = "none";
+                                label.style.color = "rgb(212, 212, 212)";
+                                console.log(listArray);
+                            }
+                        });
+                    });
+                    targetClass.today.addTask(taskUID, checkbox.checked, input.value, null, null, time || "");
                     console.log(listArray);
                 } else if (date === getNextDateFormatted(yyyy, mm, dd)) {
                     const weekDay = new Date(parseInt(yyyy), parseInt(mm)-1, parseInt(dd)+1);
                     const weekDayName = weekDay.toLocaleDateString("en-US", { weekday: "short"});
                     const labelText = document.createTextNode(`${input.value} ${weekDayName} ${time}`);
                     tomorrow.appendChild(newTask);
+                    requestAnimationFrame(() => {
+                        if (tomorrow.children.length === 2 || tomorrow.querySelector(".fadeIn")) {
+                            newTask.classList.add("fadeIn");
+                            newTask.style.display = "block";
+                        } else if (!tomorrow.querySelector(".fadeIn")) {
+                            newTask.style.display = "none";
+                        }
+                    });
                     newTask.appendChild(label);
                     label.appendChild(checkbox);
                     label.insertBefore(labelText, null);
-                    newTomorrow.addTask(taskUID, checkbox.value, input.value, null, weekDayName, time);
-                    targetClass.tomorrow = newTomorrow;
+                    checkbox.addEventListener("change", () => {
+                        Object.entries(targetClass.tomorrow).forEach(([key, task]) => {
+                            if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
+                                task.check = checkbox.checked;
+                                label.style.textDecoration = "line-through";
+                                label.style.color = "rgb(163, 162, 162)";
+                                console.log(listArray);
+                            } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
+                                task.check = checkbox.checked;
+                                label.style.textDecoration = "none";
+                                label.style.color = "rgb(212, 212, 212)";
+                                console.log(listArray);
+                            }
+                        });
+                    });
+                    targetClass.tomorrow.addTask(taskUID, checkbox.checked, input.value, null, weekDayName, time);
                     console.log(listArray);
                 } else {
                     const labelText = document.createTextNode(`${input.value} ${date}`);
                     upcoming.appendChild(newTask);
+                    requestAnimationFrame(() => {
+                        if (upcoming.children.length === 2 || upcoming.querySelector(".fadeIn")) {
+                            newTask.classList.add("fadeIn");
+                            newTask.style.display = "block";
+                        } else if (!upcoming.querySelector(".fadeIn")) {
+                            newTask.style.display = "none";
+                        }
+                    });
                     newTask.appendChild(label);
                     label.appendChild(checkbox);
                     label.insertBefore(labelText, null);
-                    newUpcoming.addTask(taskUID, checkbox.value, input.value, date, null, null);
-                    targetClass.upcoming = newUpcoming;
+                    checkbox.addEventListener("change", () => {
+                        Object.entries(targetClass.upcoming).forEach(([key, task]) => {
+                            if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
+                                task.check = checkbox.checked;
+                                label.style.textDecoration = "line-through";
+                                label.style.color = "rgb(163, 162, 162)";
+                                console.log(listArray);
+                            } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
+                                task.check = checkbox.checked;
+                                label.style.textDecoration = "none";
+                                label.style.color = "rgb(212, 212, 212)";
+                                console.log(listArray);
+                            }
+                        });
+                    });
+                    targetClass.upcoming.addTask(taskUID, checkbox.checked, input.value, date, null, null);
                     console.log(listArray);
+                }
+
+                if (list.scrollHeight > list.clientHeight) {
+                    const h3 = document.querySelectorAll("#content .list h3");
+                    h3.forEach(itemh3 => {
+                        itemh3.style.backgroundColor = "transparent";
+                        requestAnimationFrame(() => {
+                            itemh3.style.backgroundColor = "#2a2d33";
+                            itemh3.style.transition = "background-color 0.6s ease";
+                        });
+                    });
                 }
 
                 input.value = "";
             }
         });
+
+        function populateExisitingList() {
+            if (Object.keys(targetClass.today).some(key => key.startsWith("task"))) {
+                Object.keys(targetClass.today).forEach(key => {
+                    if (key.startsWith("task")) {
+                        const task = targetClass.today[key];
+                        const newTask = document.createElement("div");
+                        const label = document.createElement("label");
+                        const checkbox = document.createElement("input");
+                        const taskUID = task.id;
+        
+                        label.setAttribute("for", `${taskUID}`);
+                        checkbox.setAttribute("type", "checkbox");
+                        checkbox.setAttribute("id", `${taskUID}`);
+
+                        if (task.check) checkbox.checked = true;
+
+                        newTask.classList.add(`${taskUID}`);
+                        newTask.classList.add("task");
+                        
+                        const labelText = document.createTextNode(`${task.text} ${task.time}`);
+                        today.appendChild(newTask);
+                        requestAnimationFrame(() => {
+                            newTask.classList.add("fadeIn");
+                        });
+                        newTask.appendChild(label);
+                        label.appendChild(checkbox);
+                        label.insertBefore(labelText, null);
+                        checkbox.addEventListener("change", () => {
+                            Object.entries(targetClass.today).forEach(([key, task]) => {
+                                if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
+                                    task.check = checkbox.checked;
+                                    label.style.textDecoration = "line-through";
+                                    label.style.color = "rgb(163, 162, 162)";
+                                    console.log(listArray);
+                                } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
+                                    task.check = checkbox.checked;
+                                    label.style.textDecoration = "none";
+                                    label.style.color = "rgb(212, 212, 212)";
+                                    console.log(listArray);
+                                }
+                            });
+                        });
+                    }
+                });
+            }
+
+            if (Object.keys(targetClass.tomorrow).some(key => key.startsWith("task"))) {
+                Object.keys(targetClass.tomorrow).forEach(key => {
+                    if (key.startsWith("task")) {
+                        const task = targetClass.tomorrow[key];
+                        const newTask = document.createElement("div");
+                        const label = document.createElement("label");
+                        const checkbox = document.createElement("input");
+                        const taskUID = task.id;
+        
+                        label.setAttribute("for", `${taskUID}`);
+                        checkbox.setAttribute("type", "checkbox");
+                        checkbox.setAttribute("id", `${taskUID}`);
+
+                        if (task.check) checkbox.checked = true;
+
+                        newTask.classList.add(`${taskUID}`);
+                        newTask.classList.add("task");
+                        
+                        const labelText = document.createTextNode(`${task.text} ${task.weekDay} ${task.time}`);
+                        tomorrow.appendChild(newTask);
+                        requestAnimationFrame(() => {
+                            newTask.style.display = "none";
+                        });
+                        newTask.appendChild(label);
+                        label.appendChild(checkbox);
+                        label.insertBefore(labelText, null);
+                        checkbox.addEventListener("change", () => {
+                            Object.entries(targetClass.tomorrow).forEach(([key, task]) => {
+                                if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
+                                    task.check = checkbox.checked;
+                                    label.style.textDecoration = "line-through";
+                                    label.style.color = "rgb(163, 162, 162)";
+                                    console.log(listArray);
+                                } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
+                                    task.check = checkbox.checked;
+                                    label.style.textDecoration = "none";
+                                    label.style.color = "rgb(212, 212, 212)";
+                                    console.log(listArray);
+                                }
+                            });
+                        });
+                    }
+                });
+            }
+            
+            if (Object.keys(targetClass.upcoming).some(key => key.startsWith("task"))) {
+                Object.keys(targetClass.upcoming).forEach(key => {
+                    if (key.startsWith("task")) {
+                        const task = targetClass.upcoming[key];
+                        const newTask = document.createElement("div");
+                        const label = document.createElement("label");
+                        const checkbox = document.createElement("input");
+                        const taskUID = task.id;
+        
+                        label.setAttribute("for", `${taskUID}`);
+                        checkbox.setAttribute("type", "checkbox");
+                        checkbox.setAttribute("id", `${taskUID}`);
+
+                        if (task.check) checkbox.checked = true;
+
+                        newTask.classList.add(`${taskUID}`);
+                        newTask.classList.add("task");
+                        
+                        const labelText = document.createTextNode(`${task.text} ${task.date}`);
+                        upcoming.appendChild(newTask);
+                        requestAnimationFrame(() => {
+                            newTask.style.display = "none";
+                        });
+                        newTask.appendChild(label);
+                        label.appendChild(checkbox);
+                        label.insertBefore(labelText, null);
+                        checkbox.addEventListener("change", () => {
+                            Object.entries(targetClass.upcoming).forEach(([key, task]) => {
+                                if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
+                                    task.check = checkbox.checked;
+                                    label.style.textDecoration = "line-through";
+                                    label.style.color = "rgb(163, 162, 162)";
+                                    console.log(listArray);
+                                } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
+                                    task.check = checkbox.checked;
+                                    label.style.textDecoration = "none";
+                                    label.style.color = "rgb(212, 212, 212)";
+                                    console.log(listArray);
+                                }
+                            });
+                        });
+                    }
+                });
+            }
+            
+            const list = document.querySelector(`#content .list`);
+            if (list.scrollHeight > list.clientHeight) {
+                const h3 = document.querySelectorAll("#content .list h3");
+                h3.forEach(itemh3 => {
+                    itemh3.style.backgroundColor = "transparent";
+                    requestAnimationFrame(() => {
+                        itemh3.style.backgroundColor = "#2a2d33";
+                        itemh3.style.transition = "background-color 0.6s ease";
+                    });
+                });
+            }
+        }
     }
 
     function timeDialog() {
@@ -319,6 +558,7 @@ function contentCreate(UID) {
 
         dialogReminder.addEventListener("click", (e) => {
             if (e.target === dialogReminder) {
+                timeInput.value = "";
                 if (datePickerInstance) {
                     datePickerInstance.destroy();
                     datePickerInstance = null;
@@ -339,6 +579,108 @@ function contentCreate(UID) {
         return `${newDd}-${newMm}-${newYyyy}`;
     }
 
+    function taskHideReveal() {
+        const today = document.querySelector("#content .list .today h3");
+        const tomorrow = document.querySelector("#content .list .tomorrow h3");
+        const upcoming = document.querySelector("#content .list .upcoming h3");
+        
+        today.addEventListener("click", () => {
+            const tasks = document.querySelectorAll("#content .list .today .task");
+            const list = document.querySelector(`#content .list`);
+            const h3 = document.querySelectorAll("#content .list h3");
+            tasks.forEach(task => {
+                task.classList.toggle("fadeIn");
+                if (!task.classList.contains("fadeIn")) {
+                    task.style.display = "none";
+                } else {
+                    task.style.display = "block";
+                }
+            });
+
+            if (list.scrollHeight > list.clientHeight) {
+                h3.forEach(itemh3 => {
+                    itemh3.style.backgroundColor = "transparent";
+                    requestAnimationFrame(() => {
+                        itemh3.style.backgroundColor = "#2a2d33";
+                        itemh3.style.transition = "background-color 0.6s ease";
+                    });
+                });
+            } else {
+                h3.forEach(itemh3 => {
+                    itemh3.style.backgroundColor = "#2a2d33";
+                    requestAnimationFrame(() => {
+                        itemh3.style.backgroundColor = "transparent";
+                        itemh3.style.transition = "background-color 0.6s ease";
+                    });
+                });
+            }
+        });
+
+        tomorrow.addEventListener("click", () => {
+            const tasks = document.querySelectorAll("#content .list .tomorrow .task");
+            const list = document.querySelector(`#content .list`);
+            const h3 = document.querySelectorAll("#content .list h3");
+            tasks.forEach(task => {
+                task.classList.toggle("fadeIn");
+                if (!task.classList.contains("fadeIn")) {
+                    task.style.display = "none";
+                } else {
+                    task.style.display = "block";
+                }
+            });
+
+            if (list.scrollHeight > list.clientHeight) {
+                h3.forEach(itemh3 => {
+                    itemh3.style.backgroundColor = "transparent";
+                    requestAnimationFrame(() => {
+                        itemh3.style.backgroundColor = "#2a2d33";
+                        itemh3.style.transition = "background-color 0.6s ease";
+                    });
+                });
+            } else {
+                h3.forEach(itemh3 => {
+                    itemh3.style.backgroundColor = "#2a2d33";
+                    requestAnimationFrame(() => {
+                        itemh3.style.backgroundColor = "transparent";
+                        itemh3.style.transition = "background-color 0.6s ease";
+                    });
+                });
+            }
+        });
+        
+        upcoming.addEventListener("click", () => {
+            const tasks = document.querySelectorAll("#content .list .upcoming .task");
+            const list = document.querySelector(`#content .list`);
+            const h3 = document.querySelectorAll("#content .list h3");
+            tasks.forEach(task => {
+                task.classList.toggle("fadeIn");
+                if (!task.classList.contains("fadeIn")) {
+                    task.style.display = "none";
+                } else {
+                    task.style.display = "block";
+                }
+            });
+
+            if (list.scrollHeight > list.clientHeight) {
+                h3.forEach(itemh3 => {
+                    itemh3.style.backgroundColor = "transparent";
+                    requestAnimationFrame(() => {
+                        itemh3.style.backgroundColor = "#2a2d33";
+                        itemh3.style.transition = "background-color 0.6s ease";
+                    });
+                });
+            } else {
+                h3.forEach(itemh3 => {
+                    itemh3.style.backgroundColor = "#2a2d33";
+                    requestAnimationFrame(() => {
+                        itemh3.style.backgroundColor = "transparent";
+                        itemh3.style.transition = "background-color 0.6s ease";
+                    });
+                });
+            }
+        });
+    }
+
     (function () {
         const contentItemDetail = document.createElement("div");
         const header = document.createElement("div");
@@ -347,7 +689,7 @@ function contentCreate(UID) {
         const notes = document.createElement("div");
         const attachments = document.createElement("div");
 
-        contentItemDetail.classList.add(`${UID}-detail`);
+        contentItemDetail.classList.add(`${UID}`);
         contentItemDetail.classList.add(`detail`);
         header.classList.add("header");
         title.classList.add("title");
@@ -359,6 +701,9 @@ function contentCreate(UID) {
         headDelete.classList.add(`${UID}-deleteButton`)
 
         content.appendChild(contentItemDetail);
+        requestAnimationFrame(() => {
+            contentItemDetail.classList.add("fadeIn");
+        });
         contentItemDetail.appendChild(header);
         contentItemDetail.appendChild(title);
         contentItemDetail.appendChild(buttons);
@@ -432,20 +777,51 @@ function deleteAction(UID) {
         const deleteDialogDiv = document.querySelector(`.listDeleteConfirmDiv.${CSS.escape(UID)}`);
         const deleteYes = document.querySelector(`.listDeleteConfirmDiv.${CSS.escape(UID)} .yes.${CSS.escape(UID)}`);
         const deleteNo = document.querySelector(`.listDeleteConfirmDiv.${CSS.escape(UID)} .no.${CSS.escape(UID)}`);
+        const listFade = document.querySelector("#content .list.fadeIn");
+        const detailFade = document.querySelector("#content .detail.fadeIn");
+        const newTask = document.querySelectorAll("#content .task.fadeIn");
+        const targetIndex = listArray.findIndex(item => item.ListId === UID);//
+        console.log(targetIndex);//
+        console.log(listArray);//
+
+        const newYes = deleteYes.cloneNode(true);//
+        const newNo = deleteNo.cloneNode(true);//
+        
+        deleteYes.parentNode.replaceChild(newYes, deleteYes);//
+        deleteNo.parentNode.replaceChild(newNo, deleteNo);//
         
         dialogPropertiesChildren.dialogOpen(deleteDialog);
 
-        deleteYes.addEventListener("click", () => {
+        newYes.addEventListener("click", () => {//
             const listToDelete = document.querySelector(`.myList .${CSS.escape(UID)}`);
             const content = document.querySelector("#content");
             const myList = document.querySelector(".myList");
+
+            newTask.forEach(task => {
+                task.classList.remove("fadeIn");
+                task.classList.add("fadeOut");
+            });
+            
+            listArray.splice(targetIndex, 1);//
     
             if (datePickerInstance) {
                 datePickerInstance.destroy();
                 datePickerInstance = null;
             }
             
-            content.replaceChildren();
+            if (myList.children.length === 2) {
+                listFade.classList.add("fadeOutLast");
+                detailFade.classList.add("fadeOutLast");
+            } else {
+                listFade.classList.remove("fadeIn");
+                detailFade.classList.remove("fadeIn");
+                listFade.classList.add("fadeOut");
+                detailFade.classList.add("fadeOut");
+            }
+
+            setTimeout(() => {
+                content.replaceChildren();
+            }, 300);
             
             if (listToDelete) {
                 myList.removeChild(listToDelete);
@@ -459,7 +835,10 @@ function deleteAction(UID) {
             dialogPropertiesChildren.dialogClose(deleteDialog);
     
             if (item) {
-                item.click();
+                item.classList.add("highlighted");
+                setTimeout(() => {
+                    item.click();
+                }, 300);
             } else {
                 listName.textContent = "";
                 listDelete.setAttribute("class","listDelete");
@@ -484,7 +863,7 @@ function deleteAction(UID) {
             burgerImg.style.filter = "invert(70%)";
         });
 
-        deleteNo.addEventListener("click", () => {
+        newNo.addEventListener("click", () => {//
             dialogPropertiesChildren.dialogClose(deleteDialog);
             dialog.style.opacity = "1";
             dialog.style.transform = "scale(1)";
