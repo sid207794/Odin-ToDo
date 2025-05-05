@@ -14,9 +14,9 @@ export class Today {
         this._taskCount = 0;
     }
 
-    addTask(taskId, checkValue, task, date, weekDay, time) {
+    addTask(taskId, checkValue, task, date, weekDay, time, priority) {
         this._taskCount += 1;
-        this[`task${this._taskCount}`] = {id: taskId, check: checkValue, text: task, date: date, weekDay: weekDay, time: time};
+        this[`task${this._taskCount}`] = {id: taskId, check: checkValue, text: task, date: date, weekDay: weekDay, time: time, priority: priority};
     }
 }
 
@@ -25,9 +25,9 @@ export class Tomorrow {
         this._taskCount = 0;
     }
 
-    addTask(taskId, checkValue, task, date, weekDay, time) {
+    addTask(taskId, checkValue, task, date, weekDay, time, priority) {
         this._taskCount += 1;
-        this[`task${this._taskCount}`] = {id: taskId, check: checkValue, text: task, date: date, weekDay: weekDay, time: time};
+        this[`task${this._taskCount}`] = {id: taskId, check: checkValue, text: task, date: date, weekDay: weekDay, time: time, priority: priority};
     }
 }
 
@@ -36,8 +36,8 @@ export class Upcoming {
         this._taskCount = 0;
     }
 
-    addTask(taskId, checkValue, task, date, weekDay, time) {
+    addTask(taskId, checkValue, task, date, weekDay, time, priority) {
         this._taskCount += 1;
-        this[`task${this._taskCount}`] = {id: taskId, check: checkValue, text: task, date: date, weekDay: weekDay, time: time};
+        this[`task${this._taskCount}`] = {id: taskId, check: checkValue, text: task, date: date, weekDay: weekDay, time: time, priority: priority};
     }
 }
