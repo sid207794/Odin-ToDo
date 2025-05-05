@@ -38,14 +38,49 @@ header #left {
 }
 
 header #left .listName {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    border-right: solid 2px rgb(163, 162, 162);
+    padding: 0 15px;
+    padding-left: 0;
+}
+
+header #left .listName #listname {
+    width: 125px;
     color: white;
+    font-family: inherit;
     font-weight: 900;
     font-size: 20px;
-    flex: 1;
-    border: none;
-    border-right: solid 2px rgb(163, 162, 162);
-    padding: 0 20px;
-    padding-left: 0;
+    background-color: transparent;
+    border: solid 1px transparent;
+    outline: none;
+    box-sizing: content-box;
+    caret-color: rgb(11, 133, 255);
+    transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+header #left .listName #listname:focus {
+    color: rgb(163, 162, 162);
+    border-bottom: solid 1px rgb(11, 133, 255);
+}
+
+header #left .listName #listname:not(:focus):hover {
+    border-bottom: solid 1px rgb(163, 162, 162);
+}
+
+header #left .listName #listname:placeholder-shown {
+    border-bottom: solid 1px red;
+}
+
+header #left .listName .mirrorName {
+    visibility: hidden;
+    white-space: pre;
+    position: absolute;
+    font-family: inherit;
+    font-weight: 900;
+    font-size: 20px;
+    padding: 1px 2px;
 }
 
 header #left .share,
@@ -170,6 +205,7 @@ header #left .burger.disabled:hover img {
 .listDelete:hover,
 .taskDeleteSelect:hover {
     background-color: #65656530;
+    color: rgb(11, 133, 255);
 }
 
 header #right {
@@ -218,6 +254,10 @@ header #right button:hover img {
     padding: 25px 0;
     color: rgb(163, 162, 162);
     z-index: 15;
+    max-width: 220px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 #sidebar .profile {
@@ -304,6 +344,8 @@ header #right button:hover img {
     padding: 15px 25px;
     margin-left: 0;
     margin-right: 0;
+    border-bottom: solid 2px transparent;
+    font-weight: normal;
     cursor: pointer;
 }
 
@@ -320,8 +362,11 @@ header #right button:hover img {
 }
 
 #sidebar .myList .item.highlighted {
+    border-bottom: solid 2px rgb(11, 133, 255);
     background-color: #65656530;
     color: rgb(11, 133, 255);
+    font-weight: bold;
+    transition: font-weight 0.2s ease-in-out, border-bottom 0.2s ease-in-out;
 }
 
 #sidebar .myList h3{
@@ -491,8 +536,206 @@ header #right button:hover img {
     box-sizing: border-box;
 }
 
-#content > .detail {
+#content .detail {
     background-color: #161616ef;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+#content .detail .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#content .detail .deleteButton,
+#content .detail .complete {
+    background-color: transparent;
+    height: 30px;
+    width: 30px;
+    border: none;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#content .detail .complete {
+    margin-left: auto;
+}
+
+#content .detail .deleteButton img,
+#content .detail .complete img {
+    height: 25px;
+    width: 25px;
+    filter: invert(70%);
+    cursor: pointer;
+}
+
+#content .detail .deleteButton img:hover {
+    filter: invert(20%) sepia(100%) saturate(5000%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}
+
+#content .detail .complete img:hover {
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+}
+
+#content .detail .title #taskName {
+    background-color: transparent;
+    border: none;
+    border-bottom: solid 2px rgb(163, 162, 162);
+    outline: none;
+    font-family: inherit;
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+    width: 100%;
+    caret-color: rgb(11, 133, 255);
+    transition: color 0.2s ease-in-out, border-color 0.3s ease-in-out;
+    resize: none;
+}
+
+#content .detail .title #taskName:focus {
+    color: rgb(163, 162, 162);
+    border-bottom: solid 2px rgb(11, 133, 255);
+    transition: color 0.2s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+#content .detail .title #taskName:placeholder-shown {
+    border-bottom: solid 2px red;
+    transition: color 0.2s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+#content .detail .buttons {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 10px;
+}
+
+#content .detail .buttons .reminder,
+#content .detail .buttons .listName,
+#content .detail .buttons .priority {
+    background-color: #333333;
+    padding: 7px 12px;
+    border: none;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    filter: brightness(100%);
+}
+
+#content .detail .buttons .reminder:hover,
+#content .detail .buttons .listName:hover,
+#content .detail .buttons .priority:hover {
+    filter: brightness(90%);
+}
+
+#content .detail .reminder img,
+#content .detail .listName img,
+#content .detail .priority img {
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+    filter: invert(20%) sepia(100%) saturate(5000%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}
+
+#content .detail .listName img {
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+}
+
+#content .detail .priority img {
+    filter: invert(50%) sepia(90%) saturate(600%) hue-rotate(15deg) brightness(100%) contrast(120%);
+}
+
+#content .detail .priority.on {
+    background-color: #d9a500;
+    color: black;
+}
+
+#content .detail .priority.on img {
+    filter: invert(0%);
+}
+
+#content .detail .notes label {
+    display: flex;
+    flex-direction: column;
+}
+
+#content .detail .notes label p,
+#content .detail .attachments p {
+    margin: 5px 0;
+    color: white;
+    font-weight: bolder;
+}
+
+#content .detail .notes label #note {
+    background-color: transparent;
+    border: none;
+    border-bottom: dashed 2px rgb(163, 162, 162);
+    outline: none;
+    font-family: inherit;
+    font-size: 15px;
+    color: rgb(163, 162, 162);
+    height: 30px;
+    width: 100%;
+    caret-color: rgb(11, 133, 255);
+    transition: color 0.2s ease-in-out, border-color 0.3s ease-in-out;
+    resize: none;
+}
+
+#content .detail .notes label #note:focus {
+    color: white;
+    border-bottom: dashed 2px rgb(11, 133, 255);
+    transition: color 0.2s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+#content .detail .attachments {
+    margin: auto 0;
+}
+
+#content .detail .attachments label {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 20px 0;
+    width: 100%;
+    border: dashed 2px rgb(11, 133, 255);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+
+#content .detail .attachments label:hover {
+    border: dashed 2px white;
+    transition: border-color 0.3s ease-in-out;
+}
+
+#content .detail .attachments label:not(:hover) {
+    border: dashed 2px rgb(11, 133, 255);
+    transition: border-color 0.3s ease-in-out;
+}
+
+#content .detail .attachments label:hover p {
+    color: rgb(11, 133, 255);
+    font-weight: bold;
+    transition: color 0.2s ease-in-out, font-weight 0.2s ease-in-out;
+}
+
+#content .detail .attachments label:not(:hover) p {
+    color: white;
+    font-weight: normal;
+    transition: color 0.2s ease-in-out, font-weight 0.2s ease-in-out;
+}
+
+#content .detail .attachments label #attachment {
+    display: none;
 }
 
 #content * {
@@ -665,6 +908,11 @@ header #right button:hover img {
     transition: opacity 0.2s ease-in-out;
 }
 
+#content .list .task.taskHighlight {
+    background-color: #65656530 !important;
+    border-bottom: solid 1px rgb(11, 133, 255);
+}
+
 #content .list label{
     display: flex;
     align-items: center;
@@ -673,12 +921,33 @@ header #right button:hover img {
     cursor: pointer;
 }
 
+#content .list label span {
+    color: white;
+    background-color: rgb(11, 133, 255);
+    border-radius: 20px;
+    padding: 0 8px;
+    cursor: default;
+    box-shadow: none;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    user-select: none;
+}
+
+#content .list label span.yellow {
+    color: #161616;
+    background-color: #d9a500;
+    padding: 1px 8px;
+}
+
+#content .list label span:hover {
+    box-shadow: 5px 5px 5px black;
+}
+
 #content .today h3:hover,
 #content .tomorrow h3:hover,
 #content .upcoming h3:hover {
     color: rgb(11, 133, 255);
     box-shadow: 0 5px 10px black, 0 -5px 10px black;
-    transition: color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    transition: color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.6s ease-in-out;
 }
 
 #content .today h3:not(:hover),
@@ -686,7 +955,7 @@ header #right button:hover img {
 #content .upcoming h3:not(:hover) {
     color: rgb(235, 233, 233);
     box-shadow: none;
-    transition: color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    transition: color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.6s ease-in-out;
 }
 
 .footerInputBox {
@@ -788,9 +1057,16 @@ header #right button:hover img {
     filter: invert(60%);
 }
 
-.footerInputBox .reminder:hover img,
-.footerInputBox .priority:hover img {
+.footerInputBox .priority.on img {
+    filter: invert(50%) sepia(90%) saturate(600%) hue-rotate(15deg) brightness(100%) contrast(120%);
+}
+
+.footerInputBox .reminder:hover img {
     filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+}
+
+.footerInputBox .priority:hover img {
+    filter: invert(50%) sepia(90%) saturate(600%) hue-rotate(15deg) brightness(100%) contrast(120%);
 }
 
 .bellDialog .flatpickr-calendar {

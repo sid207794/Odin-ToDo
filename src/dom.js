@@ -5,7 +5,14 @@ import "flatpickr/dist/themes/dark.css";
 import arrowUp from "./images/arrow-up.svg";
 import bell from "./images/bell-outline.svg";
 import star from "./images/star-outline.svg";
+import starfill from "./images/star-filled.svg";
 import cross from "./images/window-close.svg";
+import trash from "./images/trash-can-outline.svg";
+import tick from "./images/check-circle-outline.svg";
+import bell2 from "./images/bell2.svg";
+import move from "./images/file-document-arrow-right.svg";
+import star2 from "./images/star-plus.svg";
+import checkCircle from "./images/check-circle.svg";
 
 const myListDialog = (function () {
     const dialog = document.querySelector(".myList dialog");
@@ -13,7 +20,8 @@ const myListDialog = (function () {
     const openBtn = document.querySelector(".myList .add");
     const closeBtn = document.querySelector(".myList dialog .close");
     const submitBtn = document.querySelector(".myList dialog .submit");
-    const listName = document.querySelector(".listName");
+    const listName = document.querySelector(".listName #listname");
+    const mirror = document.querySelector(".listName .mirrorName");
     const myList = document.querySelector(".myList");
     const content = document.querySelector("#content");
     const burger = document.querySelector("#left .burger");
@@ -39,7 +47,32 @@ const myListDialog = (function () {
 
         if (userInput !== "") {
             const uniqueclass = crypto.randomUUID();
-            listName.textContent = userInput;
+            listName.style.display = "block";
+            listName.value = userInput;
+            mirror.textContent = userInput;
+            listName.style.width = mirror.offsetWidth + "px";
+            listName.addEventListener("input", () => {
+                mirror.textContent = listName.value;
+                listName.style.width = mirror.offsetWidth + "px";
+                if (listName.value.length === 0) {
+                    listName.style.width = "125px";
+                }
+
+                const list = document.querySelector("#content .list");
+                const detail = document.querySelector("#content .detail");
+                if (list) {
+                    const listUID = list.classList[0];
+                    const item = document.querySelector(`#sidebar .myList .${CSS.escape(listUID)}`);
+                    item.textContent = listName.value;
+                }
+
+                if (detail) {
+                    const detailUID = detail.classList[0];
+                    const item = document.querySelector(`#content .${CSS.escape(detailUID)}.detail .buttons .listName`);
+                    const textNode = Array.from(item.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+                    textNode.textContent = listName.value;
+                }
+            });
             const myListItem = document.createElement("div");
             myListItem.classList.add(`${uniqueclass}`);
             myListItem.classList.add("item");
@@ -77,8 +110,9 @@ let datePickerInstance;
 
 function myListItems(UID, input) {
     const content = document.querySelector("#content");
-    const listName = document.querySelector(".listName");
+    const listName = document.querySelector(".listName #listname");
     const item = document.querySelector(`.myList .${CSS.escape(UID)}`);
+    const mirror = document.querySelector(".listName .mirrorName");
     item.addEventListener("click", () => {
         const contentList = document.querySelector(`#content .${CSS.escape(UID)}.list`);
         const items = document.querySelectorAll(".myList .item.highlighted");
@@ -91,7 +125,12 @@ function myListItems(UID, input) {
     
             createBurgerDialogCover(UID);
     
-            listName.textContent = input;
+            listName.value = item.textContent;
+            mirror.textContent = item.textContent;
+            listName.style.width = mirror.offsetWidth + "px";
+            if (listName.value.length === 0) {
+                listName.style.width = "125px";
+            }
             contentCreate(UID);
             deleteAction(UID);
 
@@ -122,9 +161,11 @@ function contentCreate(UID) {
         const imgArrow = document.createElement("img");
         const imgBell = document.createElement("img");
         const imgStar = document.createElement("img");
+        const imgStarFill = document.createElement("img");
         imgArrow.src = arrowUp;
         imgBell.src = bell;
         imgStar.src = star;
+        imgStarFill.src = starfill;
 
         contentItem.classList.add(`${UID}`);
         contentItem.classList.add(`list`);
@@ -135,7 +176,7 @@ function contentCreate(UID) {
         upcoming.classList.add("upcoming");
         h3Upcoming.textContent = "Upcoming";
         contentItemFooter.classList.add("footerInputBox");
-        contentItemFooter.innerHTML = `<input type="text" id="footerInput" placeholder="+ Add task" autocomplete="off">`;
+        contentItemFooter.innerHTML = `<input type="text" id="footerInput" maxlength="37" placeholder="+ Add task" autocomplete="off">`;
         contentItemFooterSubmit.classList.add("addTask");
         buttonsFooter.classList.add("footerButtons");
         reminderButton.classList.add("reminder");
@@ -163,6 +204,17 @@ function contentCreate(UID) {
         reminderButton.appendChild(imgBell);
         priorityButton.appendChild(imgStar);
 
+        priorityButton.addEventListener("click", () => {
+            priorityButton.classList.toggle("on");
+            if (priorityButton.classList[1] === "on") {
+                priorityButton.replaceChildren();
+                priorityButton.appendChild(imgStarFill);
+            } else {
+                priorityButton.replaceChildren();
+                priorityButton.appendChild(imgStar);
+            }
+        });
+
         timeDialog();
         addTask(UID);
         taskHideReveal();
@@ -177,6 +229,13 @@ function contentCreate(UID) {
         const tomorrow = document.querySelector(`#content .${CSS.escape(UID)} .tomorrow`);
         const upcoming = document.querySelector(`#content .${CSS.escape(UID)} .upcoming`);
         const todayDate = new Date();
+        let priorityMode;
+        const tickImg = document.createElement("img");
+        const checkImg = document.createElement("img");
+        const imgStar = document.createElement("img");
+        tickImg.src = tick;
+        checkImg.src = checkCircle;
+        imgStar.src = star;
         
         const targetClass = listArray.find(item => item.ListId === UID);
 
@@ -196,6 +255,8 @@ function contentCreate(UID) {
                 const checkbox = document.createElement("input");
                 const taskUID = crypto.randomUUID();
                 const list = document.querySelector(`#content .list`);
+                const span = document.createElement("span");
+                const priority = document.querySelector(".footerInputBox .priority");
 
                 label.setAttribute("for", `${taskUID}`);
                 checkbox.setAttribute("type", "checkbox");
@@ -204,7 +265,14 @@ function contentCreate(UID) {
                 newTask.classList.add("task");
                 
                 if (timeInput.value === "" || date === currentDate) {
-                    const labelText = document.createTextNode(`${input.value} ${time || ""}`);
+                    const labelText = document.createTextNode(`${input.value}`);
+                    span.textContent = `${time || ""}`;
+                    if (priority.classList[1] === "on") {
+                        span.classList.add("yellow");
+                        priorityMode = true;
+                    } else {
+                        priorityMode = false;
+                    }
                     today.appendChild(newTask);
                     requestAnimationFrame(() => {
                         if (today.children.length === 2 || today.querySelector(".fadeIn")) {
@@ -217,27 +285,90 @@ function contentCreate(UID) {
                     newTask.appendChild(label);
                     label.appendChild(checkbox);
                     label.insertBefore(labelText, null);
+                    label.appendChild(span);
+                    newTask.addEventListener("click", (e) => {
+                        const content = document.querySelector("#content");
+                        const detail = document.querySelector("#content .detail");
+                        const contentDetail = document.querySelector(`#content .${CSS.escape(taskUID)}.detail`);
+                        if (!checkbox.contains(e.target)) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            
+                            const allTasks = document.querySelectorAll(`#content .list .task`);
+                            allTasks.forEach(childTask => {
+                                if (childTask.classList.contains("taskHighlight")) {
+                                    childTask.classList.remove("taskHighlight");
+                                }
+                            });
+                            newTask.classList.add("taskHighlight");
+                            
+                            if (!content.contains(contentDetail)) {
+                                if (content.contains(detail)) {
+                                    detail.classList.remove("fadeIn");
+                                    detail.classList.add("fadeOut");
+                                    setTimeout(() => {
+                                        if (content.contains(detail)) {
+                                            content.removeChild(detail);
+                                            detailCard(taskUID);
+                                            const inputTask = document.querySelector("#content .detail .title #taskName")
+                                            inputTask.style.height = "auto";
+                                            inputTask.style.height = inputTask.scrollHeight + "px";
+                                        }
+                                    }, 200);
+                                } else {
+                                    detailCard(taskUID);
+                                    const inputTask = document.querySelector("#content .detail .title #taskName")
+                                    inputTask.style.height = "auto";
+                                    inputTask.style.height = inputTask.scrollHeight + "px";
+                                }
+                            }
+                        }
+                    });
                     checkbox.addEventListener("change", () => {
+                        const completeImg = document.querySelector(`#content .${CSS.escape(taskUID)}.detail .header .complete`);
                         Object.entries(targetClass.today).forEach(([key, task]) => {
                             if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "line-through";
                                 label.style.color = "rgb(163, 162, 162)";
+                                span.style.backgroundColor = "rgb(163, 162, 162)";
+                                if (completeImg) {
+                                    completeImg.replaceChildren();
+                                    completeImg.appendChild(checkImg);
+                                    checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
+                                }
                                 console.log(listArray);
                             } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "none";
                                 label.style.color = "rgb(212, 212, 212)";
+                                if (span.classList.contains("yellow")) {
+                                    span.style.backgroundColor = "#d9a500";
+                                } else {
+                                    span.style.backgroundColor = "rgb(11, 133, 255)";
+                                }
+
+                                if (completeImg) {
+                                    completeImg.replaceChildren();
+                                    completeImg.appendChild(tickImg);
+                                }
                                 console.log(listArray);
                             }
                         });
                     });
-                    targetClass.today.addTask(taskUID, checkbox.checked, input.value, null, null, time || "");
+                    targetClass.today.addTask(taskUID, checkbox.checked, input.value, null, null, time || "", priorityMode);
                     console.log(listArray);
                 } else if (date === getNextDateFormatted(yyyy, mm, dd)) {
                     const weekDay = new Date(parseInt(yyyy), parseInt(mm)-1, parseInt(dd)+1);
                     const weekDayName = weekDay.toLocaleDateString("en-US", { weekday: "short"});
-                    const labelText = document.createTextNode(`${input.value} ${weekDayName} ${time}`);
+                    const labelText = document.createTextNode(`${input.value}`);
+                    span.textContent = `${weekDayName} ${time}`;
+                    if (priority.classList[1] === "on") {
+                        span.classList.add("yellow");
+                        priorityMode = true;
+                    } else {
+                        priorityMode = false;
+                    }
                     tomorrow.appendChild(newTask);
                     requestAnimationFrame(() => {
                         if (tomorrow.children.length === 2 || tomorrow.querySelector(".fadeIn")) {
@@ -250,25 +381,88 @@ function contentCreate(UID) {
                     newTask.appendChild(label);
                     label.appendChild(checkbox);
                     label.insertBefore(labelText, null);
+                    label.appendChild(span);
+                    newTask.addEventListener("click", (e) => {
+                        const content = document.querySelector("#content");
+                        const detail = document.querySelector("#content .detail");
+                        const contentDetail = document.querySelector(`#content .${CSS.escape(taskUID)}.detail`);
+                        if (!checkbox.contains(e.target)) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            
+                            const allTasks = document.querySelectorAll(`#content .list .task`);
+                            allTasks.forEach(childTask => {
+                                if (childTask.classList.contains("taskHighlight")) {
+                                    childTask.classList.remove("taskHighlight");
+                                }
+                            });
+                            newTask.classList.add("taskHighlight");
+                            
+                            if (!content.contains(contentDetail)) {
+                                if (content.contains(detail)) {
+                                    detail.classList.remove("fadeIn");
+                                    detail.classList.add("fadeOut");
+                                    setTimeout(() => {
+                                        if (content.contains(detail)) {
+                                            content.removeChild(detail);
+                                            detailCard(taskUID);
+                                            const inputTask = document.querySelector("#content .detail .title #taskName")
+                                            inputTask.style.height = "auto";
+                                            inputTask.style.height = inputTask.scrollHeight + "px";
+                                        }
+                                    }, 200);
+                                } else {
+                                    detailCard(taskUID);
+                                    const inputTask = document.querySelector("#content .detail .title #taskName")
+                                    inputTask.style.height = "auto";
+                                    inputTask.style.height = inputTask.scrollHeight + "px";
+                                }
+                            }
+                        }
+                    });
                     checkbox.addEventListener("change", () => {
+                        const completeImg = document.querySelector(`#content .${CSS.escape(taskUID)}.detail .header .complete`);
                         Object.entries(targetClass.tomorrow).forEach(([key, task]) => {
                             if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "line-through";
                                 label.style.color = "rgb(163, 162, 162)";
+                                span.style.backgroundColor = "rgb(163, 162, 162)";
+                                if (completeImg) {
+                                    completeImg.replaceChildren();
+                                    completeImg.appendChild(checkImg);
+                                    checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
+                                }
                                 console.log(listArray);
                             } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "none";
                                 label.style.color = "rgb(212, 212, 212)";
+                                if (span.classList.contains("yellow")) {
+                                    span.style.backgroundColor = "#d9a500";
+                                } else {
+                                    span.style.backgroundColor = "rgb(11, 133, 255)";
+                                }
+
+                                if (completeImg) {
+                                    completeImg.replaceChildren();
+                                    completeImg.appendChild(tickImg);
+                                }
                                 console.log(listArray);
                             }
                         });
                     });
-                    targetClass.tomorrow.addTask(taskUID, checkbox.checked, input.value, null, weekDayName, time);
+                    targetClass.tomorrow.addTask(taskUID, checkbox.checked, input.value, null, weekDayName, time, priorityMode);
                     console.log(listArray);
                 } else {
-                    const labelText = document.createTextNode(`${input.value} ${date}`);
+                    const labelText = document.createTextNode(`${input.value}`);
+                    span.textContent = `${date}`;
+                    if (priority.classList[1] === "on") {
+                        span.classList.add("yellow");
+                        priorityMode = true;
+                    } else {
+                        priorityMode = false;
+                    }
                     upcoming.appendChild(newTask);
                     requestAnimationFrame(() => {
                         if (upcoming.children.length === 2 || upcoming.querySelector(".fadeIn")) {
@@ -281,22 +475,78 @@ function contentCreate(UID) {
                     newTask.appendChild(label);
                     label.appendChild(checkbox);
                     label.insertBefore(labelText, null);
+                    label.appendChild(span);
+                    newTask.addEventListener("click", (e) => {
+                        const content = document.querySelector("#content");
+                        const detail = document.querySelector("#content .detail");
+                        const contentDetail = document.querySelector(`#content .${CSS.escape(taskUID)}.detail`);
+                        if (!checkbox.contains(e.target)) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            
+                            const allTasks = document.querySelectorAll(`#content .list .task`);
+                            allTasks.forEach(childTask => {
+                                if (childTask.classList.contains("taskHighlight")) {
+                                    childTask.classList.remove("taskHighlight");
+                                }
+                            });
+                            newTask.classList.add("taskHighlight");
+                            
+                            if (!content.contains(contentDetail)) {
+                                if (content.contains(detail)) {
+                                    detail.classList.remove("fadeIn");
+                                    detail.classList.add("fadeOut");
+                                    setTimeout(() => {
+                                        if (content.contains(detail)) {
+                                            content.removeChild(detail);
+                                            detailCard(taskUID);
+                                            const inputTask = document.querySelector("#content .detail .title #taskName")
+                                            inputTask.style.height = "auto";
+                                            inputTask.style.height = inputTask.scrollHeight + "px";
+                                        }
+                                    }, 200);
+                                } else {
+                                    detailCard(taskUID);
+                                    const inputTask = document.querySelector("#content .detail .title #taskName")
+                                    inputTask.style.height = "auto";
+                                    inputTask.style.height = inputTask.scrollHeight + "px";
+                                }
+                            }
+                        }
+                    });
                     checkbox.addEventListener("change", () => {
+                        const completeImg = document.querySelector(`#content .${CSS.escape(taskUID)}.detail .header .complete`);
                         Object.entries(targetClass.upcoming).forEach(([key, task]) => {
                             if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "line-through";
                                 label.style.color = "rgb(163, 162, 162)";
+                                span.style.backgroundColor = "rgb(163, 162, 162)";
+                                if (completeImg) {
+                                    completeImg.replaceChildren();
+                                    completeImg.appendChild(checkImg);
+                                    checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
+                                }
                                 console.log(listArray);
                             } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "none";
                                 label.style.color = "rgb(212, 212, 212)";
+                                if (span.classList.contains("yellow")) {
+                                    span.style.backgroundColor = "#d9a500";
+                                } else {
+                                    span.style.backgroundColor = "rgb(11, 133, 255)";
+                                }
+
+                                if (completeImg) {
+                                    completeImg.replaceChildren();
+                                    completeImg.appendChild(tickImg);
+                                }
                                 console.log(listArray);
                             }
                         });
                     });
-                    targetClass.upcoming.addTask(taskUID, checkbox.checked, input.value, date, null, null);
+                    targetClass.upcoming.addTask(taskUID, checkbox.checked, input.value, date, null, null, priorityMode);
                     console.log(listArray);
                 }
 
@@ -306,12 +556,22 @@ function contentCreate(UID) {
                         itemh3.style.backgroundColor = "transparent";
                         requestAnimationFrame(() => {
                             itemh3.style.backgroundColor = "#2a2d33";
-                            itemh3.style.transition = "background-color 0.6s ease";
                         });
                     });
                 }
 
                 input.value = "";
+
+                if (priority.classList[1] === "on") {
+                    priority.classList.remove("on");
+                    priority.replaceChildren();
+                    priority.appendChild(imgStar);
+                }
+
+                newTask.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
             }
         });
 
@@ -324,17 +584,27 @@ function contentCreate(UID) {
                         const label = document.createElement("label");
                         const checkbox = document.createElement("input");
                         const taskUID = task.id;
+                        const span = document.createElement("span");
         
                         label.setAttribute("for", `${taskUID}`);
                         checkbox.setAttribute("type", "checkbox");
                         checkbox.setAttribute("id", `${taskUID}`);
 
-                        if (task.check) checkbox.checked = true;
+                        if (task.check) {
+                            checkbox.checked = true;
+                            label.style.textDecoration = "line-through";
+                            label.style.color = "rgb(163, 162, 162)";
+                            span.style.backgroundColor = "rgb(163, 162, 162)";
+                        }
 
                         newTask.classList.add(`${taskUID}`);
                         newTask.classList.add("task");
                         
-                        const labelText = document.createTextNode(`${task.text} ${task.time}`);
+                        const labelText = document.createTextNode(`${task.text}`);
+                        span.textContent = `${task.time}`;
+
+                        if (task.priority) span.classList.add("yellow");
+
                         today.appendChild(newTask);
                         requestAnimationFrame(() => {
                             newTask.classList.add("fadeIn");
@@ -342,17 +612,73 @@ function contentCreate(UID) {
                         newTask.appendChild(label);
                         label.appendChild(checkbox);
                         label.insertBefore(labelText, null);
+                        label.appendChild(span);
+                        newTask.addEventListener("click", (e) => {
+                            const content = document.querySelector("#content");
+                            const detail = document.querySelector("#content .detail");
+                            const contentDetail = document.querySelector(`#content .${CSS.escape(taskUID)}.detail`);
+                            if (!checkbox.contains(e.target)) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                            
+                                const allTasks = document.querySelectorAll(`#content .list .task`);
+                                allTasks.forEach(childTask => {
+                                    if (childTask.classList.contains("taskHighlight")) {
+                                        childTask.classList.remove("taskHighlight");
+                                    }
+                                });
+                                newTask.classList.add("taskHighlight");
+                                
+                                if (!content.contains(contentDetail)) {
+                                    if (content.contains(detail)) {
+                                        detail.classList.remove("fadeIn");
+                                        detail.classList.add("fadeOut");
+                                        setTimeout(() => {
+                                            if (content.contains(detail)) {
+                                                content.removeChild(detail);
+                                                detailCard(taskUID);
+                                                const inputTask = document.querySelector("#content .detail .title #taskName")
+                                                inputTask.style.height = "auto";
+                                                inputTask.style.height = inputTask.scrollHeight + "px";
+                                            }
+                                        }, 200);
+                                    } else {
+                                        detailCard(taskUID);
+                                        const inputTask = document.querySelector("#content .detail .title #taskName")
+                                        inputTask.style.height = "auto";
+                                        inputTask.style.height = inputTask.scrollHeight + "px";
+                                    }
+                                }
+                            }
+                        });
                         checkbox.addEventListener("change", () => {
+                            const completeImg = document.querySelector(`#content .${CSS.escape(taskUID)}.detail .header .complete`);
                             Object.entries(targetClass.today).forEach(([key, task]) => {
                                 if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "line-through";
                                     label.style.color = "rgb(163, 162, 162)";
+                                    span.style.backgroundColor = "rgb(163, 162, 162)";
+                                    if (completeImg) {
+                                        completeImg.replaceChildren();
+                                        completeImg.appendChild(checkImg);
+                                        checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
+                                    }
                                     console.log(listArray);
                                 } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "none";
                                     label.style.color = "rgb(212, 212, 212)";
+                                    if (span.classList.contains("yellow")) {
+                                        span.style.backgroundColor = "#d9a500";
+                                    } else {
+                                        span.style.backgroundColor = "rgb(11, 133, 255)";
+                                    }
+
+                                    if (completeImg) {
+                                        completeImg.replaceChildren();
+                                        completeImg.appendChild(tickImg);
+                                    }
                                     console.log(listArray);
                                 }
                             });
@@ -369,17 +695,27 @@ function contentCreate(UID) {
                         const label = document.createElement("label");
                         const checkbox = document.createElement("input");
                         const taskUID = task.id;
+                        const span = document.createElement("span");
         
                         label.setAttribute("for", `${taskUID}`);
                         checkbox.setAttribute("type", "checkbox");
                         checkbox.setAttribute("id", `${taskUID}`);
 
-                        if (task.check) checkbox.checked = true;
+                        if (task.check) {
+                            checkbox.checked = true;
+                            label.style.textDecoration = "line-through";
+                            label.style.color = "rgb(163, 162, 162)";
+                            span.style.backgroundColor = "rgb(163, 162, 162)";
+                        }
 
                         newTask.classList.add(`${taskUID}`);
                         newTask.classList.add("task");
                         
-                        const labelText = document.createTextNode(`${task.text} ${task.weekDay} ${task.time}`);
+                        const labelText = document.createTextNode(`${task.text}`);
+                        span.textContent = `${task.weekDay} ${task.time}`;
+
+                        if (task.priority) span.classList.add("yellow");
+                        
                         tomorrow.appendChild(newTask);
                         requestAnimationFrame(() => {
                             newTask.style.display = "none";
@@ -387,17 +723,73 @@ function contentCreate(UID) {
                         newTask.appendChild(label);
                         label.appendChild(checkbox);
                         label.insertBefore(labelText, null);
+                        label.appendChild(span);
+                        newTask.addEventListener("click", (e) => {
+                            const content = document.querySelector("#content");
+                            const detail = document.querySelector("#content .detail");
+                            const contentDetail = document.querySelector(`#content .${CSS.escape(taskUID)}.detail`);
+                            if (!checkbox.contains(e.target)) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                            
+                                const allTasks = document.querySelectorAll(`#content .list .task`);
+                                allTasks.forEach(childTask => {
+                                    if (childTask.classList.contains("taskHighlight")) {
+                                        childTask.classList.remove("taskHighlight");
+                                    }
+                                });
+                                newTask.classList.add("taskHighlight");
+                                
+                                if (!content.contains(contentDetail)) {
+                                    if (content.contains(detail)) {
+                                        detail.classList.remove("fadeIn");
+                                        detail.classList.add("fadeOut");
+                                        setTimeout(() => {
+                                            if (content.contains(detail)) {
+                                                content.removeChild(detail);
+                                                detailCard(taskUID);
+                                                const inputTask = document.querySelector("#content .detail .title #taskName")
+                                                inputTask.style.height = "auto";
+                                                inputTask.style.height = inputTask.scrollHeight + "px";
+                                            }
+                                        }, 200);
+                                    } else {
+                                        detailCard(taskUID);
+                                        const inputTask = document.querySelector("#content .detail .title #taskName")
+                                        inputTask.style.height = "auto";
+                                        inputTask.style.height = inputTask.scrollHeight + "px";
+                                    }
+                                }
+                            }
+                        });
                         checkbox.addEventListener("change", () => {
+                            const completeImg = document.querySelector(`#content .${CSS.escape(taskUID)}.detail .header .complete`);
                             Object.entries(targetClass.tomorrow).forEach(([key, task]) => {
                                 if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "line-through";
                                     label.style.color = "rgb(163, 162, 162)";
+                                    span.style.backgroundColor = "rgb(163, 162, 162)";
+                                    if (completeImg) {
+                                        completeImg.replaceChildren();
+                                        completeImg.appendChild(checkImg);
+                                        checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
+                                    }
                                     console.log(listArray);
                                 } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "none";
                                     label.style.color = "rgb(212, 212, 212)";
+                                    if (span.classList.contains("yellow")) {
+                                        span.style.backgroundColor = "#d9a500";
+                                    } else {
+                                        span.style.backgroundColor = "rgb(11, 133, 255)";
+                                    }
+
+                                    if (completeImg) {
+                                        completeImg.replaceChildren();
+                                        completeImg.appendChild(tickImg);
+                                    }
                                     console.log(listArray);
                                 }
                             });
@@ -414,17 +806,27 @@ function contentCreate(UID) {
                         const label = document.createElement("label");
                         const checkbox = document.createElement("input");
                         const taskUID = task.id;
+                        const span = document.createElement("span");
         
                         label.setAttribute("for", `${taskUID}`);
                         checkbox.setAttribute("type", "checkbox");
                         checkbox.setAttribute("id", `${taskUID}`);
 
-                        if (task.check) checkbox.checked = true;
+                        if (task.check) {
+                            checkbox.checked = true;
+                            label.style.textDecoration = "line-through";
+                            label.style.color = "rgb(163, 162, 162)";
+                            span.style.backgroundColor = "rgb(163, 162, 162)";
+                        }
 
                         newTask.classList.add(`${taskUID}`);
                         newTask.classList.add("task");
                         
-                        const labelText = document.createTextNode(`${task.text} ${task.date}`);
+                        const labelText = document.createTextNode(`${task.text}`);
+                        span.textContent = `${task.date}`;
+
+                        if (task.priority) span.classList.add("yellow");
+                        
                         upcoming.appendChild(newTask);
                         requestAnimationFrame(() => {
                             newTask.style.display = "none";
@@ -432,17 +834,73 @@ function contentCreate(UID) {
                         newTask.appendChild(label);
                         label.appendChild(checkbox);
                         label.insertBefore(labelText, null);
+                        label.appendChild(span);
+                        newTask.addEventListener("click", (e) => {
+                            const content = document.querySelector("#content");
+                            const detail = document.querySelector("#content .detail");
+                            const contentDetail = document.querySelector(`#content .${CSS.escape(taskUID)}.detail`);
+                            if (!checkbox.contains(e.target)) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                            
+                                const allTasks = document.querySelectorAll(`#content .list .task`);
+                                allTasks.forEach(childTask => {
+                                    if (childTask.classList.contains("taskHighlight")) {
+                                        childTask.classList.remove("taskHighlight");
+                                    }
+                                });
+                                newTask.classList.add("taskHighlight");
+                                
+                                if (!content.contains(contentDetail)) {
+                                    if (content.contains(detail)) {
+                                        detail.classList.remove("fadeIn");
+                                        detail.classList.add("fadeOut");
+                                        setTimeout(() => {
+                                            if (content.contains(detail)) {
+                                                content.removeChild(detail);
+                                                detailCard(taskUID);
+                                                const inputTask = document.querySelector("#content .detail .title #taskName")
+                                                inputTask.style.height = "auto";
+                                                inputTask.style.height = inputTask.scrollHeight + "px";
+                                            }
+                                        }, 200);
+                                    } else {
+                                        detailCard(taskUID);
+                                        const inputTask = document.querySelector("#content .detail .title #taskName")
+                                        inputTask.style.height = "auto";
+                                        inputTask.style.height = inputTask.scrollHeight + "px";
+                                    }
+                                }
+                            }
+                        });
                         checkbox.addEventListener("change", () => {
+                            const completeImg = document.querySelector(`#content .${CSS.escape(taskUID)}.detail .header .complete`);
                             Object.entries(targetClass.upcoming).forEach(([key, task]) => {
                                 if (typeof task === "object" && task.id === taskUID && checkbox.checked) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "line-through";
                                     label.style.color = "rgb(163, 162, 162)";
+                                    span.style.backgroundColor = "rgb(163, 162, 162)";
+                                    if (completeImg) {
+                                        completeImg.replaceChildren();
+                                        completeImg.appendChild(checkImg);
+                                        checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
+                                    }
                                     console.log(listArray);
                                 } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "none";
                                     label.style.color = "rgb(212, 212, 212)";
+                                    if (span.classList.contains("yellow")) {
+                                        span.style.backgroundColor = "#d9a500";
+                                    } else {
+                                        span.style.backgroundColor = "rgb(11, 133, 255)";
+                                    }
+
+                                    if (completeImg) {
+                                        completeImg.replaceChildren();
+                                        completeImg.appendChild(tickImg);
+                                    }
                                     console.log(listArray);
                                 }
                             });
@@ -451,14 +909,13 @@ function contentCreate(UID) {
                 });
             }
             
-            const list = document.querySelector(`#content .list`);
-            if (list.scrollHeight > list.clientHeight) {
+            const list = document.querySelector(`#content .list .today`);
+            if (list.children.length >= 9) {
                 const h3 = document.querySelectorAll("#content .list h3");
                 h3.forEach(itemh3 => {
                     itemh3.style.backgroundColor = "transparent";
                     requestAnimationFrame(() => {
                         itemh3.style.backgroundColor = "#2a2d33";
-                        itemh3.style.transition = "background-color 0.6s ease";
                     });
                 });
             }
@@ -602,7 +1059,6 @@ function contentCreate(UID) {
                     itemh3.style.backgroundColor = "transparent";
                     requestAnimationFrame(() => {
                         itemh3.style.backgroundColor = "#2a2d33";
-                        itemh3.style.transition = "background-color 0.6s ease";
                     });
                 });
             } else {
@@ -610,7 +1066,6 @@ function contentCreate(UID) {
                     itemh3.style.backgroundColor = "#2a2d33";
                     requestAnimationFrame(() => {
                         itemh3.style.backgroundColor = "transparent";
-                        itemh3.style.transition = "background-color 0.6s ease";
                     });
                 });
             }
@@ -634,7 +1089,6 @@ function contentCreate(UID) {
                     itemh3.style.backgroundColor = "transparent";
                     requestAnimationFrame(() => {
                         itemh3.style.backgroundColor = "#2a2d33";
-                        itemh3.style.transition = "background-color 0.6s ease";
                     });
                 });
             } else {
@@ -642,7 +1096,6 @@ function contentCreate(UID) {
                     itemh3.style.backgroundColor = "#2a2d33";
                     requestAnimationFrame(() => {
                         itemh3.style.backgroundColor = "transparent";
-                        itemh3.style.transition = "background-color 0.6s ease";
                     });
                 });
             }
@@ -666,7 +1119,6 @@ function contentCreate(UID) {
                     itemh3.style.backgroundColor = "transparent";
                     requestAnimationFrame(() => {
                         itemh3.style.backgroundColor = "#2a2d33";
-                        itemh3.style.transition = "background-color 0.6s ease";
                     });
                 });
             } else {
@@ -674,22 +1126,40 @@ function contentCreate(UID) {
                     itemh3.style.backgroundColor = "#2a2d33";
                     requestAnimationFrame(() => {
                         itemh3.style.backgroundColor = "transparent";
-                        itemh3.style.transition = "background-color 0.6s ease";
                     });
                 });
             }
         });
     }
 
-    (function () {
+    function detailCard(taskUID) {
+        const task = document.querySelector(`#content .list .${CSS.escape(taskUID)} label`);
+        const span = document.querySelector(`#content .list .${CSS.escape(taskUID)} label span`);
+        const checkbox = document.querySelector(`#content .list .${CSS.escape(taskUID)} label input#${CSS.escape(taskUID)}`);
+        const taskTextNode = Array.from(task.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+        const targetClass = listArray.find(item => item.ListId === UID);
+
         const contentItemDetail = document.createElement("div");
         const header = document.createElement("div");
         const title = document.createElement("div");
         const buttons = document.createElement("div");
         const notes = document.createElement("div");
         const attachments = document.createElement("div");
+        const name = document.querySelector("#left .listName #listname");
+        const trashImg = document.createElement("img");
+        const tickImg = document.createElement("img");
+        const checkImg = document.createElement("img");
+        const bellImg = document.createElement("img");
+        const moveImg = document.createElement("img");
+        const starImg = document.createElement("img");
+        trashImg.src = trash;
+        tickImg.src = tick;
+        bellImg.src = bell2;
+        moveImg.src = move;
+        starImg.src = star2;
+        checkImg.src = checkCircle;
 
-        contentItemDetail.classList.add(`${UID}`);
+        contentItemDetail.classList.add(`${taskUID}`);
         contentItemDetail.classList.add(`detail`);
         header.classList.add("header");
         title.classList.add("title");
@@ -698,18 +1168,189 @@ function contentCreate(UID) {
         attachments.classList.add("attachments");
 
         const headDelete = document.createElement("button");
-        headDelete.classList.add(`${UID}-deleteButton`)
+        const complete = document.createElement("button");
+        headDelete.classList.add(`${taskUID}`);
+        headDelete.classList.add("deleteButton");
+        complete.classList.add(`${taskUID}`);
+        complete.classList.add("complete");
+
+        const inputTask = document.createElement("textarea");
+        inputTask.setAttribute("id", "taskName");
+        inputTask.setAttribute("rows", "1");
+        inputTask.setAttribute("style", "overflow:hidden;");
+        inputTask.setAttribute("maxlength", "37");
+        inputTask.setAttribute("placeholder", "Add task name");
+        inputTask.setAttribute("autocomplete", "off");
+        inputTask.setAttribute("spellcheck", "false");
+        inputTask.value = taskTextNode.nodeValue.trim();
+        inputTask.style.height = "34px";
+        inputTask.addEventListener("input", () => {
+            inputTask.style.height = "auto";
+            inputTask.style.height = inputTask.scrollHeight + "px";
+            taskTextNode.nodeValue = inputTask.value;
+            Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
+                if (typeof taskObj === "object" && taskObj.id === taskUID) {
+                    taskObj.text = inputTask.value;
+                }
+            }));
+            console.log(listArray);
+        });
+
+        const reminder = document.createElement("button");
+        reminder.classList.add(`${taskUID}`);
+        reminder.classList.add("reminder");
+        const reminderText = document.createTextNode("Reminder");
+        const listName = document.createElement("button");
+        listName.classList.add(`${taskUID}`);
+        listName.classList.add("listName");
+        const listNameText = document.createTextNode(`${name.value}`);
+        const priority = document.createElement("button");
+        priority.classList.add(`${taskUID}`);
+        priority.classList.add("priority");
+        const priorityText = document.createTextNode("Priority");
+
+        const label = document.createElement("label");
+        label.setAttribute("for", "note");
+        label.innerHTML = `<p>NOTES</p>`;
+        const inputNote = document.createElement("textarea");
+        inputNote.setAttribute("id", "note");
+        inputNote.setAttribute("rows", "1");
+        inputNote.setAttribute("style", "overflow:hidden;");
+        inputNote.setAttribute("maxlength", "500");
+        inputNote.setAttribute("placeholder", "Insert your note");
+        inputNote.setAttribute("autocomplete", "off");
+        inputNote.setAttribute("spellcheck", "false");
+        inputNote.style.height = "22px";
+        Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
+            if (typeof taskObj === "object" && taskObj.id === taskUID) {
+                if (taskObj.note !== undefined) {
+                    inputNote.value = taskObj.note;
+                }
+            }
+        }));
+        inputNote.addEventListener("input", () => {
+            inputNote.style.height = "auto";
+            inputNote.style.height = inputNote.scrollHeight + "px";
+        });
+        
+        attachments.innerHTML = `<p>ATTACHMENT</p>`;
+        const labelAttach = document.createElement("label");
+        labelAttach.setAttribute("for", "attachment");
+        const inputAttach = document.createElement("input");
+        inputAttach.setAttribute("type", "file");
+        inputAttach.setAttribute("id", "attachment");
+        labelAttach.innerHTML = "<p>Choose File</p>";
 
         content.appendChild(contentItemDetail);
         requestAnimationFrame(() => {
             contentItemDetail.classList.add("fadeIn");
         });
         contentItemDetail.appendChild(header);
+        header.appendChild(complete);
+        if (checkbox.checked) {
+            complete.appendChild(checkImg);
+            checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
+        } else {
+            complete.appendChild(tickImg);
+        }
+        header.appendChild(headDelete);
+        headDelete.appendChild(trashImg);
         contentItemDetail.appendChild(title);
+        title.appendChild(inputTask);
         contentItemDetail.appendChild(buttons);
+        buttons.appendChild(reminder);
+        reminder.appendChild(bellImg);
+        reminder.appendChild(reminderText);
+        buttons.appendChild(listName);
+        listName.appendChild(moveImg);
+        listName.appendChild(listNameText);
+        buttons.appendChild(priority);
+        priority.appendChild(starImg);
+        priority.appendChild(priorityText);
+        if (span.classList.contains("yellow")) {
+            priority.classList.add("on");
+        }
         contentItemDetail.appendChild(notes);
+        notes.appendChild(label);
+        label.appendChild(inputNote);
         contentItemDetail.appendChild(attachments);
-    })();
+        attachments.appendChild(labelAttach);
+        labelAttach.appendChild(inputAttach);
+        
+        const completeImg = document.querySelector("#content .detail .header .complete");
+        completeImg.addEventListener("click", () => {
+            if (checkbox.checked) {
+                checkbox.checked = false;
+                complete.replaceChildren();
+                complete.appendChild(tickImg);
+                Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
+                    if (typeof taskObj === "object" && taskObj.id === taskUID) {
+                        taskObj.check = false;
+                    }
+                }));
+
+                task.style.textDecoration = "none";
+                task.style.color = "rgb(212, 212, 212)";
+                if (span.classList.contains("yellow")) {
+                    span.style.backgroundColor = "#d9a500";
+                } else {
+                    span.style.backgroundColor = "rgb(11, 133, 255)";
+                }
+                console.log(listArray);
+            } else if (!checkbox.checked) {
+                checkbox.checked = true;
+                complete.replaceChildren();
+                complete.appendChild(checkImg);
+                checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
+                Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
+                    if (typeof taskObj === "object" && taskObj.id === taskUID) {
+                        taskObj.check = true;
+                    }
+                }));
+
+                task.style.textDecoration = "line-through";
+                task.style.color = "rgb(163, 162, 162)";
+                span.style.backgroundColor = "rgb(163, 162, 162)";
+                console.log(listArray);
+            }
+        });
+
+        inputNote.addEventListener("input", () => {
+            Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
+                if (typeof taskObj === "object" && taskObj.id === taskUID) {
+                    taskObj.note = inputNote.value;
+                }
+            }));
+            console.log(listArray);
+        });
+
+        inputAttach.addEventListener("change", () => {
+            const fileName = inputAttach.files[0] ? inputAttach.files[0].name : "Choose File";
+            const p = document.querySelector(`#content .${CSS.escape(taskUID)}.detail .attachments label p`);
+            p.textContent = fileName;
+        });
+
+        priority.addEventListener("click", () => {
+            priority.classList.toggle("on");
+            if (priority.classList.contains("on")) {
+                span.classList.add("yellow");
+                Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
+                    if (typeof taskObj === "object" && taskObj.id === taskUID) {
+                        taskObj.priority = true;
+                    }
+                }));
+                console.log(listArray);
+            } else {
+                span.classList.remove("yellow");
+                Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
+                    if (typeof taskObj === "object" && taskObj.id === taskUID) {
+                        taskObj.priority = false;
+                    }
+                }));
+                console.log(listArray);
+            }
+        });
+    }
 }
 
 const burgerDialog = (function () {
@@ -811,12 +1452,18 @@ function deleteAction(UID) {
             
             if (myList.children.length === 2) {
                 listFade.classList.add("fadeOutLast");
-                detailFade.classList.add("fadeOutLast");
+                if (content.contains(detailFade)) {
+                    detailFade.classList.add("fadeOutLast");
+                }
             } else {
                 listFade.classList.remove("fadeIn");
-                detailFade.classList.remove("fadeIn");
+                if (content.contains(detailFade)) {
+                    detailFade.classList.remove("fadeIn");
+                }
                 listFade.classList.add("fadeOut");
-                detailFade.classList.add("fadeOut");
+                if (content.contains(detailFade)) {
+                    detailFade.classList.add("fadeOut");
+                }
             }
 
             setTimeout(() => {
@@ -828,7 +1475,7 @@ function deleteAction(UID) {
             }
     
             const item = document.querySelector(".myList .item");
-            const listName = document.querySelector(".listName");
+            const listName = document.querySelector(".listName #listname");
             const listDelete = document.querySelector(".listDelete");
             const taskDeleteSelect = document.querySelector(".taskDeleteSelect");
 
@@ -840,7 +1487,8 @@ function deleteAction(UID) {
                     item.click();
                 }, 300);
             } else {
-                listName.textContent = "";
+                listName.value = "";
+                listName.style.display = "none";
                 listDelete.setAttribute("class","listDelete");
                 taskDeleteSelect.setAttribute("class","taskDeleteSelect");
                 burger.disabled = true;
