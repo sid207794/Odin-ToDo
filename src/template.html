@@ -11,7 +11,10 @@
     <body>
         <header>
             <nav id="left">
-                <div class="listName">Personal</div>
+                <div class="listName">
+                    <input type="text" id="listname" placeholder="Add list name" maxlength="35" autocomplete="off" spellcheck="false">
+                    <span class="mirrorName"></span>
+                </div>
                 <button class="share"><img src="./images/account-plus-outline.svg"><span>Share</span></button>
                 <button class="view"><img src="./images/eye-outline.svg"><span>View</span></button>
                 <button class="burger"><img src="./images/menu.svg" alt="burger menu"></button>
@@ -50,7 +53,7 @@
                     <dialog>
                         <div class="myListDialog">
                             <button class="close" autofocus><img src="./images/window-close.svg" alt="close"></button>
-                            <input type="text" id="dialogList" name="dialogBox" placeholder="Add a list title" autocomplete="off">
+                            <input type="text" id="dialogList" name="dialogBox" maxlength="35" placeholder="Add a list title" autocomplete="off">
                             <button class="submit">Continue</button>
                         </div>
                       </dialog>
