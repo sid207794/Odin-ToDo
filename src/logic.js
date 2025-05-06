@@ -1,8 +1,9 @@
 export const listArray = [];
 
 export class MyListClass {
-    constructor(ListId) {
+    constructor(ListId, ListName) {
         this.ListId = ListId;
+        this.ListName = ListName;
         this.today = new Today();
         this.tomorrow = new Tomorrow();
         this.upcoming = new Upcoming();
