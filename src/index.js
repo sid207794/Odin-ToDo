@@ -11,7 +11,6 @@ const startupPage = (function () {
         const name = document.querySelector("#sidebar .profile .name");
         const askName = document.createElement("div");
         const loader = document.createElement("div");
-        const loaderImg = document.createElement("img");
         const nameSubmitImg = document.createElement("img");
         const inputName = document.createElement("input");
         const nameSubmit = document.createElement("button");
@@ -21,13 +20,11 @@ const startupPage = (function () {
         inputName.setAttribute("placeholder", "Add your name");
         inputName.setAttribute("maxlength", "9");
         inputName.setAttribute("autocomplete", "off");
-        loaderImg.src = profileLoad;
         nameSubmitImg.src = arrowRight;
         loader.classList.add("loader");
         askName.classList.add("askName");
         body.appendChild(askName);
         askName.appendChild(loader);
-        askName.appendChild(loaderImg);
         askName.appendChild(inputName);
         askName.appendChild(nameSubmit);
         nameSubmit.appendChild(nameSubmitImg);

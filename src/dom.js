@@ -1552,7 +1552,6 @@ function deleteAction(UID) {
             const item = document.querySelector(".myList .item");
             const listName = document.querySelector(".listName #listname");
             const listDelete = document.querySelector(".listDelete");
-            const taskDeleteSelect = document.querySelector(".taskDeleteSelect");
 
             dialogPropertiesChildren.dialogClose(deleteDialog);
     
@@ -1565,7 +1564,6 @@ function deleteAction(UID) {
                 listName.value = "";
                 listName.style.display = "none";
                 listDelete.setAttribute("class","listDelete");
-                taskDeleteSelect.setAttribute("class","taskDeleteSelect");
                 burger.disabled = true;
                 burger.classList.add("disabled");
                 deleteDialog.setAttribute("class", "listDeleteConfirm");
@@ -1607,7 +1605,6 @@ function createBurgerDialogCover(UIDClass) {
 
     burgerDialogCover.replaceChildren();
     const listDelete = document.createElement("button");
-    const taskDeleteSelect = document.createElement("button");
     const listDeleteConfirm = document.createElement("dialog");
     const h3 = document.createElement("h3");
     const p1 = document.createElement("p");
@@ -1617,8 +1614,6 @@ function createBurgerDialogCover(UIDClass) {
     const no = document.createElement("button");
     listDelete.classList.add("listDelete");
     listDelete.classList.add(`${UIDClass}`);
-    taskDeleteSelect.classList.add("taskDeleteSelect");
-    taskDeleteSelect.classList.add(`${UIDClass}`);
     listDeleteConfirm.classList.add("listDeleteConfirm");
     listDeleteConfirm.classList.add(`${UIDClass}`);
     listDeleteConfirmDiv.classList.add("listDeleteConfirmDiv");
@@ -1631,11 +1626,9 @@ function createBurgerDialogCover(UIDClass) {
     no.classList.add("no");
     no.classList.add(`${UIDClass}`);
     listDelete.textContent = "Delete List";
-    taskDeleteSelect.textContent = "Delete Task";
     yes.textContent = "Yes";
     no.textContent = "No";
     burgerDialogCover.appendChild(listDelete);
-    burgerDialogCover.appendChild(taskDeleteSelect);
     burgerDialogCover.appendChild(listDeleteConfirm);
     listDeleteConfirm.appendChild(h3);
     listDeleteConfirm.appendChild(p1);
