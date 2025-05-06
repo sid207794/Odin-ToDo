@@ -11,6 +11,87 @@ body {
     font-family: "Roboto", serif;
 }
 
+.askName {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #000000;
+    z-index: 999999;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.askName .loader {
+    border-bottom: solid 16px #d9a500;
+    border-top: solid 16px rgb(11, 133, 255);
+    border-left: solid 16px #161616;
+    border-right: solid 16px #2a2d33;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.askName img {
+    position: absolute;
+    top: 273px;
+    height: 60px;
+    width: 60px;
+}
+
+.askName #profileName {
+    height: 30px;
+    width: 145px;
+    font-family: "Roboto", serif;
+    font-size: 20px;
+    text-align: center;
+    background-color: #2a2d33;
+    border: solid 2px rgb(11, 133, 255);
+    outline: none;
+    border-radius: 20px;
+    color: white;
+}
+
+.askName .nameSubmit {
+    position: absolute;
+    top: 474px;
+    left: 860px;
+    height: 35px;
+    width: 35px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.askName .nameSubmit:hover img {
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+}
+
+.askName .nameSubmit img{
+    position: absolute;
+    top: 0;
+    left: -1px;
+    height: 35px;
+    width: 35px;
+    filter: invert(1);
+}
+
+.askName.show {
+    opacity: 1;
+}
+
 header {
     grid-row: 1 / 2;
     grid-column: 2 / 3;
@@ -223,15 +304,63 @@ header #right .search {
     background-color: #161616aa;
     backdrop-filter: blur(5px);
     border: none;
-    border-radius: 100%;
+    border-radius: 20px;
     height: 40px;
     width: 40px;
     cursor: pointer;
+    transition: border-radius 0.4s ease-in-out;
+}
+
+header #right .search.on {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    transition: border-top-left-radius 0.4s ease-in-out, border-bottom-left-radius 0.4s ease-in-out;
 }
 
 header #right .search:hover {
     background-color: #161616;
     transition: background-color 0.3s ease-in-out;
+}
+
+header #right .search.on:hover {
+    background-color: #161616aa;
+}
+
+header #right div {
+    height: 40px;
+    width: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #161616aa;
+    backdrop-filter: blur(5px);
+    border: none;
+    border-radius: 20px;
+    padding-left: 15px;
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out, border-radius 0.4s ease-in-out;
+}
+
+header #right div.on {
+    opacity: 1;
+    transform: translateX(0%);
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out, border-top-right-radius 0.4s ease-in-out, border-bottom-right-radius 0.4s ease-in-out;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+header #right div #rightSearch {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: white;
+    border-bottom: solid 1px rgb(11, 133, 255);
+    visibility: hidden;
+}
+
+header #right div #rightSearch.on {
+    visibility: visible;
 }
 
 header #right button img {
@@ -241,6 +370,10 @@ header #right button img {
 }
 
 header #right button:hover img {
+    filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
+}
+
+header #right button.on img {
     filter: invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%);
 }
 
@@ -258,6 +391,7 @@ header #right button:hover img {
     white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    user-select: none;
 }
 
 #sidebar .profile {
@@ -268,6 +402,9 @@ header #right button:hover img {
     font-size: 20px;
     font-weight: 600;
     padding: 0 25px;
+    padding-bottom: 25px;
+    border-bottom: dashed 2px rgb(11, 133, 255);
+    box-sizing: border-box;
 }
 
 #sidebar .profile .theme {
@@ -275,17 +412,16 @@ header #right button:hover img {
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    border: solid 2px rgb(163, 162, 162);
-    border-radius: 100%;
+    border: solid 2px rgb(11, 133, 255);
+    border-radius: 5px;
     height: 50px;
     width: 50px;
     cursor: pointer;
 }
 
 #sidebar .profile .theme img {
-    height: 35px;
-    width: 35px;
-    filter: invert(70%);
+    height: 45px;
+    width: 45px;
 }
 
 #sidebar .sort {
@@ -630,6 +766,7 @@ header #right button:hover img {
     font-size: 14px;
     cursor: pointer;
     filter: brightness(100%);
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 #content .detail .buttons .reminder:hover,
@@ -653,6 +790,7 @@ header #right button:hover img {
 
 #content .detail .priority img {
     filter: invert(50%) sepia(90%) saturate(600%) hue-rotate(15deg) brightness(100%) contrast(120%);
+    transition: filter 0.2s ease-in-out;
 }
 
 #content .detail .priority.on {
@@ -704,21 +842,21 @@ header #right button:hover img {
 #content .detail .attachments label {
     margin-top: 10px;
     display: inline-block;
-    padding: 20px 0;
+    padding: 2px 0;
     width: 100%;
-    border: dashed 2px rgb(11, 133, 255);
+    border: dashed 1px rgb(163, 162, 162);
     border-radius: 10px;
     cursor: pointer;
     text-align: center;
 }
 
 #content .detail .attachments label:hover {
-    border: dashed 2px white;
+    border: dashed 1px rgb(11, 133, 255);
     transition: border-color 0.3s ease-in-out;
 }
 
 #content .detail .attachments label:not(:hover) {
-    border: dashed 2px rgb(11, 133, 255);
+    border: dashed 1px rgb(163, 162, 162);
     transition: border-color 0.3s ease-in-out;
 }
 
@@ -736,6 +874,32 @@ header #right button:hover img {
 
 #content .detail .attachments label #attachment {
     display: none;
+}
+
+#content .detail .attachments label img {
+    height: 30px;
+    width: 30px;
+    transition: padding 0.2s ease-in-out;
+}
+
+#content .detail .attachments label img.pdf {
+    filter: invert(29%) sepia(91%) saturate(7491%) hue-rotate(358deg) brightness(93%) contrast(104%);
+}
+
+#content .detail .attachments label img.jpg {
+    filter: invert(34%) sepia(48%) saturate(748%) hue-rotate(210deg) brightness(93%) contrast(89%);
+}
+
+#content .detail .attachments label img.png {
+    filter: invert(49%) sepia(86%) saturate(382%) hue-rotate(102deg) brightness(90%) contrast(85%);
+}
+
+#content .detail .attachments label img.word {
+    filter: invert(64%) sepia(12%) saturate(2270%) hue-rotate(172deg) brightness(95%) contrast(90%);
+}
+
+#content .detail .attachments label:hover img {
+    padding: 0 20px;
 }
 
 #content * {
@@ -844,6 +1008,11 @@ header #right button:hover img {
     z-index: 5;
 }
 
+#content .detail.fadeIn.hidden {
+    opacity: 0;
+    transform: translateX(-200%);
+}
+
 #content .list {
     overflow-x: hidden;
     overflow-y: auto;
@@ -936,6 +1105,10 @@ header #right button:hover img {
     color: #161616;
     background-color: #d9a500;
     padding: 1px 8px;
+}
+
+#content .list label span.grey {
+    background-color: rgb(163, 162, 162);
 }
 
 #content .list label span:hover {

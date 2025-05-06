@@ -13,6 +13,10 @@ import bell2 from "./images/bell2.svg";
 import move from "./images/file-document-arrow-right.svg";
 import star2 from "./images/star-plus.svg";
 import checkCircle from "./images/check-circle.svg";
+import fileJPG from "./images/file-jpg-box.svg";
+import filePDF from "./images/file-pdf-box.svg";
+import filePNG from "./images/file-png-box.svg";
+import fileWord from "./images/file-word.svg";
 
 const myListDialog = (function () {
     const dialog = document.querySelector(".myList dialog");
@@ -64,6 +68,9 @@ const myListDialog = (function () {
                     const listUID = list.classList[0];
                     const item = document.querySelector(`#sidebar .myList .${CSS.escape(listUID)}`);
                     item.textContent = listName.value;
+                    const targetClass = listArray.find(item => item.ListId === listUID);
+                    targetClass.ListName = listName.value;
+                    localStorage.setItem("todoData", JSON.stringify(listArray));
                 }
 
                 if (detail) {
@@ -93,9 +100,9 @@ const myListDialog = (function () {
             burger.classList.remove("disabled");
             createBurgerDialogCover(uniqueclass);
 
-            const newList = new MyListClass(uniqueclass);
+            const newList = new MyListClass(uniqueclass, userInput);
             listArray.push(newList);
-            console.log(listArray);
+            localStorage.setItem("todoData", JSON.stringify(listArray));
 
             contentCreate(uniqueclass);
             deleteAction(uniqueclass);
@@ -228,6 +235,7 @@ function contentCreate(UID) {
         const today = document.querySelector(`#content .${CSS.escape(UID)} .today`);
         const tomorrow = document.querySelector(`#content .${CSS.escape(UID)} .tomorrow`);
         const upcoming = document.querySelector(`#content .${CSS.escape(UID)} .upcoming`);
+        const viewText = document.querySelector("#left .view span");
         const todayDate = new Date();
         let priorityMode;
         const tickImg = document.createElement("img");
@@ -321,6 +329,7 @@ function contentCreate(UID) {
                                     inputTask.style.height = "auto";
                                     inputTask.style.height = inputTask.scrollHeight + "px";
                                 }
+                                viewText.textContent = "Hide";
                             }
                         }
                     });
@@ -331,33 +340,29 @@ function contentCreate(UID) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "line-through";
                                 label.style.color = "rgb(163, 162, 162)";
-                                span.style.backgroundColor = "rgb(163, 162, 162)";
+                                span.classList.add("grey");
                                 if (completeImg) {
                                     completeImg.replaceChildren();
                                     completeImg.appendChild(checkImg);
                                     checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
                                 }
-                                console.log(listArray);
+                                localStorage.setItem("todoData", JSON.stringify(listArray));
                             } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "none";
                                 label.style.color = "rgb(212, 212, 212)";
-                                if (span.classList.contains("yellow")) {
-                                    span.style.backgroundColor = "#d9a500";
-                                } else {
-                                    span.style.backgroundColor = "rgb(11, 133, 255)";
-                                }
+                                span.classList.remove("grey");
 
                                 if (completeImg) {
                                     completeImg.replaceChildren();
                                     completeImg.appendChild(tickImg);
                                 }
-                                console.log(listArray);
+                                localStorage.setItem("todoData", JSON.stringify(listArray));
                             }
                         });
                     });
                     targetClass.today.addTask(taskUID, checkbox.checked, input.value, null, null, time || "", priorityMode);
-                    console.log(listArray);
+                    localStorage.setItem("todoData", JSON.stringify(listArray));
                 } else if (date === getNextDateFormatted(yyyy, mm, dd)) {
                     const weekDay = new Date(parseInt(yyyy), parseInt(mm)-1, parseInt(dd)+1);
                     const weekDayName = weekDay.toLocaleDateString("en-US", { weekday: "short"});
@@ -417,6 +422,7 @@ function contentCreate(UID) {
                                     inputTask.style.height = "auto";
                                     inputTask.style.height = inputTask.scrollHeight + "px";
                                 }
+                                viewText.textContent = "Hide";
                             }
                         }
                     });
@@ -427,33 +433,29 @@ function contentCreate(UID) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "line-through";
                                 label.style.color = "rgb(163, 162, 162)";
-                                span.style.backgroundColor = "rgb(163, 162, 162)";
+                                span.classList.add("grey");
                                 if (completeImg) {
                                     completeImg.replaceChildren();
                                     completeImg.appendChild(checkImg);
                                     checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
                                 }
-                                console.log(listArray);
+                                localStorage.setItem("todoData", JSON.stringify(listArray));
                             } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "none";
                                 label.style.color = "rgb(212, 212, 212)";
-                                if (span.classList.contains("yellow")) {
-                                    span.style.backgroundColor = "#d9a500";
-                                } else {
-                                    span.style.backgroundColor = "rgb(11, 133, 255)";
-                                }
+                                span.classList.remove("grey");
 
                                 if (completeImg) {
                                     completeImg.replaceChildren();
                                     completeImg.appendChild(tickImg);
                                 }
-                                console.log(listArray);
+                                localStorage.setItem("todoData", JSON.stringify(listArray));
                             }
                         });
                     });
                     targetClass.tomorrow.addTask(taskUID, checkbox.checked, input.value, null, weekDayName, time, priorityMode);
-                    console.log(listArray);
+                    localStorage.setItem("todoData", JSON.stringify(listArray));
                 } else {
                     const labelText = document.createTextNode(`${input.value}`);
                     span.textContent = `${date}`;
@@ -511,6 +513,7 @@ function contentCreate(UID) {
                                     inputTask.style.height = "auto";
                                     inputTask.style.height = inputTask.scrollHeight + "px";
                                 }
+                                viewText.textContent = "Hide";
                             }
                         }
                     });
@@ -521,33 +524,29 @@ function contentCreate(UID) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "line-through";
                                 label.style.color = "rgb(163, 162, 162)";
-                                span.style.backgroundColor = "rgb(163, 162, 162)";
+                                span.classList.add("grey");
                                 if (completeImg) {
                                     completeImg.replaceChildren();
                                     completeImg.appendChild(checkImg);
                                     checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
                                 }
-                                console.log(listArray);
+                                localStorage.setItem("todoData", JSON.stringify(listArray));
                             } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                 task.check = checkbox.checked;
                                 label.style.textDecoration = "none";
                                 label.style.color = "rgb(212, 212, 212)";
-                                if (span.classList.contains("yellow")) {
-                                    span.style.backgroundColor = "#d9a500";
-                                } else {
-                                    span.style.backgroundColor = "rgb(11, 133, 255)";
-                                }
+                                span.classList.remove("grey");
 
                                 if (completeImg) {
                                     completeImg.replaceChildren();
                                     completeImg.appendChild(tickImg);
                                 }
-                                console.log(listArray);
+                                localStorage.setItem("todoData", JSON.stringify(listArray));
                             }
                         });
                     });
                     targetClass.upcoming.addTask(taskUID, checkbox.checked, input.value, date, null, null, priorityMode);
-                    console.log(listArray);
+                    localStorage.setItem("todoData", JSON.stringify(listArray));
                 }
 
                 if (list.scrollHeight > list.clientHeight) {
@@ -648,6 +647,7 @@ function contentCreate(UID) {
                                         inputTask.style.height = "auto";
                                         inputTask.style.height = inputTask.scrollHeight + "px";
                                     }
+                                    viewText.textContent = "Hide";
                                 }
                             }
                         });
@@ -658,28 +658,24 @@ function contentCreate(UID) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "line-through";
                                     label.style.color = "rgb(163, 162, 162)";
-                                    span.style.backgroundColor = "rgb(163, 162, 162)";
+                                    span.classList.add("grey");
                                     if (completeImg) {
                                         completeImg.replaceChildren();
                                         completeImg.appendChild(checkImg);
                                         checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
                                     }
-                                    console.log(listArray);
+                                    localStorage.setItem("todoData", JSON.stringify(listArray));
                                 } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "none";
                                     label.style.color = "rgb(212, 212, 212)";
-                                    if (span.classList.contains("yellow")) {
-                                        span.style.backgroundColor = "#d9a500";
-                                    } else {
-                                        span.style.backgroundColor = "rgb(11, 133, 255)";
-                                    }
+                                    span.classList.remove("grey");
 
                                     if (completeImg) {
                                         completeImg.replaceChildren();
                                         completeImg.appendChild(tickImg);
                                     }
-                                    console.log(listArray);
+                                    localStorage.setItem("todoData", JSON.stringify(listArray));
                                 }
                             });
                         });
@@ -718,7 +714,7 @@ function contentCreate(UID) {
                         
                         tomorrow.appendChild(newTask);
                         requestAnimationFrame(() => {
-                            newTask.style.display = "none";
+                            newTask.classList.add("fadeIn");
                         });
                         newTask.appendChild(label);
                         label.appendChild(checkbox);
@@ -759,6 +755,7 @@ function contentCreate(UID) {
                                         inputTask.style.height = "auto";
                                         inputTask.style.height = inputTask.scrollHeight + "px";
                                     }
+                                    viewText.textContent = "Hide";
                                 }
                             }
                         });
@@ -769,28 +766,24 @@ function contentCreate(UID) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "line-through";
                                     label.style.color = "rgb(163, 162, 162)";
-                                    span.style.backgroundColor = "rgb(163, 162, 162)";
+                                    span.classList.add("grey");
                                     if (completeImg) {
                                         completeImg.replaceChildren();
                                         completeImg.appendChild(checkImg);
                                         checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
                                     }
-                                    console.log(listArray);
+                                    localStorage.setItem("todoData", JSON.stringify(listArray));
                                 } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "none";
                                     label.style.color = "rgb(212, 212, 212)";
-                                    if (span.classList.contains("yellow")) {
-                                        span.style.backgroundColor = "#d9a500";
-                                    } else {
-                                        span.style.backgroundColor = "rgb(11, 133, 255)";
-                                    }
+                                    span.classList.remove("grey");
 
                                     if (completeImg) {
                                         completeImg.replaceChildren();
                                         completeImg.appendChild(tickImg);
                                     }
-                                    console.log(listArray);
+                                    localStorage.setItem("todoData", JSON.stringify(listArray));
                                 }
                             });
                         });
@@ -829,7 +822,7 @@ function contentCreate(UID) {
                         
                         upcoming.appendChild(newTask);
                         requestAnimationFrame(() => {
-                            newTask.style.display = "none";
+                            newTask.classList.add("fadeIn");
                         });
                         newTask.appendChild(label);
                         label.appendChild(checkbox);
@@ -870,6 +863,7 @@ function contentCreate(UID) {
                                         inputTask.style.height = "auto";
                                         inputTask.style.height = inputTask.scrollHeight + "px";
                                     }
+                                    viewText.textContent = "Hide";
                                 }
                             }
                         });
@@ -880,28 +874,24 @@ function contentCreate(UID) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "line-through";
                                     label.style.color = "rgb(163, 162, 162)";
-                                    span.style.backgroundColor = "rgb(163, 162, 162)";
+                                    span.classList.add("grey");
                                     if (completeImg) {
                                         completeImg.replaceChildren();
                                         completeImg.appendChild(checkImg);
                                         checkImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
                                     }
-                                    console.log(listArray);
+                                    localStorage.setItem("todoData", JSON.stringify(listArray));
                                 } else if (typeof task === "object" && task.id === taskUID && !checkbox.checked) {
                                     task.check = checkbox.checked;
                                     label.style.textDecoration = "none";
                                     label.style.color = "rgb(212, 212, 212)";
-                                    if (span.classList.contains("yellow")) {
-                                        span.style.backgroundColor = "#d9a500";
-                                    } else {
-                                        span.style.backgroundColor = "rgb(11, 133, 255)";
-                                    }
+                                    span.classList.remove("grey");
 
                                     if (completeImg) {
                                         completeImg.replaceChildren();
                                         completeImg.appendChild(tickImg);
                                     }
-                                    console.log(listArray);
+                                    localStorage.setItem("todoData", JSON.stringify(listArray));
                                 }
                             });
                         });
@@ -909,8 +899,10 @@ function contentCreate(UID) {
                 });
             }
             
-            const list = document.querySelector(`#content .list .today`);
-            if (list.children.length >= 9) {
+            const listToday = document.querySelector(`#content .list .today`);
+            const listTomorrow = document.querySelector(`#content .list .tomorrow`);
+            const listUpcoming = document.querySelector(`#content .list .upcoming`);
+            if (listToday.children.length + listTomorrow.children.length + listUpcoming.children.length >= 11) {
                 const h3 = document.querySelectorAll("#content .list h3");
                 h3.forEach(itemh3 => {
                     itemh3.style.backgroundColor = "transparent";
@@ -1152,6 +1144,18 @@ function contentCreate(UID) {
         const bellImg = document.createElement("img");
         const moveImg = document.createElement("img");
         const starImg = document.createElement("img");
+        const jpg = document.createElement("img");
+        jpg.classList.add("jpg");
+        const pdf = document.createElement("img");
+        pdf.classList.add("pdf");
+        const png = document.createElement("img");
+        png.classList.add("png");
+        const word = document.createElement("img");
+        word.classList.add("word");
+        jpg.src = fileJPG;
+        pdf.src = filePDF;
+        png.src = filePNG;
+        word.src = fileWord;
         trashImg.src = trash;
         tickImg.src = tick;
         bellImg.src = bell2;
@@ -1193,7 +1197,7 @@ function contentCreate(UID) {
                     taskObj.text = inputTask.value;
                 }
             }));
-            console.log(listArray);
+            localStorage.setItem("todoData", JSON.stringify(listArray));
         });
 
         const reminder = document.createElement("button");
@@ -1216,7 +1220,7 @@ function contentCreate(UID) {
         inputNote.setAttribute("id", "note");
         inputNote.setAttribute("rows", "1");
         inputNote.setAttribute("style", "overflow:hidden;");
-        inputNote.setAttribute("maxlength", "500");
+        inputNote.setAttribute("maxlength", "371");
         inputNote.setAttribute("placeholder", "Insert your note");
         inputNote.setAttribute("autocomplete", "off");
         inputNote.setAttribute("spellcheck", "false");
@@ -1240,6 +1244,10 @@ function contentCreate(UID) {
         inputAttach.setAttribute("type", "file");
         inputAttach.setAttribute("id", "attachment");
         labelAttach.innerHTML = "<p>Choose File</p>";
+        labelAttach.appendChild(pdf);
+        labelAttach.appendChild(jpg);
+        labelAttach.appendChild(png);
+        labelAttach.appendChild(word);
 
         content.appendChild(contentItemDetail);
         requestAnimationFrame(() => {
@@ -1291,12 +1299,8 @@ function contentCreate(UID) {
 
                 task.style.textDecoration = "none";
                 task.style.color = "rgb(212, 212, 212)";
-                if (span.classList.contains("yellow")) {
-                    span.style.backgroundColor = "#d9a500";
-                } else {
-                    span.style.backgroundColor = "rgb(11, 133, 255)";
-                }
-                console.log(listArray);
+                span.classList.remove("grey");
+                localStorage.setItem("todoData", JSON.stringify(listArray));
             } else if (!checkbox.checked) {
                 checkbox.checked = true;
                 complete.replaceChildren();
@@ -1310,8 +1314,8 @@ function contentCreate(UID) {
 
                 task.style.textDecoration = "line-through";
                 task.style.color = "rgb(163, 162, 162)";
-                span.style.backgroundColor = "rgb(163, 162, 162)";
-                console.log(listArray);
+                span.classList.add("grey");
+                localStorage.setItem("todoData", JSON.stringify(listArray));
             }
         });
 
@@ -1321,34 +1325,67 @@ function contentCreate(UID) {
                     taskObj.note = inputNote.value;
                 }
             }));
-            console.log(listArray);
+            localStorage.setItem("todoData", JSON.stringify(listArray));
         });
 
-        inputAttach.addEventListener("change", () => {
+        inputAttach.addEventListener("change", (e) => {
+            const selectedFile = e.target.files[0];
+            if (selectedFile) {
+                Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
+                    if (typeof taskObj === "object" && taskObj.id === taskUID) {
+                        taskObj.attachment = selectedFile;
+                    }
+                }));
+                localStorage.setItem("todoData", JSON.stringify(listArray));
+            }
             const fileName = inputAttach.files[0] ? inputAttach.files[0].name : "Choose File";
             const p = document.querySelector(`#content .${CSS.escape(taskUID)}.detail .attachments label p`);
             p.textContent = fileName;
         });
 
         priority.addEventListener("click", () => {
-            priority.classList.toggle("on");
             if (priority.classList.contains("on")) {
-                span.classList.add("yellow");
-                Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
-                    if (typeof taskObj === "object" && taskObj.id === taskUID) {
-                        taskObj.priority = true;
-                    }
-                }));
-                console.log(listArray);
-            } else {
+                priority.classList.remove("on");
                 span.classList.remove("yellow");
                 Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
                     if (typeof taskObj === "object" && taskObj.id === taskUID) {
                         taskObj.priority = false;
                     }
                 }));
-                console.log(listArray);
+                localStorage.setItem("todoData", JSON.stringify(listArray));
+            } else if (!priority.classList.contains("on")) {
+                priority.classList.add("on");
+                span.classList.add("yellow");
+                Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
+                    if (typeof taskObj === "object" && taskObj.id === taskUID) {
+                        taskObj.priority = true;
+                    }
+                }));
+                localStorage.setItem("todoData", JSON.stringify(listArray));
             }
+        });
+
+        headDelete.addEventListener("click", () => {
+            Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
+                if (typeof taskObj === "object" && taskObj.id === taskUID) {
+                    delete targetClass[key][taskKey];
+                }
+            }));
+            localStorage.setItem("todoData", JSON.stringify(listArray));
+            const today = document.querySelector("#content .list .today");
+            const tomorrow = document.querySelector("#content .list .tomorrow");
+            const upcoming = document.querySelector("#content .list .upcoming");
+            const listToday = document.querySelectorAll("#content .list .today .task");
+            const listTomorrow = document.querySelectorAll("#content .list .tomorrow .task");
+            const listUpcoming = document.querySelectorAll("#content .list .upcoming .task");
+            const detail = document.querySelector("#content .detail");
+            
+            listToday.forEach(child => today.removeChild(child));
+            listTomorrow.forEach(child => tomorrow.removeChild(child));
+            listUpcoming.forEach(child => upcoming.removeChild(child));
+            addTask(UID);
+            detail.classList.remove("fadeIn")
+            detail.classList.add("fadeOut")
         });
     }
 }
@@ -1407,6 +1444,43 @@ const burgerDialog = (function () {
     });
 })();
 
+const ViewButton = (function () {
+    const view = document.querySelector("#left .view");
+    const viewText = document.querySelector("#left .view span");
+
+    view.addEventListener("click", () => {
+        const detail = document.querySelector("#content .detail");
+        if (detail) {
+            if (!detail.classList.contains("hidden")) {
+                detail.classList.add("hidden");
+                view.classList.add("hidden");
+                viewText.textContent = "View";
+            } else {
+                detail.classList.remove("hidden");
+                view.classList.remove("hidden");
+                viewText.textContent = "Hide";
+            }
+        }
+    });
+})();
+
+const searchButton = (function () {
+    const search = document.querySelector("#right .search");
+    const searchInput = document.querySelector("#right #rightSearch");
+    const div = document.querySelector("#right div");
+
+    search.addEventListener("click", () => {
+        search.classList.toggle("on");
+        if (search.classList.contains("on")) {
+            searchInput.classList.add("on");
+            div.classList.add("on");
+        } else {
+            searchInput.classList.remove("on");
+            div.classList.remove("on");
+        }
+    });
+})();
+
 function deleteAction(UID) {
     const deleteListBtn = document.querySelector(`.listDelete.${CSS.escape(UID)}`);
     const burger = document.querySelector("#left .burger");
@@ -1444,6 +1518,7 @@ function deleteAction(UID) {
             });
             
             listArray.splice(targetIndex, 1);//
+            localStorage.setItem("todoData", JSON.stringify(listArray));
     
             if (datePickerInstance) {
                 datePickerInstance.destroy();
