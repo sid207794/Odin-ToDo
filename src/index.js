@@ -28,52 +28,49 @@ const startupPage = (function () {
         askName.appendChild(inputName);
         askName.appendChild(nameSubmit);
         nameSubmit.appendChild(nameSubmitImg);
-    
-        if (name.textContent === "") {
-            askName.classList.add("show");
-            nameSubmit.addEventListener("click", () => {
-                if (inputName.value !== "") {
-                    const userInputName = inputName.value;
-                    askName.classList.remove("show");
-                    name.textContent = userInputName;
-                    setTimeout(() => {
-                        body.removeChild(askName);
-                    }, 200);
-                }
-            });
-        } else {
-            body.removeChild(askName);
+        
+        askName.classList.add("show");
+        const username = localStorage.getItem("username");
+        if (username) {
+            inputName.value = username;
         }
+        nameSubmit.addEventListener("click", () => {
+            if (inputName.value !== "") {
+                const userInputName = inputName.value;
+                name.textContent = userInputName;
+                localStorage.setItem("username", userInputName);
+                askName.classList.remove("show");
+                setTimeout(() => {
+                    body.removeChild(askName);
+                }, 200);
+            }
+        });
     })();
     
     const openBtn = document.querySelector(".myList .add");
     const submitBtn = document.querySelector(".myList dialog .submit");
     const userInput = document.querySelector(".myList dialog input");
-    const content = document.querySelector("#content");
     const storedArray = JSON.parse(localStorage.getItem("todoData"));
     listArray.length = 0;
 
     storedArray.forEach(obj => {
         const newList = new MyListClass(obj.ListId, obj.ListName);
 
-        // Restore Today tasks
         Object.entries(obj.today).forEach(([key, task]) => {
             if (key.startsWith("task")) {
-                newList.today.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority);
+                newList.today.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority, task.note);
             }
         });
 
-        // Restore Tomorrow tasks
         Object.entries(obj.tomorrow).forEach(([key, task]) => {
             if (key.startsWith("task")) {
-                newList.tomorrow.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority);
+                newList.tomorrow.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority, task.note);
             }
         });
 
-        // Restore Upcoming tasks
         Object.entries(obj.upcoming).forEach(([key, task]) => {
             if (key.startsWith("task")) {
-                newList.upcoming.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority);
+                newList.upcoming.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority, task.note);
             }
         });
 
@@ -98,6 +95,7 @@ const startupPage = (function () {
                 const personalAddTask = document.querySelector("#content .list .footerInputBox .addTask");
                 const todayH3 = document.querySelector("#content .list .today h3");
                 personalFooter.value = "Work-Out at gym";
+                personalTaskPriority.click();
                 personalTaskReminder.click();
                 personalTaskSubmitTime.click();
                 personalAddTask.click();
@@ -107,7 +105,6 @@ const startupPage = (function () {
                 localStorage.setItem("todoData", JSON.stringify(listArray));
                 todayH3.click();
                 personalFooter.value = "Visit the vet for annual vaccine";
-                personalTaskPriority.click();
                 personalAddTask.click();
                 localStorage.setItem("todoData", JSON.stringify(listArray));
                 todayH3.click();
@@ -117,7 +114,7 @@ const startupPage = (function () {
                 const secondTask = personalTodayTasks[1];
                 const personaltaskUID = secondTask.classList[0];
                 const personalTodayCheckbox = document.querySelector(`#content .list .today input#${CSS.escape(personaltaskUID)}`);
-                // personalTodayCheckbox.click();
+                personalTodayCheckbox.click();
                 localStorage.setItem("todoData", JSON.stringify(listArray));
             })();
     
@@ -153,7 +150,7 @@ const startupPage = (function () {
                 const secondTask = groceryTodayTasks[1];
                 const grocerytaskUID = secondTask.classList[0];
                 const groceryTodayCheckbox = document.querySelector(`#content .list .today input#${CSS.escape(grocerytaskUID)}`);
-                // groceryTodayCheckbox.click();
+                groceryTodayCheckbox.click();
                 localStorage.setItem("todoData", JSON.stringify(listArray));
             })();
             
@@ -164,14 +161,13 @@ const startupPage = (function () {
             PersonalList.click();
             localStorage.setItem("todoData", JSON.stringify(listArray));
             const personalTodayTasks = document.querySelectorAll("#content .list .today .task");
-            const secondTask = personalTodayTasks[2];
-            secondTask.click();
+            const firstTask = personalTodayTasks[0];
+            firstTask.click();
             localStorage.setItem("todoData", JSON.stringify(listArray));
         })();
     } else {
         listNameFunction();
         const myList = document.querySelector("#sidebar .myList");
-        const content = document.querySelector("#content");
 
         listArray.forEach(obj => {
             const UID = obj.ListId;
@@ -189,5 +185,11 @@ const startupPage = (function () {
         const items = document.querySelectorAll("#sidebar .myList .item");
         const FirstItem = items[0];
         FirstItem.click();
+
+        const tasks = document.querySelectorAll("#content .list .task");
+        const task = tasks[0];
+        if (task) {
+            task.click();
+        }
     }
 })();
