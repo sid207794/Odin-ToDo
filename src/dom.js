@@ -91,10 +91,10 @@ const myListDialog = (function () {
 
     function listNameEventListener() {
         listName.style.display = "block";
-        listName.style.width = mirror.offsetWidth + "px";
+        listName.style.width = (mirror.offsetWidth / window.innerWidth)*100 + "vw";
         listName.addEventListener("input", () => {
             mirror.textContent = listName.value;
-            listName.style.width = mirror.offsetWidth + "px";
+            listName.style.width = (mirror.offsetWidth / window.innerWidth)*100 + "vw";
             if (listName.value.length === 0) {
                 listName.style.width = "125px";
             }
@@ -143,7 +143,7 @@ export function myListItems(UID, input) {
     
             listName.value = item.textContent;
             mirror.textContent = item.textContent;
-            listName.style.width = mirror.offsetWidth + "px";
+            listName.style.width = (mirror.offsetWidth / window.innerWidth)*100 + "vw";
             if (listName.value.length === 0) {
                 listName.style.width = "125px";
             }

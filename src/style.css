@@ -16,7 +16,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 10px;
+    gap: 1.37vh; /* 10px */
     position: absolute;
     top: 0;
     left: 0;
@@ -29,15 +29,15 @@ body {
 }
 
 .askName .loader {
-    border-bottom: solid 16px #d9a500;
-    border-top: solid 16px rgb(11, 133, 255);
-    border-left: solid 16px #161616;
-    border-right: solid 16px #2a2d33;
+    border-bottom: solid 2.19vmin #d9a500; /* 16px */
+    border-top: solid 2.19vmin rgb(11, 133, 255); /* 16px */
+    border-left: solid 2.19vmin #161616; /* 16px */
+    border-right: solid 2.19vmin #2a2d33; /* 16px */
     border-radius: 50%;
-    width: 120px;
-    height: 120px;
+    width: 16.44vh; /* 120px */
+    height: 16.44vh; /* 120px */
     animation: spin 4s linear infinite;
-    margin-bottom: 100px;
+    margin-bottom: 13.70vh; /* 100px */
 }
 
 @keyframes spin {
@@ -46,29 +46,29 @@ body {
 }
 
 .askName #profileName {
-    height: 30px;
-    width: 145px;
+    height: 4.11vh; /* 30px */
+    width: 9.44vw; /* 145px */
     font-family: "Roboto", serif;
-    font-size: 20px;
+    font-size: 2.74vmin; /* 20px */
     text-align: center;
     background-color: #2a2d33;
-    border: solid 2px rgb(11, 133, 255);
+    border: solid 0.27vmin rgb(11, 133, 255); /* 2px */
     outline: none;
-    border-radius: 20px;
+    border-radius: 2.74vmin; /* 20px */
     color: white;
 }
 
 .askName #profileName::placeholder {
-    font-size: 16px;
+    font-size: 2.19vmin; /* 16px */
 }
 
 .askName .nameSubmit {
     position: relative;
-    height: 35px;
-    width: 35px;
+    height: 4.79vh; /* 35px */
+    width: 4.79vh; /* 35px */
     background-color: rgb(11, 133, 255);
     border: none;
-    border-radius: 20px;
+    border-radius: 2.74vmin; /* 20px */
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -78,7 +78,7 @@ body {
 
 .askName .nameSubmit:hover {
     background-color: transparent;
-    border: solid 2px rgb(11, 133, 255);
+    border: solid 0.27vmin rgb(11, 133, 255); /* 2px */
 }
 
 .askName .nameSubmit:hover img {
@@ -86,8 +86,8 @@ body {
 }
 
 .askName .nameSubmit img{
-    height: 35px;
-    width: 35px;
+    height: 4.79vh; /* 35px */
+    width: 4.79vh; /* 35px */
     filter: invert(1);
     transition: filter 0.2s ease-in-out;
 }
@@ -102,8 +102,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
-    padding-top: 30px;
+    padding: 2.05vmin; /* 15px */
+    padding-top: 4.11vh; /* 30px */
 }
 
 header #left {
@@ -115,9 +115,9 @@ header #left {
     backdrop-filter: blur(5px);
     width: max-content;
     width: max-content;
-    padding: 0px 25px;
+    padding: 0 1.63vw; /* 25px */
     padding-right: 0;
-    border-radius: 25px;
+    border-radius: 3.42vmin; /* 25px */
     z-index: 9999;
     position: relative;
 }
@@ -126,19 +126,19 @@ header #left .listName {
     display: flex;
     align-items: center;
     flex: 1;
-    border-right: solid 2px rgb(163, 162, 162);
-    padding: 0 15px;
+    border-right: solid 0.13vw rgb(163, 162, 162); /* 2px */
+    padding: 0 0.98vw; /* 15px */
     padding-left: 0;
 }
 
 header #left .listName #listname {
-    width: 125px;
+    width: 8.14vw; /* 125px */
     color: white;
     font-family: inherit;
     font-weight: 900;
-    font-size: 20px;
+    font-size: 2.74vmin; /* 20px */
     background-color: transparent;
-    border: solid 1px transparent;
+    border: solid 0.14vmin transparent; /* 1px */
     outline: none;
     box-sizing: content-box;
     caret-color: rgb(11, 133, 255);
@@ -147,15 +147,15 @@ header #left .listName #listname {
 
 header #left .listName #listname:focus {
     color: rgb(163, 162, 162);
-    border-bottom: solid 1px rgb(11, 133, 255);
+    border-bottom: solid 0.14vh rgb(11, 133, 255); /* 1px */
 }
 
 header #left .listName #listname:not(:focus):hover {
-    border-bottom: solid 1px rgb(163, 162, 162);
+    border-bottom: solid 0.14vh rgb(163, 162, 162); /* 1px */
 }
 
 header #left .listName #listname:placeholder-shown {
-    border-bottom: solid 1px red;
+    border-bottom: solid 0.14vh red; /* 1px */
 }
 
 header #left .listName .mirrorName {
@@ -164,8 +164,8 @@ header #left .listName .mirrorName {
     position: absolute;
     font-family: inherit;
     font-weight: 900;
-    font-size: 20px;
-    padding: 1px 2px;
+    font-size: 2.74vmin; /* 20px */
+    padding: 0.14vh 0.13vw; /* 1px 2px */ /*__CHECKPOINT__*/
 }
 
 header #left .share,
