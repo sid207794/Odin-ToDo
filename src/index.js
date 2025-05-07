@@ -1,7 +1,7 @@
 import "./style.css";
-import { listArray } from "./logic.js";
+import { MyListClass, listArray } from "./logic.js";
 import "./dom.js";
-import { myListItems, contentCreate, deleteAction } from "./dom.js";
+import { myListItems, listNameFunction } from "./dom.js";
 import profileLoad from "./images/profile.png";
 import arrowRight from "./images/arrow-right-thin.svg";
 
@@ -46,15 +46,44 @@ const startupPage = (function () {
         }
     })();
     
+    const openBtn = document.querySelector(".myList .add");
+    const submitBtn = document.querySelector(".myList dialog .submit");
+    const userInput = document.querySelector(".myList dialog input");
     const content = document.querySelector("#content");
-    // const storedArray = JSON.parse(localStorage.getItem("todoData"));
-    // console.log(storedArray);
+    const storedArray = JSON.parse(localStorage.getItem("todoData"));
+    listArray.length = 0;
+
+    storedArray.forEach(obj => {
+        const newList = new MyListClass(obj.ListId, obj.ListName);
+
+        // Restore Today tasks
+        Object.entries(obj.today).forEach(([key, task]) => {
+            if (key.startsWith("task")) {
+                newList.today.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority);
+            }
+        });
+
+        // Restore Tomorrow tasks
+        Object.entries(obj.tomorrow).forEach(([key, task]) => {
+            if (key.startsWith("task")) {
+                newList.tomorrow.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority);
+            }
+        });
+
+        // Restore Upcoming tasks
+        Object.entries(obj.upcoming).forEach(([key, task]) => {
+            if (key.startsWith("task")) {
+                newList.upcoming.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority);
+            }
+        });
+
+        listArray.push(newList);
+    });
+    console.log("storedArray:", storedArray);
+    console.log("listArray:", listArray);
 
     if (listArray.length === 0) {
         (function startupLists() {
-            const openBtn = document.querySelector(".myList .add");
-            const submitBtn = document.querySelector(".myList dialog .submit");
-            const userInput = document.querySelector(".myList dialog input");
     
             (function personal() {
                 openBtn.click();
@@ -139,25 +168,26 @@ const startupPage = (function () {
             secondTask.click();
             localStorage.setItem("todoData", JSON.stringify(listArray));
         })();
-    }// else {
-    //     const myList = document.querySelector("#sidebar .myList");
-    //     const content = document.querySelector("#content");
+    } else {
+        listNameFunction();
+        const myList = document.querySelector("#sidebar .myList");
+        const content = document.querySelector("#content");
 
-    //     storedArray.forEach(obj => {
-    //         const UID = obj.ListId;
-    //         const listName = obj.ListName;
+        listArray.forEach(obj => {
+            const UID = obj.ListId;
+            const listName = obj.ListName;
 
-    //         const item = document.createElement("div");
-    //         item.classList.add(`${UID}`);
-    //         item.classList.add("item");
-    //         item.textContent = listName;
-    //         myList.appendChild(item);
+            const item = document.createElement("div");
+            item.classList.add(`${UID}`);
+            item.classList.add("item");
+            item.textContent = listName;
+            myList.appendChild(item);
             
-    //         myListItems(UID, listName);
-    //     });
+            myListItems(UID, listName);
+        });
         
-    //     const tasks = document.querySelectorAll("#content .list .today .task");
-    //     const FirstTask = tasks[0];
-    //     FirstTask.click();
-    // }
+        const items = document.querySelectorAll("#sidebar .myList .item");
+        const FirstItem = items[0];
+        FirstItem.click();
+    }
 })();
