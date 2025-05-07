@@ -81,6 +81,9 @@ const myListDialog = (function () {
             contentCreate(uniqueclass);
             deleteAction(uniqueclass);
             myListItems(uniqueclass, userInput);
+
+            const viewText = document.querySelector("#left .view span");
+            viewText.textContent = "View";
             
             dialogPropertiesChildren.dialogClose(dialog);
         }
@@ -151,6 +154,9 @@ export function myListItems(UID, input) {
                 element.classList.remove("highlighted");
             });
             item.classList.add("highlighted");
+
+            const viewText = document.querySelector("#left .view span");
+            viewText.textContent = "View";
         }
     });
 }
