@@ -51,35 +51,9 @@ const myListDialog = (function () {
 
         if (userInput !== "") {
             const uniqueclass = crypto.randomUUID();
-            listName.style.display = "block";
             listName.value = userInput;
             mirror.textContent = userInput;
-            listName.style.width = mirror.offsetWidth + "px";
-            listName.addEventListener("input", () => {
-                mirror.textContent = listName.value;
-                listName.style.width = mirror.offsetWidth + "px";
-                if (listName.value.length === 0) {
-                    listName.style.width = "125px";
-                }
-
-                const list = document.querySelector("#content .list");
-                const detail = document.querySelector("#content .detail");
-                if (list) {
-                    const listUID = list.classList[0];
-                    const item = document.querySelector(`#sidebar .myList .${CSS.escape(listUID)}`);
-                    item.textContent = listName.value;
-                    const targetClass = listArray.find(item => item.ListId === listUID);
-                    targetClass.ListName = listName.value;
-                    localStorage.setItem("todoData", JSON.stringify(listArray));
-                }
-
-                if (detail) {
-                    const detailUID = detail.classList[0];
-                    const item = document.querySelector(`#content .${CSS.escape(detailUID)}.detail .buttons .listName`);
-                    const textNode = Array.from(item.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
-                    textNode.textContent = listName.value;
-                }
-            });
+            listNameEventListener(userInput);
             const myListItem = document.createElement("div");
             myListItem.classList.add(`${uniqueclass}`);
             myListItem.classList.add("item");
@@ -111,11 +85,43 @@ const myListDialog = (function () {
             dialogPropertiesChildren.dialogClose(dialog);
         }
     });
+
+    function listNameEventListener() {
+        listName.style.display = "block";
+        listName.style.width = mirror.offsetWidth + "px";
+        listName.addEventListener("input", () => {
+            mirror.textContent = listName.value;
+            listName.style.width = mirror.offsetWidth + "px";
+            if (listName.value.length === 0) {
+                listName.style.width = "125px";
+            }
+
+            const list = document.querySelector("#content .list");
+            const detail = document.querySelector("#content .detail");
+            if (list) {
+                const listUID = list.classList[0];
+                const item = document.querySelector(`#sidebar .myList .${CSS.escape(listUID)}`);
+                item.textContent = listName.value;
+                const targetClass = listArray.find(item => item.ListId === listUID);
+                targetClass.ListName = listName.value;
+                localStorage.setItem("todoData", JSON.stringify(listArray));
+            }
+
+            if (detail) {
+                const detailUID = detail.classList[0];
+                const item = document.querySelector(`#content .${CSS.escape(detailUID)}.detail .buttons .listName`);
+                const textNode = Array.from(item.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+                textNode.textContent = listName.value;
+            }
+        });
+    }
+
+    return { listNameEventListener };
 })();
 
 let datePickerInstance;
 
-function myListItems(UID, input) {
+export function myListItems(UID, input) {
     const content = document.querySelector("#content");
     const listName = document.querySelector(".listName #listname");
     const item = document.querySelector(`.myList .${CSS.escape(UID)}`);
@@ -593,7 +599,7 @@ function contentCreate(UID) {
                             checkbox.checked = true;
                             label.style.textDecoration = "line-through";
                             label.style.color = "rgb(163, 162, 162)";
-                            span.style.backgroundColor = "rgb(163, 162, 162)";
+                            span.classList.add("grey");
                         }
 
                         newTask.classList.add(`${taskUID}`);
@@ -701,7 +707,7 @@ function contentCreate(UID) {
                             checkbox.checked = true;
                             label.style.textDecoration = "line-through";
                             label.style.color = "rgb(163, 162, 162)";
-                            span.style.backgroundColor = "rgb(163, 162, 162)";
+                            span.classList.add("grey");
                         }
 
                         newTask.classList.add(`${taskUID}`);
@@ -809,7 +815,7 @@ function contentCreate(UID) {
                             checkbox.checked = true;
                             label.style.textDecoration = "line-through";
                             label.style.color = "rgb(163, 162, 162)";
-                            span.style.backgroundColor = "rgb(163, 162, 162)";
+                            span.classList.add("grey");
                         }
 
                         newTask.classList.add(`${taskUID}`);
@@ -1663,3 +1669,5 @@ const dialogProperties = () => {
 }
 
 const dialogPropertiesChildren = dialogProperties();
+
+export const listNameFunction = myListDialog.listNameEventListener;
