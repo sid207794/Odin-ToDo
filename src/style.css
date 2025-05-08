@@ -645,7 +645,7 @@ header #right button.on img {
     background-color: rgb(11, 133, 255);
     color: white;
     filter: brightness(50%);
-    margin-bottom: 2.74vh; /* 20px */ /*__CHECKPOINT__*/
+    margin-bottom: 2.74vh; /* 20px */
 }
 
 .myList dialog .myListDialog #dialogList:not(:placeholder-shown) + .submit {
@@ -662,42 +662,42 @@ header #right button.on img {
     grid-row: 2 / 3;
     grid-column: 2 / 3;
     display: flex;
-    gap: 25px;
-    padding: 15px;
-    padding-top: 10px;
+    gap: 3.425vh; /* 25px */
+    padding: 2.05vmin; /* 15px */
+    padding-top: 1.37vh; /* 10px */
 }
 
 #content > * {
     display: flex;
     flex-direction: column;
-    height: 600px;
-    width: 600px;
+    height: 82.19vh; /* 600px */
+    width: 39.06vw; /* 600px */
     background-color: #161616cc;
     backdrop-filter: blur(20px);
-    border-radius: 20px;
+    border-radius: 2.740vmin; /* 20px */
     box-sizing: border-box;
 }
 
 #content .detail {
     background-color: #161616ef;
-    padding: 25px;
+    padding: 3.425vmin; /* 25px */
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 3.425vh; /* 25px */
 }
 
 #content .detail .header {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 1.37vh; /* 10px */
 }
 
 #content .detail .deleteButton,
 #content .detail .complete {
     background-color: transparent;
-    height: 30px;
-    width: 30px;
+    height: 4.11vh; /* 30px */
+    width: 4.11vh; /* 30px */
     border: none;
     border-radius: 100%;
     display: flex;
@@ -711,8 +711,8 @@ header #right button.on img {
 
 #content .detail .deleteButton img,
 #content .detail .complete img {
-    height: 25px;
-    width: 25px;
+    height: 3.425vh; /* 25px */
+    width: 3.425vh; /* 25px */
     filter: invert(70%);
     cursor: pointer;
 }
@@ -728,10 +728,10 @@ header #right button.on img {
 #content .detail .title #taskName {
     background-color: transparent;
     border: none;
-    border-bottom: solid 2px rgb(163, 162, 162);
+    border-bottom: solid 0.27vh rgb(163, 162, 162); /* 2px */
     outline: none;
     font-family: inherit;
-    font-size: 25px;
+    font-size: 3.425vmin; /* 25px */
     font-weight: bold;
     color: white;
     width: 100%;
@@ -742,12 +742,12 @@ header #right button.on img {
 
 #content .detail .title #taskName:focus {
     color: rgb(163, 162, 162);
-    border-bottom: solid 2px rgb(11, 133, 255);
+    border-bottom: solid 0.27vh rgb(11, 133, 255); /* 2px */
     transition: color 0.2s ease-in-out, border-color 0.3s ease-in-out;
 }
 
 #content .detail .title #taskName:placeholder-shown {
-    border-bottom: solid 2px red;
+    border-bottom: solid 0.27vh red; /* 2px */
     transition: color 0.2s ease-in-out, border-color 0.3s ease-in-out;
 }
 
@@ -755,21 +755,21 @@ header #right button.on img {
     display: flex;
     justify-content: left;
     align-items: center;
-    gap: 10px;
+    gap: 1.37vh; /* 10px */
 }
 
 #content .detail .buttons .reminder,
 #content .detail .buttons .listName,
 #content .detail .buttons .priority {
     background-color: #333333;
-    padding: 7px 12px;
+    padding: 0.96vh 0.45vw; /* 7px 12px */
     border: none;
-    border-radius: 20px;
+    border-radius: 2.740vmin; /* 20px */
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
-    font-size: 14px;
+    font-size: 1.92vmin; /* 14px */
     cursor: pointer;
     filter: brightness(100%);
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
@@ -784,9 +784,9 @@ header #right button.on img {
 #content .detail .reminder img,
 #content .detail .listName img,
 #content .detail .priority img {
-    height: 20px;
-    width: 20px;
-    margin-right: 5px;
+    height: 2.74vh; /* 20px */
+    width: 2.74vh; /* 20px */
+    margin-right: 0.33vw; /* 5px */
     filter: invert(20%) sepia(100%) saturate(5000%) hue-rotate(0deg) brightness(100%) contrast(100%);
 }
 
@@ -815,7 +815,7 @@ header #right button.on img {
 
 #content .detail .notes label p,
 #content .detail .attachments p {
-    margin: 5px 0;
+    margin: 0.68vh 0; /* 5px 0 */
     color: white;
     font-weight: bolder;
 }
@@ -823,12 +823,12 @@ header #right button.on img {
 #content .detail .notes label #note {
     background-color: transparent;
     border: none;
-    border-bottom: dashed 2px rgb(163, 162, 162);
+    border-bottom: dashed 0.27vh rgb(163, 162, 162); /* 2px */
     outline: none;
     font-family: inherit;
-    font-size: 15px;
+    font-size: 2.05vmin; /* 15px */
     color: rgb(163, 162, 162);
-    height: 30px;
+    height: 4.11vh; /* 30px */
     width: 100%;
     caret-color: rgb(11, 133, 255);
     transition: color 0.2s ease-in-out, border-color 0.3s ease-in-out;
@@ -837,7 +837,7 @@ header #right button.on img {
 
 #content .detail .notes label #note:focus {
     color: white;
-    border-bottom: dashed 2px rgb(11, 133, 255);
+    border-bottom: dashed 0.27vh rgb(11, 133, 255); /* 2px */
     transition: color 0.2s ease-in-out, border-color 0.3s ease-in-out;
 }
 
@@ -846,23 +846,23 @@ header #right button.on img {
 }
 
 #content .detail .attachments label {
-    margin-top: 10px;
+    margin-top: 1.37vh; /* 10px */
     display: inline-block;
-    padding: 2px 0;
+    padding: 0.27vh 0; /* 2px 0 */
     width: 100%;
-    border: dashed 1px rgb(163, 162, 162);
-    border-radius: 10px;
+    border: dashed 0.137vmin rgb(163, 162, 162); /* 1px */
+    border-radius: 1.37vmin; /* 10px */
     cursor: pointer;
     text-align: center;
 }
 
 #content .detail .attachments label:hover {
-    border: dashed 1px rgb(11, 133, 255);
+    border: dashed 0.137vmin rgb(11, 133, 255); /* 1px */
     transition: border-color 0.3s ease-in-out;
 }
 
 #content .detail .attachments label:not(:hover) {
-    border: dashed 1px rgb(163, 162, 162);
+    border: dashed 0.137vmin rgb(163, 162, 162); /* 1px */
     transition: border-color 0.3s ease-in-out;
 }
 
@@ -883,8 +883,8 @@ header #right button.on img {
 }
 
 #content .detail .attachments label img {
-    height: 30px;
-    width: 30px;
+    height: 4.11vh; /* 30px */
+    width: 4.11vh; /* 30px */
     transition: padding 0.2s ease-in-out;
 }
 
@@ -905,7 +905,7 @@ header #right button.on img {
 }
 
 #content .detail .attachments label:hover img {
-    padding: 0 20px;
+    padding: 0 1.30vw; /* 0 20px */
 }
 
 #content * {
@@ -916,10 +916,10 @@ header #right button.on img {
     appearance: none;
     -webkit-appearance: none;
     position: relative;
-    height: 20px;
-    width: 20px;
+    height: 2.74vh; /* 20px */
+    width: 2.74vh; /* 20px */
     background-color: transparent;
-    border: solid 2px #65656590;
+    border: solid 0.27vmin #65656590; /* 2px */
     border-radius: 100%;
     cursor: pointer;
     outline: none;
@@ -956,12 +956,12 @@ header #right button.on img {
 #content .list input[type="checkbox"]::after {
     content: "";
     position: absolute;
-    top: 2.5px;
-    left: 6px;
-    height: 8px;
-    width: 4px;
+    top: 0.34vh; /* 2.5px */
+    left: 0.39vw; /* 6px */
+    height: 1.10vh; /* 8px */
+    width: 0.26vw; /* 4px */
     border: solid white;
-    border-width: 0 2px 2px 0;
+    border-width: 0 0.13vw 0.27vh 0; /* 0 2px 2px 0 */
     opacity: 0;
     transform: rotate(45deg) scale(0);
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -1040,7 +1040,7 @@ header #right button.on img {
 #content .tomorrow h3,
 #content .upcoming h3 {
     margin: 0 auto;
-    padding: 15px 25px;
+    padding: 2.05vh 1.63vw; /* 15px 25px */
     position: sticky;
     top: 0;
     background-color: transparent;
@@ -1052,7 +1052,7 @@ header #right button.on img {
 #content .list .today .task,
 #content .list .tomorrow .task,
 #content .list .upcoming .task {
-    padding: 10px 25px;
+    padding: 1.37vh 1.63vw; /* 10px 25px */
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
 }
@@ -1085,13 +1085,13 @@ header #right button.on img {
 
 #content .list .task.taskHighlight {
     background-color: #65656530 !important;
-    border-bottom: solid 1px rgb(11, 133, 255);
+    border-bottom: solid 0.14vh rgb(11, 133, 255); /* 1px */
 }
 
 #content .list label{
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1.37vh; /* 10px */
     color: rgb(212, 212, 212);
     cursor: pointer;
 }
@@ -1099,8 +1099,8 @@ header #right button.on img {
 #content .list label span {
     color: white;
     background-color: rgb(11, 133, 255);
-    border-radius: 20px;
-    padding: 0 8px;
+    border-radius: 2.74vmin; /* 20px */
+    padding: 0 0.52vw; /* 0 8px */
     cursor: default;
     box-shadow: none;
     transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -1110,7 +1110,7 @@ header #right button.on img {
 #content .list label span.yellow {
     color: #161616;
     background-color: #d9a500;
-    padding: 1px 8px;
+    padding: 0.14vh 0.52vw; /* 1px 8px */
 }
 
 #content .list label span.grey {
@@ -1139,15 +1139,15 @@ header #right button.on img {
 
 .footerInputBox {
     height: max-content;
-    width: 600px;
+    width: 39.06vw; /* 600px */
     background-color: #2a2d33;
     margin-top: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    padding: 10px 0;
+    border-bottom-left-radius: 2.74vmin; /* 20px */
+    border-bottom-right-radius: 2.74vmin; /* 20px */
+    padding: 1.37vh 0; /* 10px 0 */
     padding-top: 0;
     box-sizing: border-box;
     position: sticky;
@@ -1161,14 +1161,14 @@ header #right button.on img {
 }
 
 #footerInput {
-    height: 40px;
-    border-radius: 8px;
-    border: solid 1px #808080;
+    height: 5.48vh; /* 40px */
+    border-radius: 1.10vmin; /* 8px */
+    border: solid 0.14vmin #808080; /* 1px */
     outline: none;
     background-color: #161616;
-    padding-left: 15px;
-    padding-right: 15px;
-    margin: 0 25px;
+    padding-left: 0.98vw; /* 15px */
+    padding-right: 0.98vw; /* 15px */
+    margin: 0 1.63vw; /* 0 25px */
 }
 
 #footerInput:focus {
@@ -1176,25 +1176,25 @@ header #right button.on img {
 }
 
 #footerInput::placeholder {
-    font-size: 15px;
+    font-size: 2.05vmin; /* 15px */
 }
 
 .footerInputBox .addTask {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30px;
-    width: 30px;
+    height: 4.11vh; /* 30px */
+    width: 4.11vh; /* 30px */
     position: absolute;
-    right: 30px;
-    bottom: 16px;
+    right: 1.95vw; /* 30px */
+    bottom: 2.19vh; /* 16px */
     background-color: transparent;
     border: none;
 }
 
 .footerInputBox .addTask img {
-    height: 25px;
-    width: 25px;
+    height: 3.425vh; /* 25px */
+    width: 3.425vh; /* 25px */
     filter: invert(60%);
     cursor: pointer;
 }
@@ -1214,8 +1214,8 @@ header #right button.on img {
     flex: 1;
     justify-content: center;
     align-items: center;
-    height: 50px;
-    width: 30px;
+    height: 6.85vh; /* 50px */
+    width: 1.95vw; /* 30px */
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -1223,16 +1223,16 @@ header #right button.on img {
 
 .footerInputBox .reminder {
     border: none;
-    border-right: solid 1px #808080;
+    border-right: solid 0.07vw #808080; /* 1px */
     color: rgb(11, 133, 255) !important;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 2.05vmin; /* 15px */
 }
 
 .footerInputBox .reminder img,
 .footerInputBox .priority img {
-    height: 25px;
-    width: 25px;
+    height: 3.425vh; /* 25px */
+    width: 3.425vh; /* 25px */
     filter: invert(60%);
 }
 
@@ -1267,20 +1267,20 @@ header #right button.on img {
 }
 
 .bellDialog .flatpickr-month {
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
+    border-top-right-radius: 0.68vmin; /* 5px */
+    border-top-left-radius: 0.68vmin; /* 5px */
 }
 
 .submitTime {
     position: absolute;
-    top: 415px;
-    left: 140px;
+    top: 56.87vh; /* 415px */
+    left: 9.11vw; /* 140px */
     background-color: rgb(11, 133, 255);
     border: none;
-    font-size: 18px;
+    font-size: 2.47vmin; /* 18px */
     font-weight: bold;
-    padding: 8px 25px;
-    border-radius: 20px;
+    padding: 1.10vh 1.63vw; /* 8px 25px */
+    border-radius: 2.74vmin; /* 20px */
     cursor: pointer;
 }
 
@@ -1289,7 +1289,7 @@ header #right button.on img {
     display: flex;
     justify-content: center;
     align-items: end;
-    gap: 60px;
+    gap: 8.22vh; /* 60px */
 }
 
 .listDeleteConfirmDiv .yes,
@@ -1297,11 +1297,11 @@ header #right button.on img {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 35px;
-    width: 80px;
+    height: 4.79vh; /* 35px */
+    width: 5.20vw; /* 80px */
     border: none;
-    border-radius: 20px;
-    font-size: 15px;
+    border-radius: 2.74vmin; /* 20px */
+    font-size: 2.05vmin; /* 15px */
     font-weight: bold;
     background-color: rgb(11, 133, 255);
     color: white;
@@ -1314,22 +1314,22 @@ header #right button.on img {
 
 .listDeleteConfirmDiv .yes:hover {
     background-color: transparent;
-    border: solid 2px red;
+    border: solid 0.27vmin red; /* 2px */
     color: red;
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .listDeleteConfirmDiv .no:hover {
     background-color: transparent;
-    border: solid 2px rgb(11, 133, 255);
+    border: solid 0.27vmin rgb(11, 133, 255); /* 2px */
     color: rgb(11, 133, 255);
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .listDeleteConfirm h3 {
-    margin-top: 12px;
+    margin-top: 1.65vh; /* 12px */
     color: white;
-    font-size: 20px;
+    font-size: 2.74vmin; /* 20px */
 }
 
 .listDeleteConfirm p {
