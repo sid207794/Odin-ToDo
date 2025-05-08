@@ -165,7 +165,7 @@ header #left .listName .mirrorName {
     font-family: inherit;
     font-weight: 900;
     font-size: 2.74vmin; /* 20px */
-    padding: 0.14vh 0.13vw; /* 1px 2px */ /*__CHECKPOINT__*/
+    padding: 0.14vh 0.13vw; /* 1px 2px */
 }
 
 header #left .share,
@@ -174,13 +174,13 @@ header #left .view {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 17px;
+    font-size: 2.467vmin; /* 17px */
     font-weight: bold;
-    gap: 7px;
+    gap: 0.959vh; /* 7px */
     border: none;
-    border-right: solid 2px rgb(163, 162, 162);
+    border-right: solid 0.130vw rgb(163, 162, 162); /* 2px */
     flex: 1;
-    padding: 8px 20px;
+    padding: 1.095vh 1.302vw; /* 8px 20px */
     color: rgb(163, 162, 162);
     background-color: transparent;
     cursor: pointer;
@@ -191,11 +191,11 @@ header #left .burger {
     justify-content: center;
     align-items: center;
     border: none;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
+    border-top-right-radius: 3.425vmin; /* 25px */
+    border-bottom-right-radius: 3.425vmin; /* 25px */
     width: max-content;
     flex: 1;
-    padding: 8px 20px;
+    padding: 1.095vh 1.302vw; /* 8px 20px */
     background-color: transparent;
     cursor: pointer;
 }
@@ -217,8 +217,8 @@ header #left button:hover span {
 }
 
 header #left button img {
-    height: 25px;
-    width: 25px;
+    height: 3.425vh; /* 25px */
+    width: 3.425vh; /* 25px */
     filter: invert(70%);
 }
 
@@ -237,13 +237,13 @@ header #left .burger.disabled:hover img {
 #left .burgerDialog {
     background-color: #2a2d33;
     border: none;
-    border-radius: 10px;
+    border-radius: 1.370vmin; /* 10px */
     height: 6vh;
     width: 10vw;
-    min-width: 160px;
+    min-width: 10.43vw; /* 160px */
     filter: brightness(100%);
     position: absolute;
-    top: 44px;
+    top: 6.03vh; /* 44px */
 }
 
 .burgerDialogCover {
@@ -255,8 +255,8 @@ header #left .burger.disabled:hover img {
 
 .burgerDialogCover .listDeleteConfirm {
     background-color: #161616;
-    border: solid 1px #505050;
-    border-radius: 10px;
+    border: solid 0.137vmin #505050; /* 1px */
+    border-radius: 1.370vmin; /* 10px */
     height: 25vh;
     width: 20vw;
     filter: brightness(100%);
@@ -271,27 +271,27 @@ header #left .burger.disabled:hover img {
     align-items: center;
     background-color: transparent;
     border: none;
-    padding: 2.5px 15px;
+    padding: 0.344vh 0.978vw; /* 2.5px 15px */
     color: white;
-    font-size: 14px;
+    font-size: 1.919vmin; /* 14px */
     cursor: pointer;
     user-select: none;
 }
 
 .listDelete {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 1.370vmin; /* 10px */
+    border-top-right-radius: 1.370vmin; /* 10px */
 }
 
 .taskDeleteSelect {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 1.370vmin; /* 10px */
+    border-bottom-right-radius: 1.370vmin; /* 10px */
 }
 
 .listDelete:hover,
 .taskDeleteSelect:hover {
     background-color: #65656530;
-    border-radius: 10px;
+    border-radius: 1.370vmin; /* 10px */
     color: rgb(11, 133, 255);
 }
 
@@ -310,9 +310,9 @@ header #right .search {
     background-color: #161616aa;
     backdrop-filter: blur(5px);
     border: none;
-    border-radius: 20px;
-    height: 40px;
-    width: 40px;
+    border-radius: 2.740vmin; /* 20px */
+    height: 5.481vh; /* 40px */
+    width: 5.481vh; /* 40px */
     cursor: pointer;
     transition: border-radius 0.4s ease-in-out;
 }
@@ -333,16 +333,16 @@ header #right .search.on:hover {
 }
 
 header #right div {
-    height: 40px;
-    width: 180px;
+    height: 5.481vh; /* 40px */
+    width: 11.72vw; /* 180px */
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #161616aa;
     backdrop-filter: blur(5px);
     border: none;
-    border-radius: 20px;
-    padding-left: 15px;
+    border-radius: 2.740vmin; /* 20px */
+    padding-left: 0.978vw; /* 15px */
     opacity: 0;
     transform: translateX(-100%);
     transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out, border-radius 0.4s ease-in-out;
@@ -361,7 +361,7 @@ header #right div #rightSearch {
     outline: none;
     border: none;
     color: white;
-    border-bottom: solid 1px rgb(11, 133, 255);
+    border-bottom: solid 0.14vh rgb(11, 133, 255); /* 1px */
     visibility: hidden;
 }
 
@@ -370,8 +370,8 @@ header #right div #rightSearch.on {
 }
 
 header #right button img {
-    height: 25px;
-    width: 25px;
+    height: 3.425vh; /* 25px */
+    width: 3.425vh; /* 25px */
     filter: invert(70%);
 }
 
@@ -389,11 +389,11 @@ header #right button.on img {
     background-color: #101010;
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    padding: 25px 0;
+    gap: 4.110vh; /* 30px */
+    padding: 3.425vh 0; /* 25px 0 */
     color: rgb(163, 162, 162);
     z-index: 15;
-    max-width: 220px;
+    max-width: 14.32vw; /* 220px */
     white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -402,14 +402,14 @@ header #right button.on img {
 
 #sidebar .profile {
     display: flex;
-    gap: 15px;
+    gap: 2.055vh; /* 15px */
     align-items: center;
     color: white;
-    font-size: 20px;
+    font-size: 2.740vmin; /* 20px */
     font-weight: 600;
-    padding: 0 25px;
-    padding-bottom: 25px;
-    border-bottom: dashed 2px rgb(11, 133, 255);
+    padding: 0 3.425vmin; /* 0 25px */
+    padding-bottom: 3.425vmin; /* 25px */
+    border-bottom: dashed 0.274vh rgb(11, 133, 255); /* 2px */
     box-sizing: border-box;
 }
 
@@ -418,16 +418,16 @@ header #right button.on img {
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    border: solid 2px rgb(11, 133, 255);
-    border-radius: 5px;
-    height: 50px;
-    width: 50px;
+    border: solid 0.274vmin rgb(11, 133, 255); /* 2px */
+    border-radius: 0.685vmin; /* 5px */
+    height: 6.849vh; /* 50px */
+    width: 6.849vh; /* 50px */
     cursor: pointer;
 }
 
 #sidebar .profile .theme img {
-    height: 45px;
-    width: 45px;
+    height: 6.164vh; /* 45px */
+    width: 6.164vh; /* 45px */
 }
 
 #sidebar .sort {
@@ -437,7 +437,7 @@ header #right button.on img {
 }
 
 #sidebar .sort > * {
-    padding: 15px 25px;
+    padding: 2.055vh 1.632vw; /* 15px 25px */
 }
 
 #sidebar .sort > *:hover {
@@ -454,28 +454,28 @@ header #right button.on img {
     display: block;
     overflow-y: auto;
     position: relative;
-    max-height: 300px;
+    max-height: 41.10vh; /* 300px */
 }
 
 #sidebar .myList::-webkit-scrollbar {
-    width: 5px;
+    width: 0.326vw; /* 5px */
 }
 
 #sidebar .myList::-webkit-scrollbar-track {
     background-color: #101010;
-    border-radius: 2px;
-    margin-top: 50px;
+    border-radius: 0.274vmin; /* 2px */
+    margin-top: 6.849vh; /* 50px */
 }
 
 #sidebar .myList::-webkit-scrollbar-thumb {
     background-color: rgb(11, 133, 255);
-    border-radius: 2px;
+    border-radius: 0.274vmin; /* 2px */
 }
 
 #sidebar .myList span {
     display: flex;
     justify-content: space-between;
-    padding: 0 25px;
+    padding: 0 1.632vw; /* 0 25px */
     position: sticky;
     top: 0;
     z-index: 17;
@@ -483,10 +483,10 @@ header #right button.on img {
 }
 
 #sidebar .myList .item{
-    padding: 15px 25px;
+    padding: 2.055vh 1.632vw; /* 15px 25px */
     margin-left: 0;
     margin-right: 0;
-    border-bottom: solid 2px transparent;
+    border-bottom: solid 0.274vh transparent; /* 2px */
     font-weight: normal;
     cursor: pointer;
 }
@@ -504,7 +504,7 @@ header #right button.on img {
 }
 
 #sidebar .myList .item.highlighted {
-    border-bottom: solid 2px rgb(11, 133, 255);
+    border-bottom: solid 0.274vh rgb(11, 133, 255); /* 2px */
     background-color: #65656530;
     color: rgb(11, 133, 255);
     font-weight: bold;
@@ -514,14 +514,14 @@ header #right button.on img {
 #sidebar .myList h3{
     color: white;
     font-weight: 900;
-    margin: 13.5px 0;
+    margin: 1.85vh 0; /* 13.5px 0 */
 }
 
 #sidebar .myList .add{
     margin: auto 0;
     margin-left: auto;
-    height: 32px;
-    width: 32px;
+    height: 4.38vh; /* 32px */
+    width: 4.38vh; /* 32px */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -531,8 +531,8 @@ header #right button.on img {
 }
 
 #sidebar .myList .add img{
-    height: 22px;
-    width: 22px;
+    height: 3.01vh; /* 22px */
+    width: 3.01vh; /* 22px */
     filter: invert(70%);
     cursor: pointer;
 }
@@ -550,8 +550,8 @@ header #right button.on img {
 
 .myList dialog {
     background-color: #161616;
-    border: solid 1px #505050;
-    border-radius: 10px;
+    border: solid 0.137vmin #505050; /* 1px */
+    border-radius: 1.37vmin; /* 10px */
     height: 32vh;
     width: 40vw;
     filter: brightness(100%);
@@ -560,18 +560,18 @@ header #right button.on img {
 
 .bellDialog {
     background-color: #161616;
-    border: solid 1px #50505080;
-    border-radius: 10px;
+    border: solid 0.137vmin #50505080; /* 1px */
+    border-radius: 1.37vmin; /* 10px */
     height: 60vh;
     width: 21vw;
     filter: brightness(100%);
-    min-width: 320px;
+    min-width: 20.8vw; /* 320px */
 }
 
 .myList dialog .myListDialog {
     display: flex;
     flex-direction: column;
-    gap: 19px;
+    gap: 2.61vh; /* 19px */
 }
 
 .bellDialogCover {
@@ -580,15 +580,15 @@ header #right button.on img {
 }
 
 .myList dialog .myListDialog #dialogList {
-    height: 90px;
-    font-size: 30px;
+    height: 12.33vh; /* 90px */
+    font-size: 4.11vmin; /* 30px */
     background-color: transparent;
     outline: none;
     border: none;
     color: white;
     font-weight: bold;
-    padding-left: 25px;
-    padding-right: 25px;
+    padding-left: 1.63vw; /* 25px */
+    padding-right: 1.63vw; /* 25px */
 }
 
 .myList dialog .myListDialog #dialogList::placeholder {
@@ -601,28 +601,28 @@ header #right button.on img {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30px;
-    width: 30px;
+    height: 4.11vh; /* 30px */
+    width: 4.11vh; /* 30px */
     margin-left: auto;
-    font-size: 20px;
+    font-size: 2.74vmin; /* 20px */
     background-color: transparent;
     border: none;
 }
 
 .myList dialog .myListDialog .close {
-    margin-top: 13px;
-    margin-right: 13px;
+    margin-top: 1.78vmin; /* 13px */
+    margin-right: 1.78vmin; /* 13px */
 }
 
 .bellDialog .bellDialogCover .close {
     margin: auto;
-    margin-bottom: 12px;
+    margin-bottom: 1.64vh; /* 12px */
 }
 
 .myList dialog .myListDialog .close img,
 .bellDialog .bellDialogCover .close img {
-    height: 25px;
-    width: 25px;
+    height: 3.425vh; /* 25px */
+    width: 3.425vh; /* 25px */
     filter: invert(60%);
     cursor: pointer;
 }
@@ -633,19 +633,19 @@ header #right button.on img {
 }
 
 .myList dialog .myListDialog .submit {
-    height: 40px;
+    height: 5.481vh; /* 40px */
     width: max-content;
     margin: 0 auto;
-    font-size: 16px;
+    font-size: 2.19vmin; /* 16px */
     font-weight: bold;
-    padding-left: 35px;
-    padding-right: 35px;
+    padding-left: 2.28vw; /* 35px */
+    padding-right: 2.28vw; /* 35px */
     border: none;
-    border-radius: 25px;
+    border-radius: 3.425vmin; /* 25px */
     background-color: rgb(11, 133, 255);
     color: white;
     filter: brightness(50%);
-    margin-bottom: 20px;
+    margin-bottom: 2.74vh; /* 20px */ /*__CHECKPOINT__*/
 }
 
 .myList dialog .myListDialog #dialogList:not(:placeholder-shown) + .submit {
