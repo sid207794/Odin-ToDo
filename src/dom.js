@@ -96,7 +96,7 @@ const myListDialog = (function () {
             mirror.textContent = listName.value;
             listName.style.width = (mirror.offsetWidth / window.innerWidth)*100 + "vw";
             if (listName.value.length === 0) {
-                listName.style.width = "125px";
+                listName.style.width = "8.14vw"; // 125px
             }
 
             const list = document.querySelector("#content .list");
@@ -145,7 +145,7 @@ export function myListItems(UID, input) {
             mirror.textContent = item.textContent;
             listName.style.width = (mirror.offsetWidth / window.innerWidth)*100 + "vw";
             if (listName.value.length === 0) {
-                listName.style.width = "125px";
+                listName.style.width = "8.14vw"; // 125px
             }
             contentCreate(UID);
             deleteAction(UID);
@@ -332,14 +332,14 @@ function contentCreate(UID) {
                                             detailCard(taskUID);
                                             const inputTask = document.querySelector("#content .detail .title #taskName")
                                             inputTask.style.height = "auto";
-                                            inputTask.style.height = inputTask.scrollHeight + "px";
+                                            inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                         }
                                     }, 200);
                                 } else {
                                     detailCard(taskUID);
                                     const inputTask = document.querySelector("#content .detail .title #taskName")
                                     inputTask.style.height = "auto";
-                                    inputTask.style.height = inputTask.scrollHeight + "px";
+                                    inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                 }
                                 viewText.textContent = "Hide";
                             }
@@ -425,14 +425,14 @@ function contentCreate(UID) {
                                             detailCard(taskUID);
                                             const inputTask = document.querySelector("#content .detail .title #taskName")
                                             inputTask.style.height = "auto";
-                                            inputTask.style.height = inputTask.scrollHeight + "px";
+                                            inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                         }
                                     }, 200);
                                 } else {
                                     detailCard(taskUID);
                                     const inputTask = document.querySelector("#content .detail .title #taskName")
                                     inputTask.style.height = "auto";
-                                    inputTask.style.height = inputTask.scrollHeight + "px";
+                                    inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                 }
                                 viewText.textContent = "Hide";
                             }
@@ -516,14 +516,14 @@ function contentCreate(UID) {
                                             detailCard(taskUID);
                                             const inputTask = document.querySelector("#content .detail .title #taskName")
                                             inputTask.style.height = "auto";
-                                            inputTask.style.height = inputTask.scrollHeight + "px";
+                                            inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                         }
                                     }, 200);
                                 } else {
                                     detailCard(taskUID);
                                     const inputTask = document.querySelector("#content .detail .title #taskName")
                                     inputTask.style.height = "auto";
-                                    inputTask.style.height = inputTask.scrollHeight + "px";
+                                    inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                 }
                                 viewText.textContent = "Hide";
                             }
@@ -650,14 +650,14 @@ function contentCreate(UID) {
                                                 detailCard(taskUID);
                                                 const inputTask = document.querySelector("#content .detail .title #taskName")
                                                 inputTask.style.height = "auto";
-                                                inputTask.style.height = inputTask.scrollHeight + "px";
+                                                inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                             }
                                         }, 200);
                                     } else {
                                         detailCard(taskUID);
                                         const inputTask = document.querySelector("#content .detail .title #taskName")
                                         inputTask.style.height = "auto";
-                                        inputTask.style.height = inputTask.scrollHeight + "px";
+                                        inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                     }
                                     viewText.textContent = "Hide";
                                 }
@@ -758,14 +758,14 @@ function contentCreate(UID) {
                                                 detailCard(taskUID);
                                                 const inputTask = document.querySelector("#content .detail .title #taskName")
                                                 inputTask.style.height = "auto";
-                                                inputTask.style.height = inputTask.scrollHeight + "px";
+                                                inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                             }
                                         }, 200);
                                     } else {
                                         detailCard(taskUID);
                                         const inputTask = document.querySelector("#content .detail .title #taskName")
                                         inputTask.style.height = "auto";
-                                        inputTask.style.height = inputTask.scrollHeight + "px";
+                                        inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                     }
                                     viewText.textContent = "Hide";
                                 }
@@ -866,14 +866,14 @@ function contentCreate(UID) {
                                                 detailCard(taskUID);
                                                 const inputTask = document.querySelector("#content .detail .title #taskName")
                                                 inputTask.style.height = "auto";
-                                                inputTask.style.height = inputTask.scrollHeight + "px";
+                                                inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                             }
                                         }, 200);
                                     } else {
                                         detailCard(taskUID);
                                         const inputTask = document.querySelector("#content .detail .title #taskName")
                                         inputTask.style.height = "auto";
-                                        inputTask.style.height = inputTask.scrollHeight + "px";
+                                        inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
                                     }
                                     viewText.textContent = "Hide";
                                 }
@@ -1199,10 +1199,10 @@ function contentCreate(UID) {
         inputTask.setAttribute("autocomplete", "off");
         inputTask.setAttribute("spellcheck", "false");
         inputTask.value = taskTextNode.nodeValue.trim();
-        inputTask.style.height = "34px";
+        inputTask.style.height = "4.66vh"; // 34px
         inputTask.addEventListener("input", () => {
             inputTask.style.height = "auto";
-            inputTask.style.height = inputTask.scrollHeight + "px";
+            inputTask.style.height = (inputTask.scrollHeight / window.innerHeight)*100 + "vh";
             taskTextNode.nodeValue = inputTask.value;
             Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
                 if (typeof taskObj === "object" && taskObj.id === taskUID) {
@@ -1236,7 +1236,7 @@ function contentCreate(UID) {
         inputNote.setAttribute("placeholder", "Insert your note");
         inputNote.setAttribute("autocomplete", "off");
         inputNote.setAttribute("spellcheck", "false");
-        inputNote.style.height = "22px";
+        inputNote.style.height = "3.01vh"; // 22px
         Object.keys(targetClass).forEach(key => Object.entries(targetClass[key]).forEach(([taskKey, taskObj]) => {
             if (typeof taskObj === "object" && taskObj.id === taskUID) {
                 if (taskObj.note !== undefined) {
@@ -1246,7 +1246,7 @@ function contentCreate(UID) {
         }));
         inputNote.addEventListener("input", () => {
             inputNote.style.height = "auto";
-            inputNote.style.height = inputNote.scrollHeight + "px";
+            inputNote.style.height = (inputNote.scrollHeight / window.innerHeight)*100 + "vh";
         });
         
         attachments.innerHTML = `<p>ATTACHMENT</p>`;
@@ -1421,7 +1421,7 @@ const burgerDialog = (function () {
                 dialog.style.transition = "opacity 0.1s ease-in-out, transform 0.1s ease-in-out";
             });
             dialog.style.flexDirection = "column";
-            dialog.style.left = `${burger.offsetLeft-46}px`;
+            dialog.style.left = `${((burger.offsetLeft-46) / window.innerWidth)*100}vw`;
             burger.style.backgroundColor = "#161616";
             burgerImg.style.filter = "invert(46%) sepia(96%) saturate(1918%) hue-rotate(185deg) brightness(101%) contrast(102%)";
         } else {
