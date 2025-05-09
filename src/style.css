@@ -434,6 +434,7 @@ header #right button.on img {
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    font-size: 2.19vmin; /* 16px */
 }
 
 #sidebar .sort > * {
@@ -480,6 +481,7 @@ header #right button.on img {
     top: 0;
     z-index: 17;
     background-color: #101010;
+    font-size: 2.56vmin; /* 18.72px */
 }
 
 #sidebar .myList .item{
@@ -489,6 +491,7 @@ header #right button.on img {
     border-bottom: solid 0.274vh transparent; /* 2px */
     font-weight: normal;
     cursor: pointer;
+    font-size: 2.19vmin; /* 16px */
 }
 
 #sidebar .myList .item:hover,
@@ -670,7 +673,7 @@ header #right button.on img {
 #content > * {
     display: flex;
     flex-direction: column;
-    height: 82.19vh; /* 600px */
+    height: 39.06vw; /* 600px */
     width: 39.06vw; /* 600px */
     background-color: #161616cc;
     backdrop-filter: blur(20px);
@@ -762,7 +765,7 @@ header #right button.on img {
 #content .detail .buttons .listName,
 #content .detail .buttons .priority {
     background-color: #333333;
-    padding: 0.96vh 0.45vw; /* 7px 12px */
+    padding: 0.96vh 0.6vw; /* 7px 12px */
     border: none;
     border-radius: 2.740vmin; /* 20px */
     display: flex;
@@ -818,6 +821,7 @@ header #right button.on img {
     margin: 0.68vh 0; /* 5px 0 */
     color: white;
     font-weight: bolder;
+    font-size: 2.19vmin; /* 16px */
 }
 
 #content .detail .notes label #note {
@@ -1047,6 +1051,7 @@ header #right button.on img {
     z-index: 13;
     cursor: pointer;
     user-select: none;
+    font-size: 2.56vmin; /* 18.72px */
 }
 
 #content .list .today .task,
@@ -1094,6 +1099,8 @@ header #right button.on img {
     gap: 1.37vh; /* 10px */
     color: rgb(212, 212, 212);
     cursor: pointer;
+    font-size: 2.19vmin; /* 16px */
+    flex-wrap: wrap;
 }
 
 #content .list label span {
@@ -1105,6 +1112,9 @@ header #right button.on img {
     box-shadow: none;
     transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     user-select: none;
+    flex-shrink: 0;
+    display: inline-block;
+    white-space: nowrap;
 }
 
 #content .list label span.yellow {
@@ -1169,6 +1179,7 @@ header #right button.on img {
     padding-left: 0.98vw; /* 15px */
     padding-right: 0.98vw; /* 15px */
     margin: 0 1.63vw; /* 0 25px */
+    font-size: 2.05vmin; /* 15px */
 }
 
 #footerInput:focus {
@@ -1335,8 +1346,10 @@ header #right button.on img {
 .listDeleteConfirm p {
     color: rgb(212, 212, 212);
     margin-bottom: 0;
+    font-size: 2.19vmin; /* 16px */
 }
 
 .listDeleteConfirm p + p {
     margin-top: 0;
+    font-size: 2.19vmin; /* 16px */
 }
