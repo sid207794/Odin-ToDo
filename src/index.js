@@ -168,6 +168,7 @@ const startupPage = (function () {
     } else {
         listNameFunction();
         const myList = document.querySelector("#sidebar .myList");
+        const list = document.querySelector("#content .list");
 
         listArray.forEach(obj => {
             const UID = obj.ListId;
@@ -190,6 +191,16 @@ const startupPage = (function () {
         const task = tasks[0];
         if (task) {
             task.click();
+        }
+        
+        if (list.scrollHeight > list.clientHeight) {
+            const h3 = document.querySelectorAll("#content .list h3");
+            h3.forEach(itemh3 => {
+                itemh3.style.backgroundColor = "transparent";
+                requestAnimationFrame(() => {
+                    itemh3.style.backgroundColor = "#2a2d33";
+                });
+            });
         }
     }
 })();

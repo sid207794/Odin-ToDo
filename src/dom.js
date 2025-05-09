@@ -1384,6 +1384,7 @@ function contentCreate(UID) {
                 }
             }));
             localStorage.setItem("todoData", JSON.stringify(listArray));
+            const list = document.querySelector("#content .list");
             const today = document.querySelector("#content .list .today");
             const tomorrow = document.querySelector("#content .list .tomorrow");
             const upcoming = document.querySelector("#content .list .upcoming");
@@ -1398,6 +1399,24 @@ function contentCreate(UID) {
             addTask(UID);
             detail.classList.remove("fadeIn")
             detail.classList.add("fadeOut")
+            
+            if (list.scrollHeight > list.clientHeight) {
+                const h3 = document.querySelectorAll("#content .list h3");
+                h3.forEach(itemh3 => {
+                    itemh3.style.backgroundColor = "transparent";
+                    requestAnimationFrame(() => {
+                        itemh3.style.backgroundColor = "#2a2d33";
+                    });
+                });
+            } else {
+                const h3 = document.querySelectorAll("#content .list h3");
+                h3.forEach(itemh3 => {
+                    itemh3.style.backgroundColor = "#2a2d33";
+                    requestAnimationFrame(() => {
+                        itemh3.style.backgroundColor = "transparent";
+                    });
+                });
+            }
         });
     }
 }
