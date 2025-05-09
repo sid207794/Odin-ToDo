@@ -53,29 +53,31 @@ const startupPage = (function () {
     const storedArray = JSON.parse(localStorage.getItem("todoData"));
     listArray.length = 0;
 
-    storedArray.forEach(obj => {
-        const newList = new MyListClass(obj.ListId, obj.ListName);
+    if (storedArray && Array.isArray(storedArray)) {
+        storedArray.forEach(obj => {
+            const newList = new MyListClass(obj.ListId, obj.ListName);
 
-        Object.entries(obj.today).forEach(([key, task]) => {
-            if (key.startsWith("task")) {
-                newList.today.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority, task.note);
-            }
+            Object.entries(obj.today).forEach(([key, task]) => {
+                if (key.startsWith("task")) {
+                    newList.today.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority, task.note);
+                }
+            });
+
+            Object.entries(obj.tomorrow).forEach(([key, task]) => {
+                if (key.startsWith("task")) {
+                    newList.tomorrow.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority, task.note);
+                }
+            });
+
+            Object.entries(obj.upcoming).forEach(([key, task]) => {
+                if (key.startsWith("task")) {
+                    newList.upcoming.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority, task.note);
+                }
+            });
+
+            listArray.push(newList);
         });
-
-        Object.entries(obj.tomorrow).forEach(([key, task]) => {
-            if (key.startsWith("task")) {
-                newList.tomorrow.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority, task.note);
-            }
-        });
-
-        Object.entries(obj.upcoming).forEach(([key, task]) => {
-            if (key.startsWith("task")) {
-                newList.upcoming.addTask(task.id, task.check, task.text, task.date, task.weekDay, task.time, task.priority, task.note);
-            }
-        });
-
-        listArray.push(newList);
-    });
+    }
     console.log("storedArray:", storedArray);
     console.log("listArray:", listArray);
 
